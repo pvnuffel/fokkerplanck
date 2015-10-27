@@ -14,10 +14,10 @@ class Sampler(object):
         return param
     getDefaultParameters=staticmethod(getDefaultParameters)
     
-    def lift(self,rho,grid,N):
+    def lift(self,rho,grid,N,skip=1):
         cum,edges = self.rho2cum(rho,grid)
         y = self.rand.uniform(size=N)
-        print "sampling density with seed : ", self.cur_seed, "first sample: ", y[0]
+   #     print "sampling density with seed : ", self.cur_seed, "first sample: ", y[0]
         return self.inv_cum(y,cum,edges)
     
     def rho2cum(self,rho,grid):
@@ -54,7 +54,7 @@ class Sampler(object):
         return xn
     
     def seed(self,s):
-        print "seeding the density sampler with seed : ", s
+      #  print "seeding the density sampler with seed : ", s
         self.cur_seed = s
         self.rand.seed(self.cur_seed)
     

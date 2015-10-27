@@ -25,9 +25,9 @@ class TimestepperSystem(System.System):
                 the time-reporting horizon for a matrix-vector product 
         """
         param = {}
-        param['eps'] = 1e-6
+        param['eps'] = 1e-5
         param['dt'] = 1e-3
-        param['Dt'] = 5e-3
+        param['Dt'] = 1e-2
         return param
     getDefaultParameters = staticmethod(getDefaultParameters)
     

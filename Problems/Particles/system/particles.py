@@ -60,7 +60,7 @@ class Particles(TSystem.TimestepperSystem):
     def integrate(self,rho,lambd):
         # lambd = [a,D]
         self.lifting.seed(self.lifting.param['seed'])
-        self.seed(self.param['seed'])
+        #self.seed(self.param['seed'])
         x = self.lift(rho)
         print "nb particles : ", len(x)
         x_Dt = self.simulate(x,lambd)
@@ -68,8 +68,8 @@ class Particles(TSystem.TimestepperSystem):
     
     def lift(self,rho):
         grid = self.grid
-        x = self.lifting.lift(rho,grid,self.param['N'])
-        return x 
+        x, seed = self.lifting.lift(rho,grid,self.param['N'])
+        return x, seed 
     
     def simulate(self,x0,lambd):
         Dt = self.param['Dt']
@@ -101,5 +101,5 @@ class Particles(TSystem.TimestepperSystem):
     def computeJacobian(self):
         dx = self.grid[1]-self.grid[0]
         N = len(self.u)
-        return self.precond.computeJacobian(N,dx) 
+        return self.precond.computeJacobian(N,dx)
     

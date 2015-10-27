@@ -11,7 +11,8 @@ import System.TimestepperSystem as TSystem
 
 def create_doublewell(alpha,beta):
     def doublewell(x):
-        return -4*x**3+3*(alpha+beta)*x**2-2*alpha*beta*x
+       # return -4*x**3+3*(alpha+beta)*x**2-2*alpha*beta*x
+        return 2*x-4*x**3  
     return doublewell
 
 class Particles(TSystem.TimestepperSystem):
@@ -45,16 +46,17 @@ class Particles(TSystem.TimestepperSystem):
         self.restriction = restriction
         self.neq = 1
         self.rand=scipy.random.mtrand.RandomState()
-        self.precond = param['precond']
+        self.precond = param['precond']    #  (  keyError: 'precond' )
         self.precond.system = self
         self.Dt = param['Dt']
+        self.dt = param['dt']
         TSystem.TimestepperSystem.__init__(self,rho,lambd,param)
     
     def getDefaultParameters():
         param = {}
         param['Nlarge']=1000000
         param['Nsmall']=10000
-        param['dt']=1e-3
+        param['dt']=1e-4
         param['Dt']=1e-2
         param['seed']=0
         param['eps']=1e-5
@@ -72,9 +74,14 @@ class Particles(TSystem.TimestepperSystem):
     
     def integrate(self,rho,lambd):
         # lambd = [a,D]
-        x,seed = self.lift(rho)
-        print "nb particles : ", len(x)
-        x_Dt = self.simulate(x,seed,lambd)
+        x= self.lift(rho)
+ #       print "x= ", x
+       # print "nb particles : ", len(x)
+        #self.seed(self.param['seed'])
+        seed =self.lifting.seed(self.lifting.param['seed'])
+        seedlist = [seed]*len(x)  #fill list with  same elements (need this datatype for inv_transform_sampling.py)
+        #print "seed= ", seed
+        x_Dt = self.simulate(x,seedlist,lambd)
         return x,x_Dt,self.restrict(x_Dt)
     
     def lift(self,rho):
@@ -82,11 +89,11 @@ class Particles(TSystem.TimestepperSystem):
         x = self.lifting.lift(rho,grid,self.param['Nlarge'],self.skip)
         return x
     
-    def simulate(self,x0,seed,lambd):
-        print "in simulate : ", lambd
+    def simulate(self,x0,seedlist,lambd):
+        #print "in simulate : ", lambd
         x_Dt = scipy.zeros_like(x0)
         for i in range(len(x0)):
-            x_Dt[i]=self.simulate_particle(x0[i],seed[i],lambd)
+            x_Dt[i]=self.simulate_particle(x0[i],seedlist[i],lambd)
         return x_Dt
     
     def simulate_particle(self,x,seed,lambd):
@@ -102,6 +109,8 @@ class Particles(TSystem.TimestepperSystem):
             tcur += dt
             # the random number
             dW = self.getBrownianIncrement()
+          #  if tcur == 0.0004:   
+           #     print dW
             # the process
             drift_term = a * self.drift(x)
             x=x+drift_term*dt+sqrt(2*D*dt)*dW
@@ -141,9 +150,9 @@ class Particles(TSystem.TimestepperSystem):
         # note that the perturbed state is no longer a probability distribution
         # so norming the histograms is not entirely correct
         u_eps_Dt = total*self.restriction.restrict(self.x_Dt,self.grid,self.domain,w=w_part)
-        result = v-(u_eps_Dt - self.u_Dt)/eps*norm(v)
-        control = self.controlJacobian(v)
-        return result + control      
+        Jv = v-(u_eps_Dt - self.u_Dt)/eps*norm(v)
+        #control = self.controlJacobian(v)
+        return Jv  #, u_eps_Dt, self.u_Dt
     
     def testJacobian(self,v):
         eps = self.param['eps']

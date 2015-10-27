@@ -11,7 +11,8 @@ import scipy
 import scipy.linalg
 
 import inv_transform
-import kde 
+#import kde 
+import histogram 
 
 import particles
 import pde
@@ -47,9 +48,10 @@ rho_Dt = fp_pde.u_Dt
 
 # particle-based system
 
-param_kde = kde.KDE.getDefaultParameters()
-param_kde['h']=2e-2
-restriction = kde.KDE(param_kde)
+#param_kde = kde.KDE.getDefaultParameters()
+#param_kde['h']=2e-2
+#restriction = kde.KDE(param_kde)
+restriction = histogram.Histogram()
 
 param=particles.Particles.getDefaultParameters()
 param['Dt'] = Dt

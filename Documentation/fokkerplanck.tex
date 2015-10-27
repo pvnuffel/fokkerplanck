@@ -1,0 +1,62 @@
+\documentclass[]{article}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage[utf8]{inputenc} 
+\usepackage{subcaption}
+\usepackage{caption}
+\usepackage{hyperref} 
+%opening
+\title{}
+\author{}
+
+
+
+\newcommand{\R}{\ensuremath{\mathbb{R}}} % commando zonder argumenten
+\newcommand{\C}{\ensuremath{\mathbb{C}}}
+\newcommand{\N}{\ensuremath{\mathbb{N}}}
+\newcommand{\norm}[1]{\left\|#1\right\|} % commando's met argumenten
+\newcommand{\pa}[2]{\frac{\partial #1}{\partial #2}}
+\newcommand{\ppa}[2]{\frac{\partial^2 #1}{\partial #2^2}}
+\newcommand{\dd}{\ensuremath{\mathrm{d}}}
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+
+\end{abstract}
+
+We compare solutions of partial differential equations of advection-diffusion-type
+
+\begin{equation}
+\label{fokkerplanck}
+\pa{\rho(x,t)}{t} + \pa{(a(x) \rho(x,t))}{x} = D  \ppa{\rho(x,t)}{x} 
+\end{equation}
+
+generated in two ways:
+\begin{itemize}
+\item By explicitly solving eq. \eqref{fokkerplanck} using the discretization scheme\footnote{First-order upwind scheme for the advection part combined with the Forward-Time Central-Space-method for the difussion part}
+\begin{equation}
+\rho_i^{n+1} = \rho_i^n + \Delta t \left( \frac{D}{{\Delta x}^2} \left( \rho_{i+1}^{n} - 2 \rho_i^n + \rho_{i-1}^n \right)  - \frac{a(x)}{\Delta x} (\rho_i^n - \rho_{i-1}^n) \right)
+\end{equation}
+for the value of the probabilty density $\rho$ at position $i \Delta x$ and time $(n+1) \Delta t$.
+\item By simulating an ensemble of $N$ particles evolving according to the corresponding stochastic differential equation  
+\begin{equation}
+    \dd X = a(X) \dd t + \sqrt{2D} \cdot \dd{W}.
+\end{equation}
+ The position $X^{n+1}$ at time $ (n+1) \Delta t$ of each  particle is simulated using the  Euler-Maruyama scheme
+\begin{equation}
+   X^{n + 1} = X^{n} + a(X^n) \Delta t +  \sqrt{2D \Delta t}\cdot \xi^n 
+\end{equation}
+with $\xi^n  \sim \mathcal{N} (0,1)$
+\end{itemize}
+
+
+
+
+
+
+\section{}
+
+\end{document}

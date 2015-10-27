@@ -38,6 +38,7 @@ class FokkerPlanck(TSystem.TimestepperSystem):
         self.precond = param['precond']
         self.precond.system = self
         self.Dt = param['Dt']
+        self.dt = param['dt'] 
         TSystem.TimestepperSystem.__init__(self,rho,lambd,param)    
     
     def integrate(self,rho0,lambd):

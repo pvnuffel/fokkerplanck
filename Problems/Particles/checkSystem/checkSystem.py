@@ -12,12 +12,16 @@ import scipy
 import scipy.linalg
 
 import inv_transform
-import kde
+#import kde
+import histogram
 import particles
 import pde
 import precond
 
-D = 0.01
+# Fokker Planck for SDE
+a = 1  #advection coefficient
+D = 0.1  #difussion coefficient
+lambd = scipy.array([a,D])
 Dt = 0.01 
 N = 100000
 eps = 1e-7
@@ -26,28 +30,25 @@ eps = 1e-7
 h=2e-2 # kde mesh width 
 dx = 0.05
 dt = 1e-3 
-print ("nu : ", dx**2/2./D/dt)
+print("check stability condition")
+print ("nu=", dx**2/(2.*D*dt))  #stability condition: nu>1  (see https://en.wikipedia.org/wiki/FTCS_scheme)
 xL = -2.
 xR = 2.
 grid = scipy.arange(xL+dx/2.,xR,dx)
 rho = scipy.ones_like(grid)/(xR-xL)
 print ("rho: ", rho)
 
-# Fokker Planck for SDE
-a = 1
-D = 0.1
-lambd = scipy.array([a,D])
-
-Dt = 0.01
 
 # Fokker Planck for SDE
 sampler_param = inv_transform.Sampler.getDefaultParameters()
 sampler_param['seed']=0
 lifting = inv_transform.Sampler(sampler_param)
 
-param_kde = kde.KDE.getDefaultParameters()
-param_kde['h']=h
-restriction = kde.KDE(param_kde)
+# param_kde = kde.KDE.getDefaultParameters()
+# param_kde['h']=h
+# restriction = kde.KDE(param_kde)
+
+restriction = histogram.Histogram()
 
 param=particles.Particles.getDefaultParameters()
 param['eps']=eps
@@ -58,10 +59,6 @@ precond_param['Dstar']=0.
 precond_param['sigma']=scipy.zeros_like(grid)
 precond_param['kappa']=particles.doublewell
 param['precond']=precond.Precond(precond_param)
-
-param_kde = kde.KDE.getDefaultParameters()
-param_kde['h']=2e-2
-restriction = kde.KDE(param_kde)
 
 fp_sde = particles.Particles(lifting,restriction,rho,grid,lambd,param)
 
@@ -92,15 +89,14 @@ param['D']=D
 param['Dt'] = Dt
 param['eps_jac']=eps
 
-
 fp_pde = pde.FokkerPlanck(rho,grid,pde.doublewell,lambd,param)
 
 Jv_pde = fp_pde.applyJacobian(v)
 
 # testing the preconditioner
 
-A = scipy.identity(len(grid))+Dt*fp_sde.computeJacobian()
-J = fp_sde.computeJacobian()
-pJ = scipy.linalg.solve(A,v)
+#A = scipy.identity(len(grid))+Dt*fp_sde.computeJacobian()
+#J = fp_sde.computeJacobian()
+#pJ = scipy.linalg.solve(A,v)
 
 print (sum(v), sum(Jv_sde), sum(Jv_pde) )

@@ -11,7 +11,8 @@ import scipy
 import scipy.linalg
 
 import inv_transform
-import kde 
+#import kde 
+import histogram
 
 import particles
 import pde
@@ -20,7 +21,10 @@ import precond
 # system parameters
 a = 1
 D = 0.1
-lambd = scipy.array([a,D])
+alpha = 1   
+beta = -1
+lambd = scipy.array([a,D,alpha,beta])
+#lambd = scipy.array([a,D])
 xL = -2.
 xR = 2.
 
@@ -41,21 +45,27 @@ param['D']=D
 param['a']=a
 param['Dt'] = Dt
 param['eps_jac']=eps_jac
-fp_pde = pde.FokkerPlanck(rho0,grid,pde.doublewell,lambd,param)
-rho_Dt = fp_pde.u_Dt
+
 
 # particle-based system
 
-param_kde = kde.KDE.getDefaultParameters()
-param_kde['h']=2e-2
-restriction = kde.KDE(param_kde)
-
+#param_kde = kde.KDE.getDefaultParameters()
+#param_kde['h']=2e-2
+#restriction = kde.KDE(param_kde)
+param_histogram = histogram.Histogram.getDefaultParameters()
+restriction = histogram.Histogram(param_histogram)
+        
 param=particles.Particles.getDefaultParameters()
 param['Dt'] = Dt
 precond_param=precond.Precond.getDefaultParameters()
 precond_param['Dstar']=0.
 precond_param['sigma']=1.
 param['precond']=precond.Precond(precond_param)
+
+
+fp_pde = pde.FokkerPlanck(rho0,grid,pde.doublewell,lambd,param)
+rho_Dt = fp_pde.u_Dt
+
 
 Nlist = scipy.array([10000,20000,50000,100000,200000,500000,700000])
 nN = len(Nlist)
