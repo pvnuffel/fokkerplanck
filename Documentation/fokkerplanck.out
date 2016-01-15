@@ -1,1 +1,9 @@
-\BOOKMARK [1][-]{section.1}{}{}% 1
+\BOOKMARK [1][-]{section.1}{Introduction}{}% 1
+\BOOKMARK [1][-]{section.2}{Coarse time stepper}{}% 2
+\BOOKMARK [2][-]{subsection.2.1}{Lifting: bold0mu mumu x }{section.2}% 3
+\BOOKMARK [2][-]{subsection.2.2}{Restriction: x bold0mu mumu }{section.2}% 4
+\BOOKMARK [1][-]{section.3}{Convergence of variance-reduced Jacobian-vector-products}{}% 5
+\BOOKMARK [2][-]{subsection.3.1}{Why do we need variance reduction of the Jacobian-vector products? }{section.3}% 6
+\BOOKMARK [2][-]{subsection.3.2}{How do we reduce the variance of the Jacobian-vector products?}{section.3}% 7
+\BOOKMARK [2][-]{subsection.3.3}{Results}{section.3}% 8
+\BOOKMARK [1][-]{section.4}{Convergence of the bias}{}% 9

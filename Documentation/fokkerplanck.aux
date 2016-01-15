@@ -16,5 +16,32 @@
 \gdef\HyperFirstAtBeginDocument#1{#1}
 \providecommand\HyField@AuxAddToFields[1]{}
 \providecommand\HyField@AuxAddToCoFields[2]{}
-\newlabel{fokkerplanck}{{1}{1}{}{equation.0.1}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {1}}{1}{section.1}}
+\@writefile{toc}{\contentsline {section}{\numberline {1}Introduction}{1}{section.1}}
+\newlabel{fokkerplanck}{{1}{1}{Introduction}{equation.1.1}{}}
+\newlabel{pde_discretization}{{2}{1}{Introduction}{equation.1.2}{}}
+\newlabel{SDE}{{3}{1}{Introduction}{equation.1.3}{}}
+\newlabel{Euler-Mar}{{4}{1}{Introduction}{equation.1.4}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {2}Coarse time stepper}{1}{section.2}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.1}Lifting: $\ensuremath  {\boldsymbol  {\rho }}\rightarrow \mathbf  {x} $}{2}{subsection.2.1}}
+\newlabel{section:lifting}{{2.1}{2}{Lifting: $\U \rightarrow \mathbf {x} $}{subsection.2.1}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.2}Restriction: $\mathbf  {x} \rightarrow \ensuremath  {\boldsymbol  {\rho }}$}{2}{subsection.2.2}}
+\newlabel{section:restriction}{{2.2}{2}{Restriction: $\mathbf {x} \rightarrow \U $}{subsection.2.2}{}}
+\newlabel{restriction}{{6}{2}{Restriction: $\mathbf {x} \rightarrow \U $}{equation.2.6}{}}
+\newlabel{restriction_eps}{{8}{2}{Restriction: $\mathbf {x} \rightarrow \U $}{equation.2.8}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {3}Convergence of variance-reduced Jacobian-vector-products}{3}{section.3}}
+\newlabel{section:Jv}{{3.1}{3}{Why do we need variance reduction of the Jacobian-vector products?}{subsection.3.1}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.1}Why do we need variance reduction of the Jacobian-vector products? }{3}{subsection.3.1}}
+\newlabel{Jv_approx}{{10}{3}{Why do we need variance reduction of the Jacobian-vector products?}{equation.3.10}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.2}How do we reduce the variance of the Jacobian-vector products?}{3}{subsection.3.2}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.3}Results}{3}{subsection.3.3}}
+\@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces The variance on the stochastic solution for the Jacobian-vector-product converges to zero with $\mathcal  {O}(1/ N)$ and it does not depend on the value of $\varepsilon $.\relax }}{4}{figure.caption.1}}
+\providecommand*\caption@xref[2]{\@setref\relax\@undefined{#1}}
+\newlabel{Var_N}{{1}{4}{The variance on the stochastic solution for the Jacobian-vector-product converges to zero with $\mathcal {O}(1/ N)$ and it does not depend on the value of $\varepsilon $.\relax }{figure.caption.1}{}}
+\newlabel{MSE}{{11}{4}{Results}{equation.3.11}{}}
+\newlabel{Var}{{12}{4}{Results}{equation.3.12}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {1}{\ignorespaces Parameter values\relax }}{5}{table.caption.2}}
+\@writefile{toc}{\contentsline {section}{\numberline {4}Convergence of the bias}{5}{section.4}}
+\@writefile{lof}{\contentsline {figure}{\numberline {2}{\ignorespaces The expectation value of the stochastic solution of the Jacobian-vector-product is calculated by averaging over $M$ stochastic realizations. The estimated bias between this solution and the deterministic one is squared and plotted as a function of the number of particles $N$ for different values of $M$. For large particle numbers, the estimated bias becomes independent of $M$ and converges to the real bias. This real bias is the numerical error in the solution of the PDE [Need to check this last statement].\relax }}{6}{figure.caption.3}}
+\newlabel{Bias_Jv_N_M}{{2}{6}{The expectation value of the stochastic solution of the Jacobian-vector-product is calculated by averaging over $M$ stochastic realizations. The estimated bias between this solution and the deterministic one is squared and plotted as a function of the number of particles $N$ for different values of $M$. For large particle numbers, the estimated bias becomes independent of $M$ and converges to the real bias. This real bias is the numerical error in the solution of the PDE [Need to check this last statement].\relax }{figure.caption.3}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {3}{\ignorespaces The expectation value of the stochastic solution of the Jacobian-vector-product is calculated by averaging over $M$ stochastic realizations. The estimated bias between this solution and the deterministic one is squared and plotted as a function of the number of realizations $M$ for simulations with different particle number $N$. For large particle numbers, the estimated bias becomes independent of $M$ and converges to the real bias. This real bias is the numerical error in the solution of the PDE [Need to check this last statement].\relax }}{7}{figure.caption.4}}
+\newlabel{Bias_Jv_M_N}{{3}{7}{The expectation value of the stochastic solution of the Jacobian-vector-product is calculated by averaging over $M$ stochastic realizations. The estimated bias between this solution and the deterministic one is squared and plotted as a function of the number of realizations $M$ for simulations with different particle number $N$. For large particle numbers, the estimated bias becomes independent of $M$ and converges to the real bias. This real bias is the numerical error in the solution of the PDE [Need to check this last statement].\relax }{figure.caption.4}{}}

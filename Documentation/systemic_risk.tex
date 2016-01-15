@@ -1,0 +1,93 @@
+\documentclass[]{article}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage[utf8]{inputenc} 
+\usepackage{subcaption}
+\usepackage{caption}
+\usepackage{hyperref}
+\usepackage{amsbsy}
+\usepackage[left=4.5cm]{geometry}
+%\usepackage{cancel}
+ %http://tex.stackexchange.com/questions/595/how-can-i-get-bold-math-symbols
+%opening
+\title{}
+\author{}
+
+%\newcommand{\R}{\ensuremath{\mathbb{R}}} % commando zonder argumenten
+\newcommand{\C}{\ensuremath{\mathbb{C}}}
+\newcommand{\N}{\ensuremath{\mathbb{N}}}
+\newcommand{\E}{\ensuremath{\mathbb{E}}}
+\newcommand{\norm}[1]{\left\|#1\right\|} % commando's met argumenten
+\newcommand{\pa}[2]{\frac{\partial #1}{\partial #2}}
+\newcommand{\ppa}[2]{\frac{\partial^2 #1}{\partial #2^2}}
+\newcommand{\dd}{\ensuremath{\mathrm{d}}}
+\newcommand{\U}{\ensuremath{\boldsymbol{\rho}}}
+\newcommand{\cts}{\ensuremath{\boldsymbol{\Phi}_T}} %Coarse time step
+\newcommand{\V}{\ensuremath{\mathbf{v}}}
+\newcommand{\jv}{\ensuremath{\mathbf{\hat{Jv}}}}
+\newcommand{\jvpde}{\ensuremath{\mathbf{Jv}_{FP}}}
+%\newcommand{\expect}[1]{\ensuremath { \mathbb{E} \left[ #1  \right] } 
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+
+%
+%We investigate coarse equilibrium states of a stochastic model 
+%
+%
+% we derive an analytic
+%approximate coarse evolution-map for the expected average purchase. We then study the emergence
+%of coarse fronts when the agents are split into two factions with opposite preferences. We
+%develop a novel Newton-Krylov method that is able to compute accurately and efficiently coarse
+%fixed points when the underlying fine-scale dynamics is stochastic. The main novelty of the algorithm
+%is in the elimination of the noise that is generated when estimating Jacobian-vector products
+%using time-integration of perturbed initial conditions. We present numerical results that demonstrate
+%the convergence properties of the numerical method, and use the method to show that macroscopic
+%fronts in this model destabilise at a coarse symmetry-breaking bifurcation.
+%
+%We consider a system of diffusion processes that interact through their empirical mean and have a stabilizing force acting on each of them, corresponding to a bistable potential. There are three parameters that characterize the system: the strength of the intrinsic stabilization, the strength of the external random perturbations, and the degree of cooperation or interaction between them. The latter is the rate of mean reversion of each component to the empirical mean of the system. We interpret this model in the context of systemic risk and analyze in detail the effect of cooperation between the components, that is, the rate of mean reversion. We show that in a certain regime of parameters increasing cooperation tends to increase the stability of the individual agents but it also increases the overall or systemic risk. We use the theory of large deviations of diffusions interacting through their mean field.
+%
+%
+%The present paper thus contains two main contributions. First, for the specific
+%system under study, we explain the birth of the above-described macroscopic states in
+%terms of coarse symmetry-breaking bifurcations. To the best of our knowledge, steps
+%in this direction were taken only very recently [55, 7] and were confined to globally
+%locked-in states. In the homogeneous case, we follow [5] and interpret metastable
+%locked-in states as fixed points of a coarse evolution map. In the limit of infinitely
+%many globally-coupled agents with homogeneous product preferences, we derive the
+%coarse evolution map analytically. In the case of heterogeneous agents we employ
+%stochastic continuation and show for the first time how fronts destabilise to partially
+%locked-in states.
+%The second main contribution of the paper is the development of a novel procedure
+%to obtain coarse Jacobian-vector products with reduced variance, allowing
+%the accurate evaluation of Jacobian-vector products in the presence of microscopic
+%stochasticity, thus gaining full control over the linear and the nonlinear iterations
+%of the Newton-Krylov solver. Even though our implementation of variance-reduced
+%Jacobian-vector products is specific to the lock-in model, we believe that analogous
+%strategies can be applied to other ABMs. Therefore, we provide a detailed account of
+%the algorithmic steps involved in defining an accurate equation-free Newton-Krylov
+%method and testing its convergence properties
+
+\end{abstract}
+
+\section{Systemic risk}
+
+
+\begin{equation}
+\label{fokkerplanck}
+\pa{\rho(x,t)}{t} = - \mu \pa{( U(x) \rho(x,t))}{x} - \alpha \pa{}{x} \left[ \left(\int x \rho(x,t) \mathrm{d}x  -x \right) \rho(x,t) \right] + D  \ppa{\rho(x,t)}{x} 
+\end{equation}
+
+
+\begin{figure}
+\includegraphics{../../riskmodel/Problems/WeightedParticles/checkSystem/plots/xmean_alpha5}
+
+\end{figure}
+
+
+
+\end{document}

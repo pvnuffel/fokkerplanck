@@ -4,6 +4,8 @@ from scipy.linalg import norm
 import System
 
 
+
+
 class TimestepperSystem(System.System):
 
     def __init__(self,u,lambd,parameters=None):
@@ -40,6 +42,8 @@ class TimestepperSystem(System.System):
         self.u = u
         self.lambd = lambd
         self.u_Dt = self.integrate(u,lambd)
+       # self.x_prev = x_prev
+        print self.u_Dt
         print "leaving setState"
     def getResidual(self):
         """
@@ -67,10 +71,12 @@ class TimestepperSystem(System.System):
         If the system Jacobian is J, this function returns (an
         approximation to) (1-J)*v 
         """
+        
+        print "WE ARE IN FP"
         eps = self.param['eps']
         u_eps = self.u + eps * v/norm(v)
         u_eps_Dt = self.integrate(u_eps,self.lambd)
-        result = v-(u_eps_Dt - self.u_Dt)/eps*norm(v)
+        result = (u_eps_Dt - self.u_Dt)/eps*norm(v)
         return result   
     
     def getParameterDerivative(self,i):

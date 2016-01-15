@@ -116,7 +116,7 @@ class Point(scipy.sparse.linalg.LinearOperator):
     def setState(self,u,lambd):
         self.u=u
         self.lambd=lambd
-        self.system.setState(u,lambd)
+    #    self.system.setState(u,lambd)  #need  to use this again for continuation
         # this is meant to deal with preconditioner matrix that needs to be
         # built if the state changes.
         if not self.precond == None:
@@ -405,7 +405,7 @@ class Point(scipy.sparse.linalg.LinearOperator):
         sfree=s[n:n+l]
         sart=s[n+l:]
         sx_norm=norm(sx)
-        sfree_norm=norm(sfree)
+       # sfree_norm=norm(sfree)
         
         result=scipy.zeros(scipy.shape(s),scipy.float64)
         

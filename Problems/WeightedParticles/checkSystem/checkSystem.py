@@ -32,7 +32,7 @@ if __name__=="__main__":
     D = None
     Dt = None
     N = None
-    M=300  #number of monte carlo steps
+    M=1  #number of monte carlo steps
     # deze manier van input parameters verwerken staat in Langtangen
     while len(sys.argv) > 1 :
         option = sys.argv[1];               del sys.argv[1]
@@ -47,27 +47,31 @@ if __name__=="__main__":
         D = 1./2.
     if Dt == None:
         Dt = 1e-2
+        
     if N == None:
         Nlarge = 1000
         Nsmall = 1000
-    seed = 16
+    seed = 1
     # discretization parameters
     h=2e-2 # kde mesh width 
     dx = 0.01
-    dt = 1e-4 # ti
-    print ("nu=", dx**2/(2.*D*dt))  #stability condition: nu>1  (see https://en.wikipedia.org/wiki/FTCS_scheme)
+    dt = 1e-5 # ti
+    r= (2.*D*dt)/dx**2
+    if r>1: 
+        print 'Stability condition not fulfilled, because r=',r #(see https://en.wikipedia.org/wiki/FTCS_scheme)
+        sys.exit("Ending Script. Make sure that r<1") 
     xL = -1.7
     xR = 1.7
     grid = scipy.arange(xL+dx/2.,xR,dx)
-   # rho = scipy.ones_like(grid)
-    rho = scipy.zeros_like(grid)
-    rho[150]=1
+
+    rho = scipy.ones_like(grid)
+    #rho[150]=1
         # 0.1*scipy.random.uniform(low=-0.5,high=0.5,size=scipy.shape(grid)[0])
     rho = rho/(sum(rho)*dx)
     print "rho: ", rho
 
     # Fokker Planck for SDE
-    a = 0
+    a = 1
     zeta = 0.
   #  alphas = [1.]
     alpha=1
@@ -97,11 +101,6 @@ if __name__=="__main__":
     sampler_param = inv_transform.Sampler.getDefaultParameters()
     sampler_param['seed']=1
     lifting1 = inv_transform.Sampler(sampler_param)
-
-    #sampler_param = inv_transform.Sampler.getDefaultParameters()
-    sampler_param['seed']=2
-    lifting2 = inv_transform.Sampler(sampler_param)
-
    
     param_histogram = histogram.Histogram.getDefaultParameters()
     param_histogram['h']=h
@@ -198,7 +197,8 @@ if __name__=="__main__":
 #    tolerance2 = scipy.amax(scipy.absolute(rho2_Dt-rho_Dt_fp))
 #    Jv_sde2 =fp_sde.applyJacobian(v) 
     
-
+    Nlist = scipy.array([1000,2000,5000,10000])     
+    
     tolerance = scipy.zeros((M+1))
     Jv_norm = scipy.zeros((M+1))
     diff_norm = scipy.zeros((M+1))
@@ -210,7 +210,9 @@ if __name__=="__main__":
     rho_average=0
     #rho_m =scipy.zeros_like(rho_Dt)
     
-    for m in range(1,M+1):
+    
+    
+    for m in range(1,1):
         print "running with seed ", m 
         sampler_param = inv_transform.Sampler.getDefaultParameters()
         sampler_param['seed']=m
@@ -219,19 +221,19 @@ if __name__=="__main__":
         fp_sde=None
         fp_sde = particles.Particles(lifting,restriction,rho,grid,lambd,fp_sde,param)
         rho_Dt = fp_sde.u_Dt
-        rho42=(rho42+ rho_Dt[42])/m
-        rho_42[m] = rho42 -  rho_Dt_fp[42]
-        rho_average = (rho_average + rho_Dt)
-        rho_norm[m] = norm((rho_average - rho_Dt_fp)/m)      
+#        rho42=(rho42+ rho_Dt[42])/m
+#        rho_42[m] = rho42 -  rho_Dt_fp[42]
+#        rho_average = (rho_average + rho_Dt)
+#        rho_norm[m] = norm((rho_average - rho_Dt_fp)/m)      \
         
-#        tolerance[m] = scipy.amax(scipy.absolute(rho_Dt-rho_Dt_fp))
-   #    Jv_sde =fp_sde.applyJacobian(v)          
-#        Jv_sde_sum = Jv_sde_sum + Jv_sde
-#        diff =  Jv_sde - Jv_pde
-#        totaldiff = totaldiff + diff
-#        averagediff = totaldiff/(m)
-#        diff_norm[m] = norm(averagediff)
-#        Jv_norm[m] = norm(Jv_sde_sum/(m))
+     #   tolerance[m] = scipy.amax(scipy.absolute(rho_Dt-rho_Dt_fp))
+        Jv_sde =fp_sde.applyJacobian(v)          
+        Jv_sde_sum = Jv_sde_sum + Jv_sde
+        diff =  Jv_sde - Jv_pde
+        totaldiff = totaldiff + diff
+        averagediff = totaldiff/(m)
+        diff_norm[m] = norm(averagediff)
+        Jv_norm[m] = norm(Jv_sde_sum/(m))
         
         #norm(Jv_sde-Jv_pde)  #twonorm of vector difference
        

@@ -19,6 +19,3 @@ class Histogram(object):
         edges = scipy.r_[domain[0],(grid[1:]+grid[:-1])/2.,domain[-1]]
         bins = scipy.digitize(x,edges)-1
         return bins
-    
-
-

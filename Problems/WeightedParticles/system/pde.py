@@ -15,8 +15,8 @@ def doublewell(x):
 
 
 def d2udx2(u,dx):
-    u_bc=scipy.r_[u[0],u,u[-1]]
-    return 1./dx**2*(u_bc[2:]-2*u_bc[1:-1]+u_bc[:-2]) 
+    u_bc=scipy.r_[u[0],u,u[-1]]        #add first and last element (so they appear two time and u_bc[1:-1] is original vector with same dimesnion then u_bc[:-2] )
+    return 1./dx**2*(u_bc[2:]-2*u_bc[1:-1]+u_bc[:-2]) #FTCS scheme
 
     
 class FokkerPlanck(TSystem.TimestepperSystem):
@@ -35,8 +35,8 @@ class FokkerPlanck(TSystem.TimestepperSystem):
             param = FokkerPlanck.getDefaultParameters()
         self.param = param
         self.neq = 1
-        self.precond = param['precond']
-        self.precond.system = self
+      #  self.precond = param['precond']
+ #       self.precond.system = self
         self.Dt = param['Dt']
         self.dt = param['dt'] 
         TSystem.TimestepperSystem.__init__(self,rho,lambd,param)    

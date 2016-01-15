@@ -7,6 +7,13 @@ class Sampler(object):
         self.param = param
         self.rand = scipy.random.mtrand.RandomState()
         self.seed(param['seed'])
+
+
+    def set_rg_state(self, rg_state):
+        self.rand.set_state(rg_state) 
+    
+    def get_rg_state(self):
+        return self.rand.get_state()
     
     def getDefaultParameters():
         param = {}
@@ -17,6 +24,7 @@ class Sampler(object):
     def lift(self,rho,grid,N,skip=1):
         cum,edges = self.rho2cum(rho,grid)
         y = self.rand.uniform(size=N)
+      #  print y
    #     print "sampling density with seed : ", self.cur_seed, "first sample: ", y[0]
         return self.inv_cum(y,cum,edges)
     
@@ -34,7 +42,7 @@ class Sampler(object):
             if rho[n]<0 :
                 print "encountered a negative density : ", rho[n]
             cum[n+1]=cum[n]+rho[n]*(edges[n+1]-edges[n])
-        print "estimating cumulative density : last value ", cum[-1], " (should be 1.)"
+        print "estimating cumulative density : last value = ", cum[-1], " (should be 1.)"
         if scipy.absolute(cum[-1]-1)>1e-7:
             print "cumulative: ", cum
         return cum,edges
@@ -54,7 +62,7 @@ class Sampler(object):
         return xn
     
     def seed(self,s):
-      #  print "seeding the density sampler with seed : ", s
+        print "seeding the density sampler with seed : ", s
         self.cur_seed = s
         self.rand.seed(self.cur_seed)
     

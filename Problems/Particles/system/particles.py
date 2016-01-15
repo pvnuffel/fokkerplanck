@@ -37,8 +37,8 @@ class Particles(TSystem.TimestepperSystem):
         self.restriction = restriction
         self.neq = 1
         self.rand=scipy.random.mtrand.RandomState()
-        self.precond = param['precond']
-        self.precond.system = self
+        #self.precond = param['precond']
+        #self.precond.system = self
         self.Dt = param['Dt']
         TSystem.TimestepperSystem.__init__(self,rho,lambd,param)
     
@@ -68,8 +68,8 @@ class Particles(TSystem.TimestepperSystem):
     
     def lift(self,rho):
         grid = self.grid
-        x, seed = self.lifting.lift(rho,grid,self.param['N'])
-        return x, seed 
+        x = self.lifting.lift(rho,grid,self.param['N'])
+        return x
     
     def simulate(self,x0,lambd):
         Dt = self.param['Dt']
@@ -87,6 +87,9 @@ class Particles(TSystem.TimestepperSystem):
             tcur += dt
             # the random number
             dW=self.rand.normal(loc=0.,scale=scipy.sqrt(2*D*dt),size=N)
+          #  if tcur == dt:    #only print random number for first time step
+          #      print 'dW =',  dW            
+            
             # the process
             drift_term = a * drift(x)
             x=x+drift_term*dt+dW
