@@ -54,7 +54,7 @@ if __name__=="__main__":
     t1 = time.time()
     
     print 'Start solving sde'
-    dx = 1e-1
+    dx = 1e-2
 
     dt = 1e-4 # ti
     N=1000
@@ -96,10 +96,10 @@ if __name__=="__main__":
    # fp_sde = particles.Particles(lifting,restriction,rho,grid, lambd, param=param)       
 
    # Nlist = scipy.array([1000, 2000, 4000, 8000, 16000, 32000, 64000, 128000])
-    Nlist = scipy.array([1000]) #, 800, 1600, 3200])
+    Nlist = scipy.array([10, 100, 1000, 10000]) #, 800, 1600, 3200])
     
     param['eps']= 1e-5 
-    M=100 #number of monte carlo steps  
+    M=10 #number of monte carlo steps  
     
     nN= len(Nlist)
 
@@ -146,9 +146,9 @@ if __name__=="__main__":
                 E_rho_sum[n] = E_rho_sum[n] + rho_Dt           #matrix
         
                 print "calculate JVs"
-                Jv =fp_sde.applyJacobian(v)                                                 
-                Jv_sq_sum[n] = Jv_sq_sum[n] + (norm(Jv))**2
-                E_Jv_sum[n] = E_Jv_sum[n] + Jv 
+              #  Jv =fp_sde.applyJacobian(v)                                                 
+          #      Jv_sq_sum[n] = Jv_sq_sum[n] + (norm(Jv))**2
+         #       E_Jv_sum[n] = E_Jv_sum[n] + Jv 
                 
                 x_prev_sim = fp_sde.x_Dt
               #  print 'len x-vector= ' , len( fp_sde.x_Dt) 
@@ -169,14 +169,14 @@ if __name__=="__main__":
             E_rho[n] = E_rho_sum[n]/Mtot
             sq_E_rho[n]= (norm(E_rho[n]))**2
             
-            Jv_sq[n]=  Jv_sq_sum[n]/Mtot
-            E_Jv[n] = E_Jv_sum[n]/Mtot
-            sq_E_Jv[n]= (norm(E_Jv[n]))**2
+       #     Jv_sq[n]=  Jv_sq_sum[n]/Mtot
+       #     E_Jv[n] = E_Jv_sum[n]/Mtot
+       #     sq_E_Jv[n]= (norm(E_Jv[n]))**2
             
        # write_to_path = '/home/pieter/fokkerplanck/Problems/WeightedParticles/checkSystem/data/newfile_m%d.out' %Mtot
         #file1 = open('data/newfile_m100.out', "w")
-        np.savetxt('test-E_Jv_m%d.out'%Mtot, E_Jv)
-        np.savetxt('test-E_rho_m%d.out'%Mtot, E_rho)
+   #     np.savetxt('test-E_Jv_m%d.out'%Mtot, E_Jv)
+  #      np.savetxt('test-E_rho_m%d.out'%Mtot, E_rho)
        #np.savetxt('5-12-E_rho_m%d.out' %Mtot, E_rho )
        # np.savetxt('5-12-sq_E_rho_m%d.out' %Mtot,  sq_E_rho )        
        # np.savetxt(file1,  '42')

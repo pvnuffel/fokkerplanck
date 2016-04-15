@@ -126,8 +126,8 @@ if __name__=="__main__":
 
     # POINT PARAMETERS
     point_param = Point.Point.getDefaultParameters()
-    point_param['artificial']=[4]
-    point_param['artificial_condition']=[probability.condition]
+  #  point_param['artificial']=[4]
+  #  point_param['artificial_condition']=[probability.condition]
     
     pprev = p
     p = Point.Point(fp_sde,nsolv,None,point_param)

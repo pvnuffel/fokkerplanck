@@ -5,6 +5,16 @@ Peter~N. Brown and Youcef Saad.
 \newblock Hybrid krylov methods for nonlinear systems of equations.
 \newblock {\em SIAM J. Sci. Stat. Comput.}, 11(3):450--481, May 1990.
 
+\bibitem{broyden2004krylov}
+C.G. Broyden and M.T. Vespucci.
+\newblock {\em Krylov Solvers for Linear Algebraic Systems: Krylov Solvers}.
+\newblock Studies in Computational Mathematics. Elsevier Science, 2004.
+
+\bibitem{campbell96}
+S.~L. Campbell, I.~C.~F. Ipsen, C.~T. Kelley, and C.~D. Meyer.
+\newblock {GMRES and the minimal polynomial}.
+\newblock {\em BIT Numerical Mathematics}, 36(4):664--675, dec 1996.
+
 \bibitem{Garnier}
 Josselin Garnier, George Papanicolaou, and Tzu-Wei Yang.
 \newblock {Large deviations for a mean field model of systemic risk}.

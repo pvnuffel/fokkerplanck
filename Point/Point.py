@@ -8,6 +8,9 @@ import Solver.Solver as Solver
 import Solver.LinearSolver as LinearSolver
 import System.System as System
 
+import matplotlib.pylab as plt
+
+
 class Point(scipy.sparse.linalg.LinearOperator):
 
     """ 
@@ -116,13 +119,35 @@ class Point(scipy.sparse.linalg.LinearOperator):
     def setState(self,u,lambd):
         self.u=u
         self.lambd=lambd
-    #    self.system.setState(u,lambd)  #need  to use this again for continuation
+        self.system.setState(u,lambd)  #need  to use this again for continuation       
+        #om onbegrijpelijke reden stond bovenstaande lijn initieel in commentaar waardoor het residu in Newtonsolver niet werd geupdated.
+        # this is meant to deal with preconditioner matrix that needs to be
+        # built if the state changes.
+#        if not self.precond == None:
+#            self.precond.new_build()
+#        self.solver.new_build()
+        
+#    def updateLambd(self, lambd):
+#        # self.u=u
+#        # self.lambd=lambd
+#        self.system.setState(u,lambd)  #need  to use this again for continuation
+#        # this is meant to deal with preconditioner matrix that needs to be
+#        # built if the state changes.
+#        if not self.precond == None:
+#             self.precond.new_build()
+#        self.solver.new_build()
+    def updateState(self):
+        # self.u=u
+        # self.lambd=lambd
+        u, lambd = self.getState()
+        self.system.setState(u,lambd)  #need  to use this again for continuation
         # this is meant to deal with preconditioner matrix that needs to be
         # built if the state changes.
         if not self.precond == None:
-            self.precond.new_build()
+             self.precond.new_build()
         self.solver.new_build()
-    
+
+
     def getState(self):
         """
         Returns (u,lambd)
@@ -162,6 +187,7 @@ class Point(scipy.sparse.linalg.LinearOperator):
         lambd[self.param['free']]=x[n:n+l]
         lambd[self.param['artificial']]=x[n+l:]
         self.setState(u,lambd)
+        self.updateState()
     
     def getCurrentGuess(self):
         """
@@ -174,7 +200,7 @@ class Point(scipy.sparse.linalg.LinearOperator):
 
         The vector "x" has a part "u"  that describes the
         current solution, "free" for values of the free parameters 
-        and a part "art" containing the values of thhe artificial
+        and a part "art" containing the values of the artificial
         parameters.
         
              [       ]
@@ -216,6 +242,8 @@ class Point(scipy.sparse.linalg.LinearOperator):
             r = artificial[i]['res'] 
             res = scipy.r_[res,r] 
         return res
+        
+
     
     def computeJacobian(self): 
         """ 
@@ -418,7 +446,19 @@ class Point(scipy.sparse.linalg.LinearOperator):
         #                              [  art  ]
         if not sx_norm==0:
             if option == "jac":
-                Mv_x=self.system.applyJacobian(sx)
+#                print "Now, the Jac-vec product is calculated in Point-class. The vector is "
+#                plt.plot(sx)
+#                plt.title(r'$\delta$')
+#                plt.show() 
+                 Mv_x=self.system.applyJacobian(sx)
+#                print "and the Jac-vectorproduct is "
+#                plt.plot(Mv_x)
+#                plt.title(r'$J\delta$')
+#                plt.show()
+#                print  "and the difference between the two is non-zero: "
+#                plt.plot(Mv_x-sx)
+#                plt.title(r'$J\delta - \delta $')
+#                plt.show()
             if option == "precond":
                 Mv_x=self.system.applyPreconditioner(sx)
         else:
@@ -528,7 +568,7 @@ class Point(scipy.sparse.linalg.LinearOperator):
         """
         n=len(self.u)
         l=len(self.param['free'])
-        a=len(self.param['art'])
+        a=len(self.param['artificial'])
         A=scipy.zeros((n+l+a,n+l+a),scipy.float64)
         for i in range(n+l+a):
             y=scipy.zeros((n+l+a,),scipy.float64)
@@ -582,13 +622,18 @@ class Point(scipy.sparse.linalg.LinearOperator):
         """
         Returns a * point + pointy
         """
-        p=Point(self.system,self.solver,self.param)
-        p.setState(a*self.u+pointy.u,\
-            a*self.lambd+pointy.lambd)
+        #p=Point(self.system,self.solver,self.param)    
+        p=Point(self.system,self.solver,  self.precond, self.param)
+        print 'New point with density rho = ', a*self.u+pointy.u
+        print 'and lambda = ',  a*self.lambd+pointy.lambd
+        p.setState(a*self.u+pointy.u, a*self.lambd+pointy.lambd)
         return p
-    
+        
+ 
+        
     def copy(self):
-        return Point(self.system,self.solver,self.param)
+   #     return Point(self.system,self.solver, self.param)
+        return Point(self.system,self.solver,self.precond, self.param)
     
     def save(self,file,group,table):
         # om zeker te zijn dat het systeem in een

@@ -1,5 +1,6 @@
 \documentclass[]{article}
 \usepackage{amsmath}
+\usepackage{amsthm}
 \usepackage{amssymb}
 \usepackage{graphicx}
 \usepackage[utf8]{inputenc} 
@@ -10,7 +11,7 @@
 \usepackage[left=4cm]{geometry}
  %http://tex.stackexchange.com/questions/595/how-can-i-get-bold-math-symbols
 %opening
-\title{}
+\title{Variance reduction in coarse bifurcation analysis of stochastic models}
 \author{Pieter Van Nuffel}
 
 \newcommand{\R}{\ensuremath{\mathbb{R}}} % commando zonder argumenten
@@ -22,14 +23,18 @@
 \newcommand{\ppa}[2]{\frac{\partial^2 #1}{\partial #2^2}}
 \newcommand{\dd}{\ensuremath{\mathrm{d}}}
 \newcommand{\U}{\ensuremath{\boldsymbol{\rho}}}
-\newcommand{\cts}{\ensuremath{\boldsymbol{\Phi}_T}} %Coarse time step
-\newcommand{\V}{\ensuremath{\mathbf{v}}}
+\newcommand{\cts}{\ensuremath{\boldsymbol{\Phi}^N_T}} %Coarse time step
+\newcommand{\V}{\ensuremath{\mathbf{v}}} 
 \newcommand{\jv}{\ensuremath{\mathbf{\hat{Jv}}}}
 \newcommand{\jvpde}{\ensuremath{\mathbf{Jv}_{FP}}}
 
+\theoremstyle{definition}
+\newtheorem{Theorem}{Theorem}
+
+
 \begin{document}
 
-\maketitle
+\maketitle{}
 
 \begin{abstract}
 
@@ -71,6 +76,7 @@ We develop a Newton-Krylov method that is able to compute accurately and efficie
 
 \section{Problem}
 
+ As a toy problem we use a model where the closed model is exact. In general, we are interested in performing a bifurcation analysis for a model for which at which an exact, closed model at the macorscopic level is not available.
 \subsection{Model problem}
 
 \input{fokkerplanck_update.tex}
@@ -79,6 +85,9 @@ We develop a Newton-Krylov method that is able to compute accurately and efficie
 
 
 \section{Method}
+\subsection{Coarse time stepper}
+\input{coarse_time_stepper.tex}
+
 
 \subsection{Newton-Krylov solver} \label{sec:Newton-Krylov}
 
@@ -89,9 +98,7 @@ If we want to compute steady states for the density $\U_*$ without direct simula
   {F}(\U_*) = \U_* - \cts(\U_*) =0. \label{non-linear_system}
 \end{equation}
 %where $\mathbf{F}$ is nonlinear function from $\R^N$ to  $\R^N$. 
-To find the steady state $\U_*$, we apply Newton's method to eq. \ref{non-linear_system} . Starting from an initial state $\U^0$, we iterate 
-
-
+To find the steady state $\U_*$, we apply Newton's method to eq. \ref{non-linear_system}. Starting from an initial state $\U^0$, we iterate %in two  steps, because the inverse of the the inverse of the Jacobian is computationally expensive)
 \begin{eqnarray}
 \begin{cases}
 & \texttt{Solve         }  J(\U^n) \boldsymbol{\delta_n}  =  - {F}(\U^n) \label{linear_system}        \\          
@@ -107,14 +114,42 @@ The Jacobian $J(\cts)$ applied to a vector $\mathbf{v}$ (with unit norm) will be
 \begin{eqnarray}
 \label{Jv_approx}
 J(\cts) \cdot \mathbf{v} &\approx& \frac{\cts (\U + \varepsilon \mathbf{v}, \boldsymbol{\omega_1} )  - \cts (\U, \boldsymbol{\omega_2})}{\varepsilon} \\
-&\approx & \frac{\cts (\U, \boldsymbol{\omega_1} )  + \varepsilon D(\cts) (  \U, \boldsymbol{\omega_1})  \cdot \mathbf{v}  - \cts (\U, \boldsymbol{\omega_2}) }{\varepsilon} \nonumber
-.
+&\approx & \frac{\cts (\U, \boldsymbol{\omega_1} )  + \varepsilon J(\cts) (  \U, \boldsymbol{\omega_1})  \cdot \mathbf{v}  - \cts (\U, \boldsymbol{\omega_2}) }{\varepsilon} \nonumber
 \end{eqnarray}
 
-\subsection{Variance reduced Jacobian-vector product}
+\input{GMRES}
+
+\subsection{Variance reduced Jacobian-vector products}
+
+If we use the solution of the PDE, eq. \eqref{pde_discretization}, the time stepper is deterministic and the calculation of the Jacobian-vector products is straightforward. If we use the solutions of the SDE however, we have to deal with numerical noise in evaluating eq. \ref{Jv_approx}.
+Because the coarse time-stepper is stochastic, repeating $\cts$ with two sets of random numbers ($\boldsymbol{\omega_1}$ and $ \boldsymbol{\omega_2}$)  will give different results. For $ \varepsilon \ll 1$ this will result in an $\mathcal{O}(1/(\varepsilon^2 N))$ variance. Consequently the variance on the Jacobian-vector-products will grow unboundedly as $\varepsilon$ tends to zero and $J(\cts) \cdot \mathbf{v}$ completely loses the structure of the perturbation \V.
+
+This numerical noise can be reduced by using the same random numbers $\boldsymbol{\omega}$ for the unperturbed and perturbed simulations. If we apply the weighted restriction operator \eqref{restriction_eps},  we get the same microscopic realizations in the lifting step - the only difference is in the computation of the weights. As such,  we impose $\boldsymbol{\omega_1} = \boldsymbol{\omega_2}$ in eq. \eqref{Jv_approx} and consequently the variance of $J(\cts) \cdot \mathbf{v}$ is bounded and of  $\mathcal{O}(1/ N)$.  In the limit of infinitely many particles, the result will converge to the exact Jacobian-vector product. For finite values of $N$, there will be noise in the Jacobian-vector product as a result of the random selection of a subset of all possible realizations. The presented procedure only prevents noise blowup that would arise if a different selection of realizations were considered for the perturbed and unperturbed coarse time-step.
+
 
 \section{Analysis}
 \subsection{Variance}
+
+Fig. \ref{Var_N} shows that the variance on the stochastic solution for the Jacobian-vector-product converges to zero with $\mathcal{O}(1/ N)$ and that it does not depend on the value of $\varepsilon$.
+
+\begin{figure}
+\centering
+\includegraphics[width=0.8\linewidth]{../Problems/Particles/checkSystem/plots/Var_N_eps_nw}
+\caption[Effect of variance reduction]{In the case of unweighted restriction, the variance on the stochastic solution of the Jacobian-vector-product becomes unbounded as we decrease the perturbation size $\epsilon$. By using weights in the restriction step, the variance does not longer depend on the value of $\varepsilon$ and   converges to zero with $\mathcal{O}(1/ N)$.}
+\label{Var_N}
+\end{figure}
+
+%\input{GMRES.tex}
+
+
+The convergence of the density to the real solution, strongly depends on the number of particles $N$ and on the choise of $\epsilon$ in the GMRES-method. 
+
+
+
+\subsection{}
+
+
+
 \subsection{bias}
 
 
@@ -173,6 +208,35 @@ To establish the idea, let us repeat the numerical simulations with eq. \ref{SDE
 
 \subsection{Bifurcation study}
 
+
+
+\subsubsection{Nota's}
+Tijdens elke continueringsstap, wordt een nieuw punt gecreëerd dat initieel de dichtheid \U krijgt van het vorig punt en met een parameter (D) die horizontaal word geupdate. Dan wordt de norm van het residu berekend $\norm{ \U(t) - \U(t+\Delta t)} $, waarin de dichtheid op de volgende tijdsstap verkregen wordt door een simulatie van het systeem met de nieuwe parameter. De grootte van het residu is dus afhankelijk van de stapgrootte in de bifurcatieparamter. De newtontolerantie is de norm van het residu. Als de newton-tolerantie te groot gekozen wordt (in vergelijking met de stapgrootte van het residu), dan wordt er geen Newton-iteratie uitgevoerd. Als de Newton-tolerantie evenwel te klein gekozen wordt, dan bereikt de Newton-solver mogelijk geen convergentie ten gevolge van de ruis. De Newton-tolerantie moet dus weloverwogen gekozen worden. 
+
+\subsection{Results for the pde}
+Ook hier zien we dat de keuze van de newtontolerantie belangrijk is (te groot = kans op dezelfde toestanden , te klein= failed iterations).
+Dit kan echter opgevangen worden door de oplossing van dx nauwkeuriger te maken door de tolerantie van de GMRES te verfijnen (het probleem was dat er dx=0 oplossingen werden teruggegeven) 
+
+\begin{figure}
+\includegraphics{../Problems/WeightedParticles/checkSystem/plots/bifurcation_pde(D)}
+\caption{  Bifurcation diagram of the steady states calculated with the Newton-Krylov-Solver for the PDE. $\Delta t = 10^{-4}, \Delta T = 10^{-2}, \Delta x = 10^{-2}, \Delta D = 0.01, \epsilon_{GMRES}=10^{-5},  \delta_{Newton} = 10^{-7}, \epsilon=10^{-5}$
+}
+\end{figure}
+
+%\begin{center}
+%\begin{table}
+%\caption{Parameter values}
+%  \begin{tabular} { | c  | c |}    \hline   
+%     %FTCS-scheme  &   Euler-Maruyama-scheme  \\  
+%   \textit{ {Discretization parameters}}&    &  SDE    \\ \hline
+%       $\Delta t $  & $10^{-4}$ \\ 
+%       $\Delta T $ &  $10^{-2}$ \\ 
+%      $ \Delta x &  $10^{-2}$ \\ 
+%       $ \Delta D$  $  &  $ 0.01 $ \\ \hline
+%  \end{tabular}
+%\end{table}
+%\end{center}
+
 \subsubsection{Calculating fixed points}
 The steady  states are computed with the Newton-Krylov solver described in section \ref{sec:Newton-Krylov} and compared with the approximated analytical solutions, calculated by Garnier et. al for small $h$ \cite{Garnier}.
 
@@ -190,6 +254,8 @@ The steady  states are computed with the Newton-Krylov solver described in secti
 \subsubsection{Continuation}
 We use a pseudo-arclength contunaution method with secant prediction steps.
 In fig. \ref{todo} we show a bifurcation diagram of the densities. 
+
+
 
 
 
@@ -220,7 +286,18 @@ By adding the mean reversion term, the Fokker-Plack equation \eqref{fokkerplanck
 Explicit solutions of eq. \label{fp_mean_field} are not available in general, but we can find equilibrium solutions. Assuming 
 
 
+
+
+
+\section{Newton convergence}
+
+
+
 \bibliographystyle{plain}
 \bibliography{biblio.bib}
+
+
+
+
 
 \end{document}

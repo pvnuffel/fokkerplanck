@@ -43,13 +43,20 @@ class TimestepperSystem(System.System):
         self.lambd = lambd
         self.u_Dt = self.integrate(u,lambd)
        # self.x_prev = x_prev
-        print self.u_Dt
+        #print self.u_Dt
         print "leaving setState"
+        
+    def updateState(self, u, lambd):               #needed in Newton-solver?
+        self.u = self.integrate(u,lambd)
+        self.lambd = lambd
+                
+        
     def getResidual(self):
         """
         This method determines what the residual for the system is.
         """
         res = self.u - self.u_Dt
+      #  print '         Residual = ', res
         return res
     
     def computeJacobian(self):
@@ -57,7 +64,7 @@ class TimestepperSystem(System.System):
         returns the Jacobian of the system for the given state and
         parameter vectors
         """
-        print "ATTENTION: RUNNING COMPUTE JACOBIAN ON TIMESTEPPER SYSTEM"
+        print "ATTENTION: RUNNING COMPUTE JACOBIAN ON TIMESTEPPER SYSTEM!"
         n = len(self.u)
         A = scipy.zeros((n,n))
         for i in range(n):
@@ -72,11 +79,18 @@ class TimestepperSystem(System.System):
         approximation to) (1-J)*v 
         """
         
-        print "WE ARE IN FP"
+    #    print "we are in FP"
         eps = self.param['eps']
         u_eps = self.u + eps * v/norm(v)
+        
         u_eps_Dt = self.integrate(u_eps,self.lambd)
-        result = (u_eps_Dt - self.u_Dt)/eps*norm(v)
+        
+#        print 'checksum u_eps_Dt = ' , sum(u_eps_Dt)
+#        print 'checksum u__Dt = ' , sum(self.u_Dt)
+#        print 'checksum Jv= ' , sum( (u_eps_Dt -self.u_Dt)/eps*norm(v))
+        result = v - (u_eps_Dt - self.u_Dt)/eps*norm(v)
+#        print 'checksum v= ' , sum(v)
+#        print 'check j-Jv' , sum(result)
         return result   
     
     def getParameterDerivative(self,i):

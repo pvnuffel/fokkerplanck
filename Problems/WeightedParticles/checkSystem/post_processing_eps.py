@@ -10,11 +10,12 @@ import sys
 import numpy as np
 import matplotlib.pylab as plt
 
+
 from scipy.linalg import norm
 from scipy import sqrt
 
 import matplotlib.pylab as plt
-
+plt.rc('text', usetex=True)
 
 if __name__=="__main__":
     D = 1./2
@@ -146,7 +147,7 @@ if __name__=="__main__":
        
     for eps_i in range (0,len(eps_list)):
         plot_var = plt.plot(Nlist_inv, (sde_Jv_sq[eps_i] -sq_E_Jv[eps_i])/bins, lines[eps_i],
-                            label =r'$\varepsilon=10^{-%d}$' %eps_list_exponents[eps_i] , linewidth=2)
+                            label =r'$\varepsilon=10^{-%d}$' %eps_list_exponents[eps_i] , linewidth=3)
     plt.ylabel('Var ($\mathbf{\hat{Jv}} $)', fontsize = 16)
     plt.xlabel('$1/N$', fontsize = 16) 
     plt.xscale(log_flag)
@@ -154,6 +155,8 @@ if __name__=="__main__":
     plt.legend([plot_var], loc='best')
     plt.legend(bbox_to_anchor=(1, 0.5), numpoints = 1 )
     plt.gca().add_patch(triangle_o1var)
+    order= r'$\mathcal{O}(1/N)$'
+    plt.annotate(order,  xy=(2e-4, 2e-2), xytext=(1.1e-4, 5.2e-2), fontsize=11, color='grey')
     if(save_flag): plt.savefig("plots/Var_N_eps.pdf")
     plt.show()
     

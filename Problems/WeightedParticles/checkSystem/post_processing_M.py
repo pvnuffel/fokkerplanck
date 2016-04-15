@@ -22,13 +22,14 @@ if __name__=="__main__":
    
     Mlist= [ 20, 40, 60, 80, 100, 120, 140, 160, 180, 200]
     
-   # Nlist = scipy.array([1000, 2000,4000,8000,16000,32000,64000]) #,128000])
     Nlist = scipy.array([1000, 2000,4000,8000,16000,32000,64000, 128000, 256000])
     Nlist_inv = 1.0/Nlist
     rho_Dt_fp= np.loadtxt('data/25-11-Rho_pde_dx_e-4_eps-5.out')   #,  np.loadtxt('25-11-Rho_pde_dx_e-4_eps-5.out') ,  
     #np.loadtxt('25-11-Rho_pde_dx_e-4_eps-6.out') ,  np.loadtxt('25-11-Rho_pde_dx_e-4_eps-7.out') ]  #these data should be the same
-    Jv_pde= np.loadtxt('data/25-11-Jv_pde_dx_e-4_eps-5.out') 
-    Jv_pde_dxbig= np.loadtxt('data/Jv_pde_dx_5e-4_vsin.out') 
+#    Jv_pde= np.loadtxt('data/25-11-Jv_pde_dx_e-4_eps-5.out') 
+   # Jv_pde_dxbig= np.loadtxt('data/Jv_pde_dx_5e-4_vsin.out') 
+    Jv_coarse = np.loadtxt('Jv_pde_coarse.out')
+    
   #  Jv_pde = Jv_pde_list[1]
     
     #SDE       
@@ -82,30 +83,30 @@ if __name__=="__main__":
 
     bins = len(Jv_sde)
     
-    Jv_coarse = scipy.zeros(bins)
-    for i in range (0,bins):
-        bin_av = 0
-        for j in range (0,  resize_factor ):
-            bin_av = bin_av+ Jv_pde[i*resize_factor+j]
-            Jv_coarse[i] = bin_av/resize_factor
-            
-            
-    resize_factor = int (len(Jv_pde_dxbig)/len(Jv_sde))        
-    Jv_coarse_dxbig = scipy.zeros(bins)
-    for i in range (0,bins):
-        bin_av = 0
-        for j in range (0,  resize_factor ):
-            bin_av = bin_av+ Jv_pde[i*resize_factor+j]
-            Jv_coarse[i] = bin_av/resize_factor
+#    Jv_coarse = scipy.zeros(bins)
+#    for i in range (0,bins):
+#        bin_av = 0
+#        for j in range (0,  resize_factor ):
+#            bin_av = bin_av+ Jv_pde[i*resize_factor+j]
+#            Jv_coarse[i] = bin_av/resize_factor
+#            
+#            
+#    resize_factor = int (len(Jv_pde_dxbig)/len(Jv_sde))        
+#    Jv_coarse_dxbig = scipy.zeros(bins)
+#    for i in range (0,bins):
+#        bin_av = 0
+#        for j in range (0,  resize_factor ):
+#            bin_av = bin_av+ Jv_pde[i*resize_factor+j]
+#            Jv_coarse[i] = bin_av/resize_factor
                          
                 
   #  pde_rho_sq = norm(rho_coarse)**2
-    pde_Jv_sq = norm(Jv_coarse)**2
+  #  pde_Jv_sq = norm(Jv_coarse)**2
 
     
     log_flag = 'log'
   #  log_flag = 'linear'
-    save_flag = False
+    save_flag = True
     
     lines = ["-","--","-.",":","-","--","-.",":","-","--","-.",":"]    
 
@@ -192,8 +193,6 @@ if __name__=="__main__":
     #VBiasPlot
     
 
-
-    
     bias =  scipy.zeros(((len(Mlist), len(Nlist), bins)))
     biasnorm=  scipy.zeros((len(Mlist),len(Nlist)))
     bias_sq=  scipy.zeros((len(Mlist), len(Nlist)))
@@ -208,7 +207,7 @@ if __name__=="__main__":
             
     ax = plt.subplot(111)
     box = ax.get_position()
-    ax.set_position([box.x0, box.y0, box.width * 0.85, box.height])       
+    ax.set_position([box.x0+0.04, box.y0, box.width * 0.99, box.height])       
     for m in range (0,len(Mlist)):
         plot_bias_sq = plt.plot(Nlist_inv, bias_sq[m] /bins, lines[m], label =r'$M=%d$' %Mlist[m], linewidth=1.5  )
     plt.xlabel('$1/N$', fontsize = 16)
@@ -218,8 +217,11 @@ if __name__=="__main__":
     plt.xscale(log_flag)
     plt.yscale(log_flag)
     plt.legend([plot_bias_sq], loc='best')
+    order= r'$\mathcal{O}(1/N)$'
+    plt.annotate(order,  xy=(1.2e-5, 3.1e-3), xytext=(1.2e-5, 3.1e-3), fontsize=11, color='grey')
    # plt.legend(bbox_to_anchor=(0.32, 1), numpoints = 1 )
-    plt.legend(bbox_to_anchor=(1.3, 0.9), numpoints = 1,  prop={'size':9} )
+   # plt.legend(bbox_to_anchor=(1.3, 0.9), numpoints = 1,  prop={'size':9} )
+    plt.legend(bbox_to_anchor=(1, 0.57), numpoints = 1,  prop={'size':8} )
     if(save_flag): plt.savefig("plots/Bias_Jv_N_M.pdf")
     plt.savefig("plots/Bias_Jv_N_M.pdf")
     plt.show()
@@ -252,42 +254,42 @@ if __name__=="__main__":
         plt.ylabel( r'$\hat{\mathbf{Bias}}(\mathbf{\hat{Jv}} ,  \mathbf{Jv}_{FP} }) $', fontsize = 16)
         plt.legend([plot_bias], loc='best')
         plt.legend(bbox_to_anchor=(1, 1), numpoints = 1 )
-        if(save_flag): plt.savefig('plots/25-11Bias_e-_%d.pdf' %Mlist_exponents[m] )
+        if(save_flag): plt.savefig('plots/25-11Bias_e-_%d.pdf' %Mlist[m] )
         plt.show()
 
   #  MSE Plot
 
-    ax = plt.subplot(111)
-    box = ax.get_position()
-    ax.set_position([box.x0, box.y0, box.width * 0.8, box.height])
-    for m in range (0,len(Mlist)):
-        plot_Jv_mse = plt.plot(Nlist_inv, (sde_Jv_sq[m] - 2*np.dot(E_Jv[m],Jv_coarse)  + pde_Jv_sq)/bins, 
-                              lines[m], label =r'$M=%d$' %Mlist[m] , linewidth=2 )
-    plt.ylabel(r'MSE($\mathbf{\hat{Jv}} ,  \mathbf{Jv}_{FP} }$)', fontsize = 16)
-    plt.xlabel('$1/N$', fontsize = 16)
-    plt.xscale(log_flag)
-    plt.yscale(log_flag)
-    plt.legend([plot_Jv_mse], loc='best')
-    plt.legend(bbox_to_anchor=(1, 0.5), numpoints = 1 )
-    if(save_flag): plt.savefig("plots/25-11MSE_N.pdf")
-    plt.show()
-    
-    for m in range (0,len(Mlist)):
-        plot_Jv_mse2 = plt.plot(Nlist_inv,  (sde_Jv_sq[m] - sq_E_Jv[m] + bias_sq[m])/bins , lines[m], label =r'$M=%d$' %Mlist[m] , linewidth=2 )  #gives the same result, as expected
-    plt.ylabel(r'MSE($\mathbf{\hat{Jv}} , \mathbf{Jv}_{FP} $)', fontsize = 16)
-    plt.xlabel('$1/N$', fontsize = 16)
-    plt.xscale(log_flag)
-    plt.yscale(log_flag)
-    plt.legend([plot_Jv_mse], loc='best')
-    plt.legend(bbox_to_anchor=(1, 0.5), numpoints = 1 )
-    plt.show()
-    
-    plot_Jv =  plt.plot(Jv_sde, '-', color='g', label = '$\$',  linewidth=2)
-    plot_Jv = plt.plot( Jv_coarse, '--', color='b' , label = '$\$',  linewidth=2)
-
-    plt.ylabel(r' $Jv$', fontsize = 16)
-   # plt.xlabel('$x$', fontsize = 16)
-    plt.show()
+#    ax = plt.subplot(111)
+#    box = ax.get_position()
+#    ax.set_position([box.x0, box.y0, box.width * 0.8, box.height])
+#    for m in range (0,len(Mlist)):
+#        plot_Jv_mse = plt.plot(Nlist_inv, (sde_Jv_sq[m] - 2*np.dot(E_Jv[m],Jv_coarse)  + pde_Jv_sq)/bins, 
+#                              lines[m], label =r'$M=%d$' %Mlist[m] , linewidth=2 )
+#    plt.ylabel(r'MSE($\mathbf{\hat{Jv}} ,  \mathbf{Jv}_{FP} }$)', fontsize = 16)
+#    plt.xlabel('$1/N$', fontsize = 16)
+#    plt.xscale(log_flag)
+#    plt.yscale(log_flag)
+#    plt.legend([plot_Jv_mse], loc='best')
+#    plt.legend(bbox_to_anchor=(1, 0.5), numpoints = 1 )
+#    if(save_flag): plt.savefig("plots/25-11MSE_N.pdf")
+#    plt.show()
+#    
+#    for m in range (0,len(Mlist)):
+#        plot_Jv_mse2 = plt.plot(Nlist_inv,  (sde_Jv_sq[m] - sq_E_Jv[m] + bias_sq[m])/bins , lines[m], label =r'$M=%d$' %Mlist[m] , linewidth=2 )  #gives the same result, as expected
+#    plt.ylabel(r'MSE($\mathbf{\hat{Jv}} , \mathbf{Jv}_{FP} $)', fontsize = 16)
+#    plt.xlabel('$1/N$', fontsize = 16)
+#    plt.xscale(log_flag)
+#    plt.yscale(log_flag)
+#    plt.legend([plot_Jv_mse], loc='best')
+#    plt.legend(bbox_to_anchor=(1, 0.5), numpoints = 1 )
+#    plt.show()
+#    
+#    plot_Jv =  plt.plot(Jv_sde, '-', color='g', label = '$\$',  linewidth=2)
+#    plot_Jv = plt.plot( Jv_coarse, '--', color='b' , label = '$\$',  linewidth=2)
+#
+#    plt.ylabel(r' $Jv$', fontsize = 16)
+#   # plt.xlabel('$x$', fontsize = 16)
+#    plt.show()
     
     
                 #plot_biasnorm = plt.plot(bias_sq[i], label=r'$N= %d$' %Nlist[i]  )

@@ -5,7 +5,7 @@ sys.path.append('../')   #added to resolve importerror of nephew-directories
 sys.path.append('../../')
 sys.path.append('../../../')
 
-
+from scipy.linalg import norm
 
 
 import System.TimestepperSystem as TSystem
@@ -62,7 +62,7 @@ class Particles(TSystem.TimestepperSystem):
         self.lifting.seed(self.lifting.param['seed'])
         #self.seed(self.param['seed'])
         x = self.lift(rho)
-        print "nb particles : ", len(x)
+       # print "nb particles : ", len(x)
         x_Dt = self.simulate(x,lambd)
         return self.restrict(x_Dt)
     
@@ -87,8 +87,8 @@ class Particles(TSystem.TimestepperSystem):
             tcur += dt
             # the random number
             dW=self.rand.normal(loc=0.,scale=scipy.sqrt(2*D*dt),size=N)
-          #  if tcur == dt:    #only print random number for first time step
-          #      print 'dW =',  dW            
+#            if tcur == dt:    #only print random number for first time step
+#                print 'dW =',  dW            
             
             # the process
             drift_term = a * drift(x)
@@ -105,4 +105,15 @@ class Particles(TSystem.TimestepperSystem):
         dx = self.grid[1]-self.grid[0]
         N = len(self.u)
         return self.precond.computeJacobian(N,dx)
-    
+        
+
+#    def applyJacobian(self,v):  #In Timestepperystem
+#
+#        eps = self.param['eps']
+#        u_eps = self.u + eps * v/norm(v)
+#        print self.seed
+#        u_eps_Dt = self.integrate(u_eps,self.lambd)
+#        print self.seed
+#        result = (u_eps_Dt - self.u_Dt)/eps*norm(v)
+#        return result   
+#    

@@ -1,0 +1,64 @@
+@article{avitabile14,
+  author = "Avitabile, Daniele and Hoyle, Rebecca and Samaey, Giovanni",
+  title = "Noise reduction in coarse bifurcation analysis of stochastic agent-based models: an example of consumer lock-in",
+  journal = "SIAM Journal on Applied Dynamical Systems",
+  volume = "13",
+  number = "4",
+  pages = "1583--1619",
+  year = "2014",
+  url = "https://lirias.kuleuven.be/handle/123456789/492023",
+}
+
+@article{watts98,
+  author="Watts, Duncan J and Strogatz, Steven H",
+  title= {\href{http://www.nature.com/nature/journal/v393/n6684/pdf/393440a0.pdf} {Collective dynamics of 'small-world' networks}},
+  journal="Nature",
+  volume="393",
+  pages="440--442",
+  year="1998"
+}
+
+@TechReport{Garnier,
+  author={Josselin Garnier and George Papanicolaou and Tzu-Wei Yang},
+  title={{Large deviations for a mean field model of systemic risk}},
+  year=2012,
+  month=Apr,
+  institution={arXiv.org},
+  type={Papers},
+  url={https://ideas.repec.org/p/arx/papers/1204.3536.html},
+  number={1204.3536},
+  abstract={We consider a system of diffusion processes that interact through their empirical mean and have a stabilizing force acting on each of them, corresponding to a bistable potential. There are three parameters that characterize the system: the strength of the intrinsic stabilization, the strength of the external random perturbations, and the degree of cooperation or interaction between them. The latter is the rate of mean reversion of each component to the empirical mean of the system. We interpret this model in the context of systemic risk and analyze in detail the effect of cooperation between the components, that is, the rate of mean reversion. We show that in a certain regime of parameters increasing cooperation tends to increase the stability of the individual agents but it also increases the overall or systemic risk. We use the theory of large deviations of diffusions interacting through their mean field.},
+  keywords={},
+  doi={},
+}
+
+@article{Brown_Krylov,
+ author = {Brown, Peter N. and Saad, Youcef},
+ title = {Hybrid Krylov Methods for Nonlinear Systems of Equations},
+ journal = {SIAM J. Sci. Stat. Comput.},
+ issue_date = {May 1990},
+ volume = {11},
+ number = {3},
+ month = may,
+ year = {1990},
+ issn = {0196-5204},
+ pages = {450--481},
+ numpages = {32},
+ url = {http://dx.doi.org/10.1137/0911026},
+ doi = {10.1137/0911026},
+ acmid = {78496},
+ publisher = {Society for Industrial and Applied Mathematics},
+ address = {Philadelphia, PA, USA},
+} 
+
+
+@book{broyden2004krylov,
+  title={Krylov Solvers for Linear Algebraic Systems: Krylov Solvers},
+  author={Broyden, C.G. and Vespucci, M.T.},
+  isbn={9780080478876},
+  series={Studies in Computational Mathematics},
+  url={https://books.google.be/books?id=WoyUPP1Ps2QC},
+  year={2004},
+  publisher={Elsevier Science}
+}
+GMRES and the minimal polynomial

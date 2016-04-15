@@ -11,7 +11,7 @@ sys.path.append('../../../')
 import System.TimestepperSystem as TSystem
 
 def doublewell(x):
-    return 2*x-4*x**3   
+    return  2*x-4*x**3   
 
 
 def d2udx2(u,dx):

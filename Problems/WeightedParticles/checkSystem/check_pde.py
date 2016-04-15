@@ -28,13 +28,13 @@ import pde
 
 if __name__=="__main__":
     D = 1./2.
-    Dt = 1e-2
+    Dt = 2
     seed = 16
     # discretization parameters
    #h=2e-2 # kde mesh width 
     dx = 1e-3
 #    dxlist= [1e-2,  5e-3, 1e-3, 5e-4] 
-    dxlist= [1e-2, 1e-3]
+    dxlist= [1e-2]
     dt = min(dxlist)**2/(2*D)
     #r= (2.*D*dt)/(dx)**2
     r= (2.*D*dt)/(min(dxlist))**2
@@ -65,13 +65,15 @@ if __name__=="__main__":
         print "rho: ", rho
  
         fp_pde = pde.FokkerPlanck(rho,grid,pde.doublewell,lambd,param)
+        rho_Dt = fp_pde.u_Dt
 
         v=scipy.zeros_like(grid)
         v[200]=-1
         v[300]=1
     
         Jv_pde = fp_pde.applyJacobian(v)    
-        plt.plot(grid, Jv_pde)
+       # plt.plot(grid, Jv_pde)
+        plt.plot(grid, rho_Dt)
         plt.show()
         #rho_Dt_fp = fp_pde.u_Dt
         #plt.plot( grid, rho_Dt_fp)

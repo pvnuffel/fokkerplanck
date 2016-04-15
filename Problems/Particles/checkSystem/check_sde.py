@@ -27,7 +27,7 @@ a = 1  #advection coefficient
 D =  1./2. #difussion coefficient
 lambd = scipy.array([a,D])
 Dt = 0.01 
-N = 10000
+N = 1000
 eps = 1e-5
 
 # discretization parameters
@@ -41,7 +41,6 @@ grid = scipy.arange(xL+dx/2.,xR,dx)
 rho = scipy.ones_like(grid)
 rho = rho/(sum(rho)*dx)
 #print ("rho: ", rho)
-
 
 v=scipy.zeros_like(grid)
 for j in range(len(grid)): 
@@ -64,7 +63,7 @@ param['Dt'] = Dt
 param['dt']=dt
 
 param['eps']= eps
-M=500 #number of monte carlo steps  
+M=100 #number of monte carlo steps  
 
 E_rho =scipy.zeros_like(rho)
 E_Jv =scipy.zeros_like(rho)

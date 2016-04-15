@@ -17,7 +17,7 @@ class Sampler(object):
     def lift(self,rho,grid,N):
         cum,edges = self.rho2cum(rho,grid)
         y = self.rand.uniform(size=N)
-        print "sampling density with seed : ", self.cur_seed, "first sample: ", y[0]
+     #   print "sampling density with seed : ", self.cur_seed, "first sample: ", y[0]
         return self.inv_cum(y,cum,edges)
     
     def rho2cum(self,rho,grid):

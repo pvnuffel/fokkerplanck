@@ -3,6 +3,8 @@ from scipy.linalg import norm
 from scipy import sqrt
 import numpy as np
 import sys         
+import matplotlib.pylab as plt
+
 sys.path.append('../')   #added to resolve importerror of nephew-directories
 sys.path.append('../../')
 sys.path.append('../../../')
@@ -117,39 +119,62 @@ class Particles(TSystem.TimestepperSystem):
         x = self.lifting.lift(rho,grid,self.param['Nsmall'],self.skip)
         return x
     
-    def simulate(self,x0,seedlist,lambd):
-        #print "in simulate : ", lambd
-        x_Dt = scipy.zeros_like(x0)
-        for i in range(len(x0)):
-            x_Dt[i]=self.simulate_particle(x0[i],seedlist[i],lambd)
-#            if (i==42): 
-#                print 'position diff for particle 42 =' , x_Dt[i]-x0[i]
-        return x_Dt
-    
-    def simulate_particle(self,x,seed,lambd):
-        tstart = 0
-        tcur = tstart
+#    def simulate(self,x0,seedlist,lambd):
+#        #print "in simulate : ", lambd
+#        x_Dt = scipy.zeros_like(x0)
+#        for i in range(len(x0)):
+#            x_Dt[i]=self.simulate_particle(x0[i],seedlist[i],lambd)
+##            if (i==42): 
+##                print 'position diff for particle 42 =' , x_Dt[i]-x0[i]
+#        return x_Dt
+#    
+#    def simulate_particle(self,x,seed,lambd):
+#        tstart = 0
+#        tcur = tstart
+#        Dt = self.param['Dt']
+#        # Dt needs to be a multiple of param['Dt']
+#        dt = self.param['dt']
+#        D = lambd[1]
+#        a = lambd[0]
+#       # print "seed", seed
+#      #  self.seed_particle(seed)    # is this why every particle gets different random numbers?
+#        while (tcur < tstart + Dt - dt/2 ):
+#            tcur += dt
+#            # the random number
+#            dW = self.getBrownianIncrement()
+#     #       if tcur == dt:    #only print random number for first time step
+#            #    print dW
+#            # the process
+#            drift_term = a * self.drift(x)
+#            x=x+drift_term*dt+sqrt(2*D*dt)*dW
+#            # and reflecting boundary conditions
+#            if (x>self.domain[1]):
+#                x = 2*self.domain[1]-x
+#            if (x<self.domain[0]):
+#                x = 2*self.domain[0]-x
+#        return x
+        
+    def simulate(self,x, seedlist, lambd):   #using this for-loop works 100 times faster in comparison with the implementation in 
         Dt = self.param['Dt']
-        # Dt needs to be a multiple of param['Dt']
         dt = self.param['dt']
-        D = lambd[1]
+        D= lambd[1]
+        sigma = np.sqrt(D)
         a = lambd[0]
-       # print "seed", seed
-      #  self.seed_particle(seed)    # is this why every particle gets different random numbers?
-        while (tcur < tstart + Dt - dt/2 ):
-            tcur += dt
+     #   alpha =lambd[2]
+        
+        n_steps = int(Dt/dt)
+
+        for tcur in range(0, n_steps):
             # the random number
-            dW = self.getBrownianIncrement()
-     #       if tcur == dt:    #only print random number for first time step
-            #    print dW
-            # the process
+            dW=self.rand.normal(loc=0.,scale=sigma*scipy.sqrt(dt),size=self.N)
+           # if tcur == 1:    #only print random number for first time step
+            #    print 'dW =',  dW            
+                    # the process
             drift_term = a * self.drift(x)
-            x=x+drift_term*dt+sqrt(2*D*dt)*dW
+            x=x+ drift_term*dt+dW 
             # and reflecting boundary conditions
-            if (x>self.domain[1]):
-                x = 2*self.domain[1]-x
-            if (x<self.domain[0]):
-                x = 2*self.domain[0]-x
+            scipy.where(x>self.domain[1],2*self.domain[1]-x,x)
+            scipy.where(x<self.domain[0],2*self.domain[0]-x,x)
         return x
     
     def getBrownianIncrement(self):
@@ -176,14 +201,14 @@ class Particles(TSystem.TimestepperSystem):
     def setBins(self):   #convert position list for every particle in a list of bin-numbers for ervery particle
         self.bin = self.restriction.getBins(self.x,self.grid,self.domain)
     
-    def computeJacobian(self,precond=False):
-        if precond:
-            dx = self.grid[1]-self.grid[0]
-            N = len(self.u)
-            return self.precond.computeJacobian(N,dx) 
-        else:
-            return TSystem.TimestepperSystem.computeJacobian(self)
-    
+#    def computeJacobian(self,precond=False):
+#        if precond:
+#            dx = self.grid[1]-self.grid[0]
+#            N = len(self.u)
+#            return self.precond.computeJacobian(N,dx) 
+#        else:
+#            return TSystem.TimestepperSystem.computeJacobian(self)
+#    
     def applyJacobian_obs(self,v):
         eps = self.param['eps']
         # compute weights per bin for perturbation 
@@ -204,10 +229,18 @@ class Particles(TSystem.TimestepperSystem):
         
         
     def applyJacobian(self,v):
+        #print 'APPLYING PARTICLES-BASED JACOBIAN'
         eps = self.param['eps']
         # compute weights per bin for perturbation 
         # w = 1 + eps * v/rhoT
+#        print 'checksum v = ', sum(v) 
+      #  plt.plot(v)
+      #  plt.show()
+        
+#        print 'checknorm v = ', norm(v) 
         w_bin = 1. + eps * v/(norm(v)*self.u)
+#        print 'wbin', w_bin
+#        print 'sum w_bin= ', sum(w_bin)
         self.wbin = w_bin
         if(self.w_prev != None):
             bin_tot =  scipy.r_[self.w_prev, self.bin]  
@@ -217,18 +250,22 @@ class Particles(TSystem.TimestepperSystem):
      #   print 'bintot =',  bin_tot
         # transform to weights per particle
         w_part = w_bin[bin_tot]   #gives the weight corresponding to the bin index for each particle
-        total = scipy.sum(w_part)/self.Nlarge  #may not be exactly 1
-    #    print total
+#        print 'wpart', w_part
+        total = scipy.sum(w_part)/self.Nlarge  #may not be exactly 1            #This factor was not included anymore since 17/03/2016
+#        print 'sum of weights =' , total
         # note that the perturbed state is no longer a probability distribution
         # so norming the histograms is not entirely correct
-        u_eps_Dt = total*self.restriction.restrict(self.x_Dt,self.grid,self.domain,w=w_part) 
+        u_eps_Dt = self.restriction.restrict(self.x_Dt,self.grid,self.domain,w=w_part)  
+#        print 'checksum u_eps_Dt = ' , sum(u_eps_Dt)
+#        print 'checksum u__Dt = ' , sum(self.u_Dt)
+#        print 'checkdifference u__Dt = ' , sum(u_eps_Dt) - sum(self.u_Dt) 
+#        print 'checksum Jv= ' , sum( (u_eps_Dt -self.u_Dt)/eps*norm(v))
         #the difference between U_eps_Dt and U_Dt is w_part (they use the same x_Dt)
       #  Jv = v-(u_eps_Dt -self.u_Dt)/eps*norm(v)
-        Jv = (u_eps_Dt -self.u_Dt)/eps*norm(v)
-        Jv= v- Jv
+        Jv = v- (u_eps_Dt -self.u_Dt)/eps*norm(v)
+#        print 'checksum v - Jv,  = ' , sum(Jv)
         #control = self.controlJacobian(v)
         return Jv  #, u_eps_Dt, self.u_Dt
-    
     
     def testJacobian(self,v):
         eps = self.param['eps']
@@ -288,5 +325,24 @@ class Particles(TSystem.TimestepperSystem):
             control = (control_small - control_large)/eps*norm(v)
         return control      
 
-    
-    
+#    
+#        def makePlot(self, rho, lambd, tcur):   
+#        plt.axis([-2, 2, 0, 1]) 
+#        label1= r'$\rho (x,t)$'
+#        plot_rho = plt.plot(self.grid, rho, label=label1)
+#        plt.ylabel(r'$\rho$', fontsize = 16)
+#        plt.xlabel('$x$', fontsize = 14)
+#        D = lambd[1]
+#        a =lambd[0]
+#        dx = self.grid[1]-self.grid[0]
+#        norm = sum( np.exp((-self.grid**4 + self.grid**2 )*a/D))*dx
+#   #         norm = quad(lambda x: np.exp(-( x**4 -x**2)*a/D ), -np.inf, np.inf)  #gives same_result
+#        rho_ss = np.exp( (-self.grid**4 + self.grid**2 )*a/D)/norm
+#        label2= r'$\frac{ \exp{\left[-\frac{V(x)}{\sigma^2}\right]}}{\mathcal{N}}$'
+#        plot_rho = plt.plot(self.grid, rho_ss, label=label2)
+#        plt.legend(prop={'size':0.1})
+#        plt.legend([plot_rho], loc='best')
+#        plt.legend(bbox_to_anchor=(1, 1), numpoints = 1 )
+#        plt.savefig('movieplots/plot_rho_t%.5d.jpg' %tcur, dpi=500)
+#        #plt.savefig('movieplots/plot_rho_t%.5d.pdf' %tcur)
+#        plt.close()   

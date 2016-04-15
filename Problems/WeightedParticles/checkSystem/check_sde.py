@@ -12,7 +12,7 @@ import numpy as np
 from scipy.linalg import norm
 from scipy import sqrt
 
-#import matplotlib.pylab as plt
+import matplotlib.pylab as plt
 
 sys.path.append("../system/")
 sys.path.append("../lifting/")
@@ -33,9 +33,9 @@ import Utils.conditions.probability as probability
 #import Continuer.Continuer as Continuer 
 
 if __name__=="__main__":
-    print 'Start solving sde'
-    D = 1./2.
-    Dt = 100
+
+    D = 1
+    Dt = 2
     seed = 16
     # discretization parameters
    #h=2e-2 # kde mesh width 
@@ -57,7 +57,7 @@ if __name__=="__main__":
 #    factor = int (dx/dx_fp)
 #    print "Discretisation for solving sde is ", factor, " times coarser than the discretisation for solving the pde"
     dt = 1e-2 # ti
-    N=1000
+    N=5000000
     Nlarge= N
     Nsmall =N
     
@@ -66,16 +66,9 @@ if __name__=="__main__":
     rho = scipy.ones_like(grid)
     rho = rho/(sum(rho)*dx)
     
-    
-
     v=scipy.zeros_like(grid)
     for j in range(len(grid)): 
         v[j]= np.sin(j*2*np.pi/len(grid))
-
-#    v=scipy.zeros_like(grid)
-#    v[20]=1
-#    v[30]=-1
-     
     
   #  sampler_param = inv_transform.Sampler.getDefaultParameters()
   #  sampler_param['seed']=0
@@ -145,57 +138,58 @@ if __name__=="__main__":
                 rg_state = lifting.get_rg_state()  #We remember the internal state of the random generator to get new random number for sampling the new particles
                 
                 print "calculate .u_Dt"
-                rho_Dt = fp_sde.u_Dt 
+                rho_Dt_sde = fp_sde.u_Dt 
                 t0=time.time()
                 print "Simulation time for solving sde: " , t0-t1, " seconds"
                 #rho_fine = fp_sde.make_rho_fine(rho_Dt) 
              #   rho_sq[n] = rho_sq[n] + (norm(rho_Dt))**2
             #    E_rho[n] = E_rho[n] + rho_Dt           #matrix
         
+                plt.plot(rho_Dt_sde)
                 print "calculate JVs"
               #  Jv =fp_sde.applyJacobian(v)                                                 
                # Jv_sq[n] = Jv_sq[n] + (norm(Jv))**2
                 #E_Jv[n] = E_Jv[n] + Jv 
                 
                             # CREATING rho = scipy.ones_like(gridLINEAR SOLVER
-                gmres_param = GMRES.GMRESLinearSolver.getDefaultParameters()
-                gmres_param['tol']=1e-7
-                gmres_param['print']='short'
-                gmres_param['builtin']=True
-                linsolv = GMRES.GMRESLinearSolver(gmres_param)
-                linsolv2 = GMRES.GMRESLinearSolver(gmres_param)
-        
-                # CREATING NEWTON SOLVER
-                newt_param = NewtonSolver.NewtonSolver.getDefaultParameters()
-                newt_param['rel_tol']=1e-7
-                newt_param['abs_tol']=1e-7
-                newt_param['print']='short'
-                newt_param['max_iter']=10
-                nsolv = NewtonSolver.NewtonSolver(linsolv,newt_param)
-                nsolv2 = NewtonSolver.NewtonSolver(linsolv2,newt_param)
-        
-                # CREATING POINT
-                psolver_im = ImDirect.ImplicitEulerDirectLinearSolver()
-                psolver_im2 = ImDirect.ImplicitEulerDirectLinearSolver()
+#                gmres_param = GMRES.GMRESLinearSolver.getDefaultParameters()
+#                gmres_param['tol']=1e-7
+#                gmres_param['print']='short'
+#                gmres_param['builtin']=True
+#                linsolv = GMRES.GMRESLinearSolver(gmres_param)
+#                linsolv2 = GMRES.GMRESLinearSolver(gmres_param)
+#        
+#                # CREATING NEWTON SOLVER
+#                newt_param = NewtonSolver.NewtonSolver.getDefaultParameters()
+#                newt_param['rel_tol']=1e-7
+#                newt_param['abs_tol']=1e-7
+#                newt_param['print']='short'
+#                newt_param['max_iter']=10
+#                nsolv = NewtonSolver.NewtonSolver(linsolv,newt_param)
+#                nsolv2 = NewtonSolver.NewtonSolver(linsolv2,newt_param)
+#        
+#                # CREATING POINT
+#                psolver_im = ImDirect.ImplicitEulerDirectLinearSolver()
+#                psolver_im2 = ImDirect.ImplicitEulerDirectLinearSolver()
         
                 # POINT PARAMETERS
-                point_param = Point.Point.getDefaultParameters()
-                point_param['artificial']=[4]
-                point_param['artificial_condition']=[probability.condition]
+      #          point_param = Point.Point.getDefaultParameters()
+               # point_param['artificial']=[4]
+             #   point_param['artificial_condition']=[probability.condition]
                 
              #   pprev = p
-                p = Point.Point(fp_sde,nsolv,psolver_im, point_param)
-                p.correct()
+#                p = Point.Point(fp_sde,nsolv,psolver_im, point_param)
+#                p.correct()
                # points.append(p)
     
-                
+             #   newton_states = nsolv.newton_states
+             #   newton_states =  newton_states.reshape(nsolv.iterations +1, len(grid))
 #                alpha=4
 #                lambd = scipy.array([a,sigma,alpha,beta,zeta])
 #                fp_sde2 = particles.Particles(lifting,restriction,rho,grid, lambd, x_prev_sim, w_prev_sim, param=param )   
 #                p2 = Point.Point(fp_sde2,nsolv2,psolver_im2,point_param)
 #                p2.correct()
 #                points.append(p2)                      
-                
                 
                 
                 

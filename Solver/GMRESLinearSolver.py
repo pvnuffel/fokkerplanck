@@ -5,6 +5,9 @@ from scipy.sparse.linalg import gmres as sgmres
 from scipy.linalg import norm, lstsq
 from scipy import zeros,dot,r_
 import LinearSolver
+import matplotlib.pylab as plt
+import scipy
+
 
 class GMRESLinearSolver(LinearSolver.LinearSolver):
 
@@ -23,12 +26,13 @@ class GMRESLinearSolver(LinearSolver.LinearSolver):
         """
         LinearSolver.LinearSolver.__init__(self,param)
         self.resid = zeros((0,))
+        self.kappa =  zeros((0,))
         self.createCallback()
     
     def createCallback(self):
         def callback(res):
             self.resid = r_[self.resid,res]
-            if self.param['print']=='short':
+            if self.param['print']=='long':
                 print "gmres residual: ", len(self.resid), res
         self.callback=callback
     
@@ -66,7 +70,7 @@ class GMRESLinearSolver(LinearSolver.LinearSolver):
              k>0 : maximum number of iterations reached
              k<0 : illegal input or breakdown
         """
-        self.resid = zeros((0,))
+        #self.resid = zeros((0,))
         tol = self.param['tol']
         if self.param['relative']:
             tol = max(self.param['rel_tol']*norm(rhs),tol)
@@ -87,6 +91,15 @@ class GMRESLinearSolver(LinearSolver.LinearSolver):
         else:
             x,info=self.gmres(rhs,tol=tol,restrt=restart,\
                 maxiter=maxiter)
+        if print_it == 'long':  
+            print 'Convergence in GMRES!'
+            plt.title('Final GMRES-residual')
+            plt.plot(rhs-self.point.system.applyJacobian(x))        
+            plt.show()
+            print ' for vector '
+            plt.plot(x)
+            plt.title(r'$\delta_{final}$')
+            plt.show()
         return (x,info)
 
 
@@ -143,11 +156,13 @@ class GMRESLinearSolver(LinearSolver.LinearSolver):
         r = rhs - self.point.matvec(x)
         beta = norm(r)
         myres = beta/len(r)
-        V[:,0]=r/beta
-        print "in gmres",
-        print myres,tol
+        V[:,0]=r/beta 
+        print_it = self.param['print']
+        if print_it == 'long': 
+            print "in gmres",
+            print myres,tol
         while j < maxiter and myres > tol:
-            z = self.point.psolve(V[:,j])
+            z = self.point.psolve(V[:,j])   
             w = self.point.matvec(z)
             for i in range(j+1):
                 H[i,j]=dot(w,V[:,i])

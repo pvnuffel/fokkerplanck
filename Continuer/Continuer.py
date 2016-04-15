@@ -23,11 +23,11 @@ class Continuer(object):
             of points obtained through continuation.
 
         """
-        for i in range(len(points)):
-            points[i].param['free']+=params['free']   
-            points[i].param['extra_condition']+=\
-                    params['extra_condition']    
-            points[i].extra_condition+=params['extra_condition']    
+#        for i in range(len(points)):
+           # points[i].param['free']+=params['free']   
+        #    points[i].param['extra_condition']+=\
+             #       params['extra_condition']    
+   #         points[i].extra_condition+=params['extra_condition']    
         self.points = points
         self.bound_condition = params['bound_condition']
         if params == None:
@@ -56,7 +56,7 @@ class Continuer(object):
         
         plotx = {}
         plotx['field'] = 'lambd'
-        plotx['func'] = 0
+        plotx['func'] = 1 #second element of lambd (usually Difussion coefficient)
         param['plotx']=plotx
         ploty = {}
         ploty['field'] = 'u'
@@ -64,6 +64,9 @@ class Continuer(object):
         param['ploty']=ploty
 
         param['growth_factor']=1.2
+        
+        param['cont_step'] = 0.2
+
         param['print']='short'
         param['bound_condition']=[]
         return param
@@ -100,10 +103,8 @@ class Continuer(object):
             l = len(self.points)
             prev_point = self.points[l-2]
             last_point = self.points[l-1]
-
             secant = last_point.axpy(-1,prev_point)
-            dist = scipy.linalg.norm(secant.u)+\
-                    scipy.linalg.norm(secant.lambd)
+            dist = scipy.linalg.norm(secant.u)+ scipy.linalg.norm(secant.lambd)
             if successful and not bound:  
                 # het vorige punt was successvol berekend
                 steplength = growth*dist
@@ -112,12 +113,11 @@ class Continuer(object):
             elif bound:
                 # we hebben de rand geraakt
                 # nu moeten we de stap verkleinen en zien of het zo gaat
-                steplength = steplength/2
-                
+                steplength = steplength/2           
             new_point = secant.axpy(-steplength/dist,last_point)
             new_point.secant = {}
-            new_point.secant['u']=secant.u
-            new_point.secant['lambd']=secant.lambd
+            new_point.secant['u']=secant.u              #Waarom wordt dit bijgehouden?
+            new_point.secant['lambd']=secant.lambd    #Waarom wordt dit bijgehouden?
             status = new_point.correct()
             if status == 0:
                 new_success = True
@@ -151,7 +151,57 @@ class Continuer(object):
                     self.addPoint(last_point)
             successful = new_success
         succ = tries - fail
-        return succ,fail,rjct
+        return succ    # ,fail,rjct
+        
+        
+    def bcontinue_natural (self,nb_points):
+        """ 
+        performs a continuation for this branch, adding nb_points
+        points (or less, if there are failed Newton iterations)
+        """
+        # internal parameters        
+        tries = 0
+        fail = 0
+        rjct = 0
+        successful = True
+        kontinue = True
+        bound = False
+        lambd_step = scipy.zeros_like(self.points[-1].lambd)
+        cont_step = self.param['cont_step']
+        bifpar_index = self.param['plotx']['func']
+     #   bifpar_index = self.param['bifpar_index']
+        lambd_step[bifpar_index] = cont_step       #Insert the index of the prefered bifurcation parameter
+        growth = self.param['growth_factor']
+
+        l = len(self.points)
+        if l < 1:
+            raise ValueError, "There should be one point in the branch"
+        while kontinue and tries < nb_points:
+            print 'Continuation try number ' , tries
+            tries +=1
+            l = len(self.points)
+            last_point = self.points[-1]        
+            new_point = last_point.copy()
+            new_point.lambd= new_point.lambd + lambd_step
+            new_point.updateState()
+          #  print 'State after Cont Update ', new_point.getState()
+            status = new_point.correct()
+            print 'status  =', status
+            if status == 0:
+                new_success = True
+            else: 
+                new_success = False
+                           
+            if not new_success :
+                fail += 1
+
+            else :  # if new_success
+#                for i in range ( len(self.points)):
+#                    print 'lambdas =' , self.points[i].lambd[0]
+                self.addPoint(new_point)
+
+        succ = tries - fail
+        return succ
 
     def boundCrossed(self,point):
         bound = False
@@ -160,7 +210,7 @@ class Continuer(object):
             if bound : 
                 break
         return bound
-               
+
                
     def getPlot(self):
         """ 
@@ -176,6 +226,14 @@ class Continuer(object):
             y[i] = self.get(self.points[i],"y")
             print x[i],y[i]
         return x,y
+        
+    def getIterations(self):
+        N_iter = scipy.zeros((len(self.points)))
+
+        for i in range(len(self.points)):
+            N_iter[i] = self.points[i].iterations
+        return N_iter
+
 
     def get(self,point,option):
         if option == "x":
@@ -197,18 +255,18 @@ class Continuer(object):
         for p in self.points:
             p.save(file,group,table)
 
-def branch_read(filename,groupname,tablename):
-    h5file = tables.openFile(filename,"r")
-    exec "table = h5file.root." + groupname + "." + tablename
-    points = []
-    for row in table:
-        point = {}
-        for name in table.colnames:
-            point[name]=row[name]
-        points.append(point)
-    h5file.close()
-    return points
-            
+    def branch_read(filename,groupname,tablename):
+        h5file = tables.openFile(filename,"r")
+        exec "table = h5file.root." + groupname + "." + tablename
+        points = []
+        for row in table:
+            point = {}
+            for name in table.colnames:
+                point[name]=row[name]
+            points.append(point)
+        h5file.close()
+        return points
+                
         
 
 

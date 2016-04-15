@@ -24,7 +24,7 @@ class Sampler(object):
     def lift(self,rho,grid,N,skip=1):
         cum,edges = self.rho2cum(rho,grid)
         y = self.rand.uniform(size=N)
-      #  print y
+      #  print "random sampling numbers " , y
    #     print "sampling density with seed : ", self.cur_seed, "first sample: ", y[0]
         return self.inv_cum(y,cum,edges)
     
@@ -39,10 +39,10 @@ class Sampler(object):
         
         cum[0]=0.
         for n in range(ngrid):
-            if rho[n]<0 :
-                print "encountered a negative density : ", rho[n]
+         #   if rho[n]<0 :
+         #       print "encountered a negative density : ", rho[n]
             cum[n+1]=cum[n]+rho[n]*(edges[n+1]-edges[n])
-        print "estimating cumulative density : last value = ", cum[-1], " (should be 1.)"
+     #   print "estimating cumulative density : last value = ", cum[-1], " (should be 1.)"
         if scipy.absolute(cum[-1]-1)>1e-7:
             print "cumulative: ", cum
         return cum,edges
@@ -104,5 +104,25 @@ if __name__ == "__main__":
     indices = scipy.argsort(y)
     xsort = sampler.inv_cum(ysort,cum,edges)
     print scipy.amax(xsort-x[indices])   
+    
+    dx= 1e-1    
+    xL = -1.7
+    xR =1.7
+    grid = scipy.arange(xL+dx/2.,xR,dx)
+    rho_newton = scipy.array([ 0.00056236,  0.00056236,  0.00056236,  0.00075873,  0.00780793,
+        0.03639701,  0.1223761 ,  0.25240819,  0.39957626,  0.46229259,
+        0.45699236,  0.42253595,  0.33718642,  0.27315376,  0.22453869,
+        0.2013031 ,  0.18209444,  0.18183162,  0.19075894,  0.23761909,
+        0.2595615 ,  0.34807625,  0.43138754,  0.47717044,  0.48015413,
+        0.39398931,  0.25465005,  0.118413  ,  0.03884051,  0.00526264,
+        0.00126285,  0.00056236,  0.00056236,  0.00056236])
+    rho_newton = rho_newton/(sum(rho_newton)*dx)
+    param = Sampler.getDefaultParameters()
+    cum,edges = sampler.rho2cum(rho_newton,grid)
+    y = scipy.random.uniform(size=1000)
+    x = sampler.inv_cum(y,cum,edges)
+    
+        
+        
 
     

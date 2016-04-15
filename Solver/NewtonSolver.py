@@ -1,6 +1,10 @@
 import scipy
 import Solver
 import LinearSolver
+from scipy import zeros,dot,r_
+
+
+import matplotlib.pylab as plt
 
 class NewtonSolver(Solver.Solver):
 
@@ -26,8 +30,13 @@ class NewtonSolver(Solver.Solver):
         else:
             raise TypeError, "input argument " + linear_solver \
                 + " should be a linear solver"
-        self.nb_newt = 0
-    
+        self.nb_newt = 0 
+        self.newton_residual = zeros((0,))
+        self.newton_res_norm = zeros(0,)
+       # self.newton_states = zeros((  param['max_iter'],len( self.point.getCurrentGuess()) ))
+        self.newton_states = zeros((  0 ))
+      #  self.iterations  = 0
+
     def getDefaultParameters():
         """  
         Returns a dictionary of default parameters 
@@ -66,20 +75,32 @@ class NewtonSolver(Solver.Solver):
         print_it = self.param['print']
         alpha = self.param['damping']
         stop = self.param['stop']
-        
-        res = self.point.getResidual()
         x = self.point.getCurrentGuess()
-        res_norm = scipy.linalg.norm(res)
+        self.newton_states = x
+        res = self.point.getResidual()
+        res_norm = scipy.linalg.norm(res)/len(res)
+        self.newton_res_norm  =res_norm
+        print 'res norm init ', self.newton_res_norm
+        grid = self.point.system.grid
+        grid_dx = grid[-1] - grid[-2]
         if stop == "step":
             stop_norm = 0
         elif stop == "res":
             stop_norm = res_norm
             
-        while iter==0 or (iter < max_iter and stop_norm > abs_tol):
-
+        #while (iter < max_iter and (stop_norm > abs_tol or iter ==0)): geprobeerd om iedentieke toestanden te vermijden in opl van pde, maar als het residu te klein is ivm de tolerantie, dan heeft een newtonstap geen zin want dan wordt dx toch 0
+        while (iter < max_iter and (stop_norm > abs_tol)):
             iter += 1
             self.nb_newt += 1
-            dx, status = self.linsolv.solve(-res)
+            dx, status = self.linsolv.solve(-res)        # res = rho - rho.Dt
+            if print_it == 'long':  
+                plt.plot(res)                  
+                plt.title(r'Res before newton step = $ \rho - \phi(\rho) $ ')
+                plt.show()
+                plt.plot(dx)
+                plt.title(r'$dx$ ')
+                plt.show()
+            
             step_norm = scipy.linalg.norm(dx)
             step_avg = scipy.sum(dx)
             # Handling of errors and printing
@@ -88,40 +109,52 @@ class NewtonSolver(Solver.Solver):
                     "the linear system"
             # print the iterations
             if not print_it=='none':
-                print "# Newton: ", iter, " | norm res  :", \
+                print "# Newton_iter: ", iter, " | norm res  :", \
                     res_norm, "norm step : ", step_norm, "avg step: ", step_avg
-            if print_it=='long':
-                print "Newton Residual"
-                for i in range(len(res)):
-                    print i, res[i]
-                print "---------------------"
-                print "Newton Current Guess (before this iteration)"
-                for i in range(len(x)):
-                    print i, x[i]
-                print "---------------------"
-                print " Newton Step"
-                for i in range(len(x)):
-                    print i, dx[i]
-                print "---------------------"
-                print "Sum : ", scipy.sum(dx)
-                print "--------"
-                print "Newton Current Guess (after this iteration)"
-                for i in range(len(x)):
-                    print i, x[i]+alpha*dx[i]
-                print "---------------------"
-                
+#            if print_it=='long':
+#                print "Newton Residual"
+#                for i in range(len(res)):
+#                    print i, res[i]
+#                print "---------------------"
+#                print "Newton Current Guess (before this iteration)"
+#                for i in range(len(x)):
+#                    print i, x[i]
+#                print "---------------------"
+#                print " Newton Step"
+#                for i in range(len(x)):
+#                    print i, dx[i]
+#                print "---------------------"
+#                print "Sum : ", scipy.sum(dx)
+#                print "--------"
+#                print "Newton Current Guess (after this iteration)"
+#                for i in range(len(x)):
+#                    print i, x[i]+alpha*dx[i]
+#                print "---------------------"
+    
+           # print 'check sum=1? norm before = ', sum(x)*grid_dx
             x=x+alpha*dx
-            self.point.setCurrentGuess(x)                          
+         #   print 'check sum(dx)=0? norm dx = ', sum(dx)*grid_dx
+            #x = x/sum(x*grid_dx)
+          #  print 'check sum 1? norm after = ', sum(x)*grid_dx
+            self.newton_states = r_[self.newton_states,x]
+            self.point.setCurrentGuess(x)             # =  self.point.setState() +  self.point.updateState()
             res = self.point.getResidual()
             res_norm = scipy.linalg.norm(res)/len(res)
+            print 'resNorm ', res_norm
+            self.newton_res_norm = r_[self.newton_res_norm,res_norm]
+            print self.newton_res_norm
+          #  self.point.getState()
             if stop == "step":
                 stop_norm = scipy.linalg.norm(dx)
             elif stop == "res":
-                stop_norm = scipy.linalg.norm(res)
+                stop_norm = res_norm
         if not print_it == 'none':
             print "Newton: final residual : ", res_norm
+        self.iterations = iter
+        self.point.iterations=iter
         if iter == max_iter:
-            status = 1
+            status = 1  
+            print 'Failed Newton iteration'
         else:
             status = 0
         return status
