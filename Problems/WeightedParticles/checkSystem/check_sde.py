@@ -34,20 +34,21 @@ import Utils.conditions.probability as probability
 
 if __name__=="__main__":
 
-    D = 1
-    Dt = 2
+    sigma = 1
+    Dt = 1
     seed = 16
+    D=0.5*sigma**2
     # discretization parameters
    #h=2e-2 # kde mesh width 
    # dt=1e-6
     xL = -1.7
     xR = 1.7
     
-    a = 1
+    mu = 1
     zeta = 0.
-    alpha=1
-    beta = -1
-    lambd = scipy.array([a,D,alpha,beta,zeta])
+    alpha=0
+    beta = 0
+    lambd = scipy.array([mu, sigma])
             
     #SDE
     t1 = time.time()
@@ -57,7 +58,7 @@ if __name__=="__main__":
 #    factor = int (dx/dx_fp)
 #    print "Discretisation for solving sde is ", factor, " times coarser than the discretisation for solving the pde"
     dt = 1e-2 # ti
-    N=5000000
+    N=1e5
     Nlarge= N
     Nsmall =N
     

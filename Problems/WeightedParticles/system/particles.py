@@ -11,7 +11,7 @@ sys.path.append('../../../')
 
 import System.TimestepperSystem as TSystem
 
-def create_doublewell(alpha,beta):
+def create_doublewell():
     def doublewell(x):
        # return -4*x**3+3*(alpha+beta)*x**2-2*alpha*beta*x
         return 2*x-4*x**3  
@@ -32,7 +32,8 @@ class Particles(TSystem.TimestepperSystem):
         if param == None :
             param = Particles.getDefaultParameters()
         self.param = param
-        self.drift=create_doublewell(alpha=lambd[2],beta=lambd[3])
+     #   self.drift=create_doublewell(alpha=lambd[2],beta=lambd[3])
+        self.drift=create_doublewell()
         self.control= control
 #        if control == None:
 #            self.N=param['Nlarge']
@@ -157,9 +158,10 @@ class Particles(TSystem.TimestepperSystem):
     def simulate(self,x, seedlist, lambd):   #using this for-loop works 100 times faster in comparison with the implementation in 
         Dt = self.param['Dt']
         dt = self.param['dt']
-        D= lambd[1]
-        sigma = np.sqrt(D)
-        a = lambd[0]
+       # sigma= sqrt(2*lambd[1])   
+        sigma = lambd[1]
+      #  sigma = np.sqrt(D)
+        mu = lambd[0]
      #   alpha =lambd[2]
         
         n_steps = int(Dt/dt)
@@ -170,7 +172,7 @@ class Particles(TSystem.TimestepperSystem):
            # if tcur == 1:    #only print random number for first time step
             #    print 'dW =',  dW            
                     # the process
-            drift_term = a * self.drift(x)
+            drift_term = mu * self.drift(x)
             x=x+ drift_term*dt+dW 
             # and reflecting boundary conditions
             scipy.where(x>self.domain[1],2*self.domain[1]-x,x)

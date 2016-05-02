@@ -224,7 +224,7 @@ class Continuer(object):
         for i in range(len(self.points)):
             x[i] = self.get(self.points[i],"x")
             y[i] = self.get(self.points[i],"y")
-            print x[i],y[i]
+        #    print x[i],y[i]
         return x,y
         
     def getIterations(self):

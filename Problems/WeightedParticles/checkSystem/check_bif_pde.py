@@ -37,22 +37,25 @@ import Continuer.Continuer as Continuer
 
 
 
+
 if __name__=="__main__":
    # D = 1./2.
-    sigma =1
-    D= 1#1/2.
+    mu = 1.0
+    sigma=2.0
+    D=0.5*sigma**2
+  #  D = 2.0
+   # sigma = 2*np.sqrt(D)
     Dt = 1e-2
   #  Dtlist = [1e-5,2e-5, 5e-5, 1e-4, 2e-4, 5e-4, 1e-3, 2e-3, 5e-3 , 1e-2, 2e-2, 5e-2 , 1e-1, 2e-1, 5e-1, 1, 2, 5, 10]
     Dtlist = [Dt]
  #   Dtlist = [2e-3]
-    seed = 15
-    # discretization parameters
+    # discretizatio    seed = 15n parameters
    #h=2e-2 # kde mesh width 
     dx = 1e-2
 #    dxlist= [1e-2,  5e-3, 1e-3, 5e-4] 
   #  dxlist= [1e-2, 1e-3]
     #dt = min(dxlist)**2/(2*D)
-    dt=5e-5
+    dt=1e-5
     r= (2.*D*dt)/(dx)**2
     print'r = ' ,  r
 
@@ -62,12 +65,10 @@ if __name__=="__main__":
         sys.exit("Ending Script. Make sure that r<1") 
     xL = -1.7
     xR = 1.7
-    
-    a = 0.2
     zeta = 0.
     alpha=1
     beta = -1
-    lambd = scipy.array([a,D,alpha])
+    lambd = scipy.array([mu, sigma])
     param=pde.FokkerPlanck.getDefaultParameters()
     param['Dt'] = Dt
     param['dt']=dt         
@@ -143,8 +144,8 @@ if __name__=="__main__":
         newton_states = nsolv.newton_states
         nstates =  newton_states.reshape(nsolv.nb_newt+1, len(grid))
         
-        norm_c = sum( np.exp( (-grid**4 + grid**2)*a/D))*dx
-        rho_ss = np.exp( (-grid**4 + grid**2 )*a/D) /norm_c
+        norm_c = sum( np.exp( (-grid**4 + grid**2)*mu/D))*dx
+        rho_ss = np.exp( (-grid**4 + grid**2 )*mu/D) /norm_c
         label2= r'$\frac{ \exp{\left[-\frac{V(x)}{\sigma^2}\right]}}{\mathcal{N}}$'
         residual_directsim[dti] = norm( rho_ss- rho_Dt)
         residual[dti] = norm( nstates[-1] - rho_ss)
@@ -159,13 +160,13 @@ if __name__=="__main__":
 #        points.append(p2)     
 #        
         continuer_param= Continuer.Continuer.getDefaultParameters()
-        continuer_param['plotx']['func'] = 0
+        continuer_param['plotx']['func'] = 1
         continuer_param['growth_factor']=1
-        continuer_param['cont_step']=0.2
+        continuer_param['cont_step']=-0.1
         branch_pde = Continuer.Continuer(points, continuer_param)
    #     branch.bcontinue(4)
         print '#Start Continuation'
-        cont_steps=15
+        cont_steps=10
         succ = branch_pde.bcontinue_natural(cont_steps)
         x_pde, y_pde = branch_pde.getPlot()
         N_iter_pde = branch_pde.getIterations()

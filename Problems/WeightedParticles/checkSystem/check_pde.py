@@ -27,16 +27,18 @@ import pde
 
 
 if __name__=="__main__":
-    D = 1./2.
-    Dt = 2
+    sigma=1
+    D=0.5*sigma**2
+    Dt = 1
     seed = 16
     # discretization parameters
    #h=2e-2 # kde mesh width 
-    dx = 1e-3
+    dx = 1e-2
 #    dxlist= [1e-2,  5e-3, 1e-3, 5e-4] 
-    dxlist= [1e-2]
-    dt = min(dxlist)**2/(2*D)
+    dxlist= [dx]
+    #dt = min(dxlist)**2/(2*D)
     #r= (2.*D*dt)/(dx)**2
+    dt=1e-5
     r= (2.*D*dt)/(min(dxlist))**2
     if r>1: 
         print 'Stability condition not fulfilled, because r=',r #(see https://en.wikipedia.org/wiki/FTCS_scheme)
@@ -44,11 +46,11 @@ if __name__=="__main__":
     xL = -1.7
     xR = 1.7
     
-    a = 1
+    mu = 1
     zeta = 0.
     alpha=1
     beta = -1
-    lambd = scipy.array([a,D,alpha,beta,zeta])
+    lambd = scipy.array([mu, sigma])
     param=pde.FokkerPlanck.getDefaultParameters()
     param['Dt'] = Dt
     param['dt']=dt         
@@ -67,11 +69,8 @@ if __name__=="__main__":
         fp_pde = pde.FokkerPlanck(rho,grid,pde.doublewell,lambd,param)
         rho_Dt = fp_pde.u_Dt
 
-        v=scipy.zeros_like(grid)
-        v[200]=-1
-        v[300]=1
-    
-        Jv_pde = fp_pde.applyJacobian(v)    
+        
+     #   Jv_pde = fp_pde.applyJacobian(v)    
        # plt.plot(grid, Jv_pde)
         plt.plot(grid, rho_Dt)
         plt.show()

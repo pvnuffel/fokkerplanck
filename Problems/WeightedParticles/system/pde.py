@@ -23,7 +23,9 @@ class FokkerPlanck(TSystem.TimestepperSystem):
     """
     Implements a PDE based time-stepper for the PDE
     
-    rho_t + [a*(x-x**3) \rho]_x = D \rho_xx 
+    originally rho_t + [a*(x-x**3) \rho]_x = D \rho_xx 
+    
+    replaced by  rho_t + [mu*(x-x**3) \rho]_x = 0.5*sigma^2 \rho_xx 
     """
     def __init__(self,rho,grid,drift,lambd,param=None):
         self.grid = grid
@@ -56,10 +58,13 @@ class FokkerPlanck(TSystem.TimestepperSystem):
     def rhs(self,rho,lambd):
         grid = self.grid
         dx = grid[1]-grid[0]
-        D = lambd[1]
-        a = lambd[0]
+   #     sigma = 2*np.sqrt(lambd[1])
+      #  D=lambd[1]
+        sigma=lambd[1]
+        mu = lambd[0]
         flux = self.flux(rho)
-        rhs = -a*(flux[1:]-flux[:-1])/dx+D*d2udx2(rho,dx)
+        rhs = -mu*(flux[1:]-flux[:-1])/dx+0.5*sigma**2*d2udx2(rho,dx)
+      #  rhs = -mu*(flux[1:]-flux[:-1])/dx+D*d2udx2(rho,dx)
         return rhs
 
     def flux(self,rho):

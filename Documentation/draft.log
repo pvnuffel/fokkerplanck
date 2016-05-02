@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013/Debian) (format=pdflatex 2015.12.29)  15 APR 2016 13:58
+This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013/Debian) (format=pdflatex 2015.12.29)  29 APR 2016 10:08
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -509,13 +509,13 @@ Package: geometry 2010/09/12 v5.6 Page Geometry
 \c@Theorem=\count116
  (./draft.aux
 
-LaTeX Warning: Label `Var_N' multiply defined.
-
-
-LaTeX Warning: Label `fp_mean_field' multiply defined.
+LaTeX Warning: Label `SDE' multiply defined.
 
 
 LaTeX Warning: Label `fig:bif_anal' multiply defined.
+
+
+LaTeX Warning: Label `fp_mean_field' multiply defined.
 
 )
 \openout1 = `draft.aux'.
@@ -627,35 +627,17 @@ LaTeX Font Info:    Try loading font information for U+msb on input line 37.
 
 (/usr/share/texlive/texmf-dist/tex/latex/amsfonts/umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
-)
-(./fokkerplanck_update.tex
-LaTeX Font Info:    Try loading font information for OMS+cmr on input line 12.
-
+) (./model_problem.tex
+LaTeX Font Info:    Try loading font information for OMS+cmr on input line 27.
 (/usr/share/texlive/texmf-dist/tex/latex/base/omscmr.fd
 File: omscmr.fd 1999/05/25 v2.5h Standard LaTeX font definitions
 )
 LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <10> not available
-(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 12.
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 27.
+ [1
 
-Overfull \hbox (1.09244pt too wide) in paragraph at lines 18--19
-[]\OT1/cmr/m/n/10 By sim-u-lat-ing an en-sem-ble of $\OML/cmm/m/it/10 N$ \OT1/c
-mr/m/n/10 par-ti-cles evolv-ing ac-cord-ing to the cor-re-spond-ing stochas-
- []
-
-[1
-
-{/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}]
-<../Problems/Particles/checkSystem/plots/Var_N_eps_nw.pdf, id=116, 433.62pt x 2
-89.08pt>
-File: ../Problems/Particles/checkSystem/plots/Var_N_eps_nw.pdf Graphic file (ty
-pe pdf)
- <use ../Problems/Particles/checkSystem/plots/Var_N_eps_nw.pdf>
-Package pdftex.def Info: ../Problems/Particles/checkSystem/plots/Var_N_eps_nw.p
-df used on input line 112.
-(pdftex.def)             Requested size: 326.67227pt x 217.7931pt.
-)
-(./coarse_time_stepper.tex [2 <../Problems/Particles/checkSystem/plots/Var_N_ep
-s_nw.pdf>]
+{/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}]) (./coarse_time_stepper.te
+x
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
 (hyperref)                removing `math shift' on input line 17.
@@ -1136,9 +1118,9 @@ Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
 (hyperref)                removing `math shift' on input line 20.
 
-) [3] (./GMRES.tex
+[2]) (./GMRES.tex
 <../Problems/WeightedParticles/checkSystem/plots/GMRES/GMRES_N_Dt_1e-1.pdf, id=
-212, 433.62pt x 289.08pt>
+138, 433.62pt x 289.08pt>
 File: ../Problems/WeightedParticles/checkSystem/plots/GMRES/GMRES_N_Dt_1e-1.pdf
  Graphic file (type pdf)
 
@@ -1148,7 +1130,7 @@ GMRES_N_Dt_1e-1.pdf used on input line 11.
 (pdftex.def)             Requested size: 204.16939pt x 136.11462pt.
 
 <../Problems/WeightedParticles/checkSystem/plots/GMRES/Spectrum_Dt_1e-1.pdf, id
-=213, 433.62pt x 289.08pt>
+=139, 433.62pt x 289.08pt>
 File: ../Problems/WeightedParticles/checkSystem/plots/GMRES/Spectrum_Dt_1e-1.pd
 f Graphic file (type pdf)
 
@@ -1162,128 +1144,148 @@ Overfull \hbox (2.2222pt too wide) in paragraph at lines 11--18
 [][] [] 
  []
 
-[4 <../Problems/WeightedParticles/checkSystem/plots/GMRES/GMRES_N_Dt_1e-1.pdf> 
-<../Problems/WeightedParticles/checkSystem/plots/GMRES/Spectrum_Dt_1e-1.pdf
+[3]) [4 <../Problems/WeightedParticles/checkSystem/plots/GMRES/GMRES_N_Dt_1e-1.
+pdf> <../Problems/WeightedParticles/checkSystem/plots/GMRES/Spectrum_Dt_1e-1.pd
+f
 
 pdfTeX warning: pdflatex (file ../Problems/WeightedParticles/checkSystem/plots/
 GMRES/Spectrum_Dt_1e-1.pdf): PDF inclusion: multiple pdfs with page group inclu
 ded in a single page
->])
+>]
+<../Problems/Particles/checkSystem/plots/Var_N_eps_nw.pdf, id=251, 433.62pt x 2
+89.08pt>
 File: ../Problems/Particles/checkSystem/plots/Var_N_eps_nw.pdf Graphic file (ty
 pe pdf)
  <use ../Problems/Particles/checkSystem/plots/Var_N_eps_nw.pdf>
 Package pdftex.def Info: ../Problems/Particles/checkSystem/plots/Var_N_eps_nw.p
-df used on input line 137.
+df used on input line 138.
 (pdftex.def)             Requested size: 326.67227pt x 217.7931pt.
- [5] [6]
+
+[5 <../Problems/Particles/checkSystem/plots/Var_N_eps_nw.pdf>]
 <../../riskmodel/Problems/WeightedParticles/checkSystem/plots/xmean_alpha1.pdf,
- id=333, 414.75735pt x 286.82784pt>
+ id=327, 414.75735pt x 286.82784pt>
 File: ../../riskmodel/Problems/WeightedParticles/checkSystem/plots/xmean_alpha1
 .pdf Graphic file (type pdf)
 
 <use ../../riskmodel/Problems/WeightedParticles/checkSystem/plots/xmean_alpha1.
 pdf>
 Package pdftex.def Info: ../../riskmodel/Problems/WeightedParticles/checkSystem
-/plots/xmean_alpha1.pdf used on input line 179.
+/plots/xmean_alpha1.pdf used on input line 180.
 (pdftex.def)             Requested size: 204.16939pt x 141.19461pt.
 
 <../../riskmodel/Problems/WeightedParticles/checkSystem/plots/xmean_alpha5.pdf,
- id=334, 414.75735pt x 286.82784pt>
+ id=328, 414.75735pt x 286.82784pt>
 File: ../../riskmodel/Problems/WeightedParticles/checkSystem/plots/xmean_alpha5
 .pdf Graphic file (type pdf)
 
 <use ../../riskmodel/Problems/WeightedParticles/checkSystem/plots/xmean_alpha5.
 pdf>
 Package pdftex.def Info: ../../riskmodel/Problems/WeightedParticles/checkSystem
-/plots/xmean_alpha5.pdf used on input line 180.
+/plots/xmean_alpha5.pdf used on input line 181.
 (pdftex.def)             Requested size: 204.16939pt x 141.19461pt.
 
-Overfull \hbox (2.2222pt too wide) in paragraph at lines 179--181
+Overfull \hbox (2.2222pt too wide) in paragraph at lines 180--182
 [][] [] 
  []
 
-[7 <../../riskmodel/Problems/WeightedParticles/checkSystem/plots/xmean_alpha1.p
-df> <../../riskmodel/Problems/WeightedParticles/checkSystem/plots/xmean_alpha5.
-pdf
+[6] [7 <../../riskmodel/Problems/WeightedParticles/checkSystem/plots/xmean_alph
+a1.pdf> <../../riskmodel/Problems/WeightedParticles/checkSystem/plots/xmean_alp
+ha5.pdf
 
 pdfTeX warning: pdflatex (file ../../riskmodel/Problems/WeightedParticles/check
 System/plots/xmean_alpha5.pdf): PDF inclusion: multiple pdfs with page group in
 cluded in a single page
 >]
-<../Problems/WeightedParticles/checkSystem/plots/bifurcation_pde(D).pdf, id=415
-, 433.62pt x 289.08pt>
-File: ../Problems/WeightedParticles/checkSystem/plots/bifurcation_pde(D).pdf Gr
-aphic file (type pdf)
 
-<use ../Problems/WeightedParticles/checkSystem/plots/bifurcation_pde(D).pdf>
-Package pdftex.def Info: ../Problems/WeightedParticles/checkSystem/plots/bifurc
-ation_pde(D).pdf used on input line 221.
-(pdftex.def)             Requested size: 433.61894pt x 289.07928pt.
+! LaTeX Error: File `../Problems/WeightedParticles/checkSystem/plots/bifurcatio
+n_pde(D)' not found.
 
-Overfull \hbox (25.28015pt too wide) in paragraph at lines 221--223
-[][] 
- []
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.224 ...les/checkSystem/plots/bifurcation_pde(D)}
+                                                  
+I could not locate the file with any of these extensions:
+.png,.pdf,.jpg,.mps,.jpeg,.jbig2,.jb2,.PNG,.PDF,.JPG,.JPEG,.JBIG2,.JB2,.eps
+Try typing  <return>  to proceed.
+If that doesn't work, type  X <return>  to quit.
+
+
+! LaTeX Error: File `../Problems/WeightedParticles/checkSystem/plots/bifurcatio
+n_pde(D)' not found.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.233 ...les/checkSystem/plots/bifurcation_pde(D)}
+                                                  
+I could not locate the file with any of these extensions:
+.png,.pdf,.jpg,.mps,.jpeg,.jbig2,.jb2,.PNG,.PDF,.JPG,.JPEG,.JBIG2,.JB2,.eps
+Try typing  <return>  to proceed.
+If that doesn't work, type  X <return>  to quit.
 
 
 <../../riskmodel/Problems/WeightedParticles/checkSystem/plots/steady_states.pdf
-, id=418, 433.62pt x 289.08pt>
+, id=417, 433.62pt x 289.08pt>
 File: ../../riskmodel/Problems/WeightedParticles/checkSystem/plots/steady_state
 s.pdf Graphic file (type pdf)
 
 <use ../../riskmodel/Problems/WeightedParticles/checkSystem/plots/steady_states
 .pdf>
 Package pdftex.def Info: ../../riskmodel/Problems/WeightedParticles/checkSystem
-/plots/steady_states.pdf used on input line 247.
+/plots/steady_states.pdf used on input line 259.
 (pdftex.def)             Requested size: 408.33879pt x 272.23808pt.
 
 
-LaTeX Warning: Reference `todo' on page 8 undefined on input line 256.
+LaTeX Warning: Reference `todo' on page 8 undefined on input line 268.
 
-
+[8] [9 <../../riskmodel/Problems/WeightedParticles/checkSystem/plots/steady_sta
+tes.pdf>]
 <../../riskmodel/Problems/WeightedParticles/checkSystem/plots/bif_alpha.pdf, id
-=419, 433.62pt x 289.08pt>
+=482, 433.62pt x 289.08pt>
 File: ../../riskmodel/Problems/WeightedParticles/checkSystem/plots/bif_alpha.pd
 f Graphic file (type pdf)
 
 <use ../../riskmodel/Problems/WeightedParticles/checkSystem/plots/bif_alpha.pdf
 >
 Package pdftex.def Info: ../../riskmodel/Problems/WeightedParticles/checkSystem
-/plots/bif_alpha.pdf used on input line 264.
+/plots/bif_alpha.pdf used on input line 276.
 (pdftex.def)             Requested size: 326.67227pt x 217.7931pt.
- (./draft.bbl [8] [9 <../Problems/WeightedParticles/checkSystem/plots/bifurcati
-on_pde(D).pdf>] [10 <../../riskmodel/Problems/WeightedParticles/checkSystem/plo
-ts/steady_states.pdf> <../../riskmodel/Problems/WeightedParticles/checkSystem/p
-lots/bif_alpha.pdf
-
-pdfTeX warning: pdflatex (file ../../riskmodel/Problems/WeightedParticles/check
-System/plots/bif_alpha.pdf): PDF inclusion: multiple pdfs with page group inclu
-ded in a single page
->])
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 303.
+ (./newton_convergence.tex) [10 <../../riskmodel/Problems/WeightedParticles/che
+ckSystem/plots/bif_alpha.pdf>] (./draft.bbl)
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 315.
  [11]
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 303.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 315.
  (./draft.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 303.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 303.
-Package rerunfilecheck Info: File `draft.out' has not changed.
-(rerunfilecheck)             Checksum: BC40C21D8FF3B2C7ABE1CA429979303B;1433.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 315.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 315.
 
+
+Package rerunfilecheck Warning: File `draft.out' has changed.
+(rerunfilecheck)                Rerun to get outlines right
+(rerunfilecheck)                or use package `bookmark'.
+
+Package rerunfilecheck Info: Checksums for `draft.out':
+(rerunfilecheck)             Before: 6E17D3FCB83DAA4C45372C11FA5D0F34;1514
+(rerunfilecheck)             After:  E20FC6E75E2F84485E0B64DEC9C378C9;1528.
 
 LaTeX Warning: There were undefined references.
 
 
 LaTeX Warning: There were multiply-defined labels.
 
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 303.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 315.
  ) 
 Here is how much of TeX's memory you used:
- 7901 strings out of 493304
- 118089 string characters out of 6139870
- 210640 words of memory out of 5000000
- 11175 multiletter control sequences out of 15000+600000
+ 7913 strings out of 493304
+ 117905 string characters out of 6139870
+ 211652 words of memory out of 5000000
+ 11172 multiletter control sequences out of 15000+600000
  15409 words of font info for 59 fonts, out of 8000000 for 9000
  957 hyphenation exceptions out of 8191
- 42i,16n,40p,1035b,438s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 42i,16n,40p,1039b,388s stack positions out of 5000i,500n,10000p,200000b,80000s
 </usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></us
 r/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/shar
 e/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx7.pfb></usr/share/texli
@@ -1296,19 +1298,17 @@ amsfonts/cm/cmmib10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfo
 nts/cmextra/cmmib7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfon
 ts/cm/cmr10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/c
 mr12.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr17.pf
-b></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr6.pfb></usr/
-share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb></usr/share/te
-xlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/share/texlive/te
-xmf-dist/fonts/type1/public/amsfonts/cm/cmr9.pfb></usr/share/texlive/texmf-dist
-/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share/texlive/texmf-dist/fonts
-/type1/public/amsfonts/cm/cmsy7.pfb></usr/share/texlive/texmf-dist/fonts/type1/
-public/amsfonts/cm/cmti10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public
-/amsfonts/cm/cmtt10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfo
-nts/symbols/msbm10.pfb>
-Output written on draft.pdf (11 pages, 1327770 bytes).
+b></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb></usr/
+share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr9.pfb></usr/share/te
+xlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share/texlive/
+texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb></usr/share/texlive/texmf-d
+ist/fonts/type1/public/amsfonts/cm/cmti10.pfb></usr/share/texlive/texmf-dist/fo
+nts/type1/public/amsfonts/cm/cmtt10.pfb></usr/share/texlive/texmf-dist/fonts/ty
+pe1/public/amsfonts/symbols/msbm10.pfb>
+Output written on draft.pdf (11 pages, 1305573 bytes).
 PDF statistics:
- 635 PDF objects out of 1000 (max. 8388607)
- 385 compressed objects within 4 object streams
+ 601 PDF objects out of 1000 (max. 8388607)
+ 369 compressed objects within 4 object streams
  63 named destinations out of 1000 (max. 500000)
- 217 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 220 words of extra memory for PDF output out of 10000 (max. 10000000)
 

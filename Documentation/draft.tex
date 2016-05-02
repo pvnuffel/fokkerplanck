@@ -38,14 +38,18 @@
 
 \begin{abstract}
 
-We investigate the emergence of coarse equilibrium states in a stochastic system of p
+
+In this project, we develop a Newton-Krylov method that is able to compute efficiently coarse fixed points when the underlying fine-scale dynamics is stochastic. We investigate the use of correlated samples to perform a more accurate approximation of the Jacobian vector products that are needed in a Krylov solution in each Newton iteration. The main novelty of the algorithm is in the elimination of the noise that is generated when estimating Jacobian-vector products using time-integration of perturbed initial conditions. We present numerical results that demonstrate the convergence properties of the numerical method, and use the method to show   the emergence of coarse equilibrium state
 
 
 
- system of diffusion processes have a stabilizing force acting on each of them, corresponding to a bistable potential.
 
-We develop a Newton-Krylov method that is able to compute accurately and efficiently coarse fixed points when the underlying fine-scale dynamics is stochastic. The main novelty of the algorithm is in the elimination of the noise that is generated when estimating Jacobian-vector products using time-integration of perturbed initial conditions. We present numerical results that demonstrate 
-%the convergence properties of the numerical method, and use the method to show that macroscopic
+
+%system of diffusion processes have a stabilizing force acting on each of them, corresponding to a bistable potential.
+
+
+
+%nd use the method to show that macroscopic
 %fronts in this model destabilise at a coarse symmetry-breaking bifurcation.
 %
 %We consider a system of diffusion processes that interact through their empirical mean and have a stabilizing force acting on each of them, corresponding to a bistable potential. There are three parameters that characterize the system: the strength of the intrinsic stabilization, the strength of the external random perturbations, and the degree of cooperation or interaction between them. The latter is the rate of mean reversion of each component to the empirical mean of the system. We interpret this model in the context of systemic risk and analyze in detail the effect of cooperation between the components, that is, the rate of mean reversion. We show that in a certain regime of parameters increasing cooperation tends to increase the stability of the individual agents but it also increases the overall or systemic risk. We use the theory of large deviations of diffusions interacting through their mean field.
@@ -74,14 +78,11 @@ We develop a Newton-Krylov method that is able to compute accurately and efficie
 
 \end{abstract}
 
-\section{Problem}
+ 
+\section{Model problem}
 
- As a toy problem we use a model where the closed model is exact. In general, we are interested in performing a bifurcation analysis for a model for which at which an exact, closed model at the macorscopic level is not available.
-\subsection{Model problem}
+\input{model_problem.tex}
 
-\input{fokkerplanck_update.tex}
-
-\subsection{Discretization}
 
 
 \section{Method}
@@ -142,7 +143,7 @@ Fig. \ref{Var_N} shows that the variance on the stochastic solution for the Jaco
 %\input{GMRES.tex}
 
 
-The convergence of the density to the real solution, strongly depends on the number of particles $N$ and on the choise of $\epsilon$ in the GMRES-method. 
+The convergence of the density to the real solution, strongly depends on the number of particles $N$ and on the choice of $\epsilon$ in the GMRES-method. 
 
 
 
@@ -157,7 +158,7 @@ The convergence of the density to the real solution, strongly depends on the num
 
 %\subsection{Including an interaction term}
 
-Until now, we considered a system of non-interacting particles. We will now extend our model to a mean field model by introducing a third parameter $\alpha$, which is the degree of interaction or cooporation in the system. A simple form of cooperative behaviour is the case where each agent tends to follow the state of the majority (or, each particle feels an attractive force towards the mean state of the system). To include this cooperation effect in our stochastic simulation, we add this mean reversion term to the SDE \eqref{SDE}:
+Until now, we considered a system of non-interacting particles. We will now extend our model to a mean field model by introducing a third parameter $\alpha$, which is the degree of interaction or cooperation in the system. A simple form of cooperative behaviour is the case where each agent tends to follow the state of the majority (or, each particle feels an attractive force towards the mean state of the system). To include this cooperation effect in our stochastic simulation, we add this mean reversion term to the SDE \eqref{SDE}:
 
 \begin{equation} 
 \label{SDE_meanfield}
@@ -170,7 +171,7 @@ An interesting application of this model to banks and insurance is the emergence
 Garnier, Papanicolaou and Yang already made use of the dynamics in eq. \eqref{SDE_meanfield}  to show that interconnectedness between agents indeed affects the stability of the whole system, causing systemic risk  \cite{Garnier}. They defined $x_i$  as the state of risk of agent $i$. The bi-stable-state structure of the potential $V(x)$ ensures that each risk variable stays around $-1$ (defined as the normal state) or $+1$ (the failed state).  A natural measure of systemic risk is then the transition probability of the empirical mean $\bar{x}$ from the normal state to the failed state. 
  
 
-To establish the idea, let us repeat the numerical simulations with eq. \ref{SDE_meanfield}. The evolution of the system is now characterized by  by the initial conditions, the three parameters ($\mu$, $\sigma$, $\alpha$) and by the system size $N$. Figure \ref{fig:sysrisk}  illustrates the behavior of the empiral mean $\bar{x}$. The simulations were performed with all agents initially in the normal state. Nevertheless, if randomness dominates the interaction, the agents can move immediately to the other potential well. The system then behaves like $N$ independent difussions, and hence, by the symmetry of the potential, the mean state will be attracted to a single mixed state $\bar{x}=0$. Upon increasing the interaction parameter $\alpha$, however, we find two new macroscopic states, suggesting the precence of a pitchfork bifurcation at the macoscopic level. These solutions are no stable steady states, but rather coarse matastable states. Their lifetime is linked to the finite system size. 
+To establish the idea, let us repeat the numerical simulations with eq. \ref{SDE_meanfield}. The evolution of the system is now characterized by  by the initial conditions, the three parameters ($\mu$, $\sigma$, $\alpha$) and by the system size $N$. Figure \ref{fig:sysrisk}  illustrates the behaviour of the empirical mean $\bar{x}$. The simulations were performed with all agents initially in the normal state. Nevertheless, if randomness dominates the interaction, the agents can move immediately to the other potential well. The system then behaves like $N$ independent diffusions, and hence, by the symmetry of the potential, the mean state will be attracted to a single mixed state $\bar{x}=0$. Upon increasing the interaction parameter $\alpha$, however, we find two new macroscopic states, suggesting the precence of a pitchfork bifurcation at the macroscopic level. These solutions are no stable steady states, but rather coarse metastable states. Their lifetime is linked to the finite system size. 
 
 
 
@@ -213,6 +214,8 @@ To establish the idea, let us repeat the numerical simulations with eq. \ref{SDE
 \subsubsection{Nota's}
 Tijdens elke continueringsstap, wordt een nieuw punt gecreëerd dat initieel de dichtheid \U krijgt van het vorig punt en met een parameter (D) die horizontaal word geupdate. Dan wordt de norm van het residu berekend $\norm{ \U(t) - \U(t+\Delta t)} $, waarin de dichtheid op de volgende tijdsstap verkregen wordt door een simulatie van het systeem met de nieuwe parameter. De grootte van het residu is dus afhankelijk van de stapgrootte in de bifurcatieparamter. De newtontolerantie is de norm van het residu. Als de newton-tolerantie te groot gekozen wordt (in vergelijking met de stapgrootte van het residu), dan wordt er geen Newton-iteratie uitgevoerd. Als de Newton-tolerantie evenwel te klein gekozen wordt, dan bereikt de Newton-solver mogelijk geen convergentie ten gevolge van de ruis. De Newton-tolerantie moet dus weloverwogen gekozen worden. 
 
+
+
 \subsection{Results for the pde}
 Ook hier zien we dat de keuze van de newtontolerantie belangrijk is (te groot = kans op dezelfde toestanden , te klein= failed iterations).
 Dit kan echter opgevangen worden door de oplossing van dx nauwkeuriger te maken door de tolerantie van de GMRES te verfijnen (het probleem was dat er dx=0 oplossingen werden teruggegeven) 
@@ -220,6 +223,15 @@ Dit kan echter opgevangen worden door de oplossing van dx nauwkeuriger te maken 
 \begin{figure}
 \includegraphics{../Problems/WeightedParticles/checkSystem/plots/bifurcation_pde(D)}
 \caption{  Bifurcation diagram of the steady states calculated with the Newton-Krylov-Solver for the PDE. $\Delta t = 10^{-4}, \Delta T = 10^{-2}, \Delta x = 10^{-2}, \Delta D = 0.01, \epsilon_{GMRES}=10^{-5},  \delta_{Newton} = 10^{-7}, \epsilon=10^{-5}$
+}
+\end{figure}
+
+\subsection{Results for the sde}
+We chose $\Delta \sigma = 0.05$ as continuation step seize. Performing a bifurcation with smaller steps is pointless, because the difference in densities will become too small in comparison with the noise on the residual.
+
+\begin{figure}
+\includegraphics{../Problems/WeightedParticles/checkSystem/plots/bifurcation_pde(D)}
+\caption{  Bifurcation diagram of the steady states calculated with the Newton-Krylov-Solver for the SDE. $\Delta t = 10^{-3}, \Delta T = 10^{-1}, \Delta x = 10^{-2}, \epsilon_{GMRES}=10^{-5},  \delta_{Newton} = 10^{-7}, \epsilon=10^{-5}$
 }
 \end{figure}
 
@@ -289,8 +301,8 @@ Explicit solutions of eq. \label{fp_mean_field} are not available in general, bu
 
 
 
-\section{Newton convergence}
-
+\section{Convergence of the Newton Method}
+\input{newton_convergence.tex}
 
 
 \bibliographystyle{plain}

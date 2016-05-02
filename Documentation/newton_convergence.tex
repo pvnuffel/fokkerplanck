@@ -1,0 +1,11 @@
+
+
+Numerical experiments that show how the Newton method converges to the fixed point:
+
+What is the maximal accuracy that can be obtained? (Relate to the variance of the coarse time-stepper.) How to cheaply estimate the stopping criterion?
+Is the resulting fixed point biased?
+Can we reduce variance by averaging over a number of 'converged' Newton iterations?
+Additional questions of interest:
+
+Can we stop the Krylov iterations before reaching machine precision (knowing that the end result will contain noise anyway)? Does an inaccuracy in the solution of the linear systems increase the required number of Newton iterations?
+Do we keep the particles fixed throughout the Newton iterations as well? (We can then probably converge the Newton procedure to machine precision.) What is then the probability distribution of the obtained fixed points? Bias? Variance?

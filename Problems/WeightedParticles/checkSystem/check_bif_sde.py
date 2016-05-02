@@ -38,7 +38,12 @@ import Continuer.Continuer as Continuer
 
 if __name__=="__main__":
     print 'Start solving sde'
-    D = 1
+ #   sigma=2
+    mu = 1.0
+  #  D=0.5*sigma**2
+    D = 2.0
+    sigma=1.0
+   # sigma = 2*np.sqrt(D)
     Dt = 1e-1  #Dt influences number of GMRES-iterations strongly
     Dtlist = [ Dt]
     #Dtlist = [ 5e-3, 1e-2, 2e-2, 5e-2, 1e-1, 2e-1, 5e-1, 1]
@@ -49,11 +54,11 @@ if __name__=="__main__":
    # dt=1e-6
     xL = -1.7
     xR = 1.7
-    a = 0.2
+
     zeta = 0.
     alpha=1
     beta = -1
-    lambd = scipy.array([a,D,alpha,beta,zeta])
+    lambd = scipy.array([mu, sigma])
        
     #SDE
     t1 = time.time()
@@ -77,7 +82,11 @@ if __name__=="__main__":
   #  lifting =  inv_transform.Sampler(sampler_param)
     
     h=2e-2 # kde mesh width     
-    M=1 #number of monte carlo steps                
+    M=10 #number of monte carlo steps         
+    y_mean = scipy.zeros(M)
+    y_sde = scipy.zeros(M)
+
+    branch_list = [] #scipy.array([M])              
     param_histogram = histogram.Histogram.getDefaultParameters()
     param_histogram['h']=h
     restriction = histogram.Histogram(param_histogram)
@@ -92,7 +101,7 @@ if __name__=="__main__":
 
  #   Nlist = scipy.array([1000, 2000, 4000, 8000, 16000, 32000, 64000, 128000])
 #    Nlist = scipy.array([1e3, 1e4, 1e5, 1e6, 1e7, 1e8]) 
-    Nlist = scipy.array([1e5]) #, 800, 1600, 3200])
+    Nlist = scipy.array([1e6]) #, 800, 1600, 3200])
     eps_list_exponents=[5]
     eps_list= [1e-5]
     param['eps']= eps_list[-1]
@@ -115,6 +124,7 @@ if __name__=="__main__":
     residual2 = scipy.zeros(len(Dtlist))
     residual3 = scipy.zeros(len(Dtlist))
     residual_directsim = scipy.zeros(len(Dtlist)) 
+
 #    
             
 #    residual1 = scipy.zeros(nN)
@@ -122,6 +132,7 @@ if __name__=="__main__":
 #    residual3 = scipy.zeros(nN)
 #    residual_directsim = scipy.zeros(nN) 
    # newton_res_norms = scipy.zeros(nN)
+    
 
     for Dti in range(0, len(Dtlist)):
         Dt = Dtlist[Dti]
@@ -181,9 +192,13 @@ if __name__=="__main__":
         
                 # CREATING NEWTON SOLVER
                 newt_param = NewtonSolver.NewtonSolver.getDefaultParameters()
-                newt_param['rel_tol']=2e-5
-                newt_param['abs_tol']=135e-5
-                newt_param['print']='long'
+                newt_param['rel_tol']=1e-5
+                if (N==1e6):
+                    newt_param['abs_tol']=45e-5
+                else:
+                    newt_param['abs_tol']=140e-5  
+                #newt_param['abs_tol']=43e-5
+                newt_param['print']='short'
                 newt_param['max_iter']=5
                 newt_param['damping']=1
                 nsolv = NewtonSolver.NewtonSolver(linsolv,newt_param)
@@ -213,17 +228,19 @@ if __name__=="__main__":
                 
                 
                 continuer_param= Continuer.Continuer.getDefaultParameters()
-                continuer_param['plotx']['func'] = 0
+                continuer_param['plotx']['func'] = 1
                 continuer_param['growth_factor']=1
-                continuer_param['cont_step']=0.2
+                continuer_param['cont_step']=0.1
                 branch = Continuer.Continuer(points, continuer_param)
             
                 print '#Start Continuation'
                 
-                cont_steps = 15
+                cont_steps = 10
                 succ = branch.bcontinue_natural(cont_steps)
                 print succ, 'succesfull continuation steps', cont_steps -succ, 'failed ones'
+                branch_list.append(branch)
                 x_sde, y_sde= branch.getPlot()
+                
                 N_iter = branch.getIterations()
                 
                         
@@ -241,7 +258,7 @@ if __name__=="__main__":
                 
 
 #                p = Point.Point(fp_sde,nsolv,None, point_param)   #if using  (psolver-im)-> ATTENTION: RUNNING COMPUTE JACOBIAN ON TIMESTEPPER SYSTEM
-#                p.correct()
+#                p.correct()stabiel systeem
 #                
               #  spectrum = p.mspectrum()
                 
@@ -255,8 +272,8 @@ if __name__=="__main__":
              #   np.savetxt('Newton/new_method_resnorm_Dte-2_tole-4_Ne6m%d' %m, newton_res_norms)
             #    np.savetxt('Newton/new_method_resnorm_Dte-2_tole-4_N%d' %N, newton_res_norms)
              #   States =  newton_states.reshape(nsolv.nb_newt +1, len(grid))  
-                norm_c = sum( np.exp( 2*(-grid**4 + grid**2)*a/D))*dx
-                rho_ss = np.exp( 2*(-grid**4 + grid**2 )*a/D) /norm_c 
+                norm_c = sum( np.exp( 2*(-grid**4 + grid**2)*mu/D))*dx
+                rho_ss = np.exp( 2*(-grid**4 + grid**2 )*mu/D) /norm_c 
                # label2= r'$\frac{ \exp{\left[-2\frac{V(x)}{\sigma^2}\right]}}{\mathcal{N}}$'In [8]:
                 
             #    np.savetxt('GMRES/res_Dt1e-1_dx1e-1_N%d.out' %N, linsolv.resid)
@@ -273,7 +290,7 @@ if __name__=="__main__":
 #                residual2[n] = norm( States[2] - rho_ss)/sqrt(len(States[2] - rho_ss))
 #                residual1[n] = norm(States[1]-rho_ss)/sqrt(len(States[1] - rho_ss))
 #                residual3[n] = norm(States[3]-rho_ss)/sqrt(len(States[3] - rho_ss))
-                rho_mean = scipy.zeros(len(rho))
+
 #
 #                for i in range(States.shape[0]):
 #                    print i

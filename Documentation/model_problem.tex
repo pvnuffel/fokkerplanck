@@ -1,30 +1,42 @@
 
 
-We look for solutions of partial differential equations of advection-diffusion-type
+\subsection{Advection-diffusion}
+
+In general, we are interested in performing a bifurcation analysis for  models at which an exact, closed model at the macroscopic level is not available. However, as a toy problem, we start using an example where the macroscopic model is already known. On the macroscopic scale the evolution of a probability density $\rho$ is given by a PDE of the advection-diffusion type
 
 \begin{equation} 
 \label{fokkerplanck}
-\pa{\rho(x,t)}{t} + \mu \pa{(f(x) \rho(x,t))}{x} = \frac{\sigma^2}{2}  \ppa{\rho(x,t)}{x} 
+\pa{\rho(x,t)}{t} + \mu \pa{(f(x) \rho(x,t))}{x} = \frac{\sigma^2}{2}  \ppa{\rho(x,t)}{x} .
 \end{equation}
-%with $f(x) = - \pa {V}{x}$
+
+The advection represents gradient-driven flow, according to an advection coefficient $\mu$ and a force $f(x) = - \pa {V}{x}$. In this example $V(x)$ is chosen to be a bi-stable potential $V(x) = x^4-x^2$. 
+The microscopic model consists in simulating an ensemble of $N$ particles evolving according to the corresponding SDE
+\begin{equation} 
+\label{SDE}
+     \dd \mathbf{X_t} = \mu f(\mathbf{X_t}) \dd t + \sigma \dd{\mathbf{W_t}},
+\end{equation}
+where $\mathbf{W_t}$ are $N$ independent, standard Brownian motions.
+
+
+
+\subsection{Discretization}
+
+We look for solutions of the Fokker-Planck-equation \eqref{fokkerplanck}
 in two ways:
 \begin{itemize}
-\item By explicitly solving eq. \eqref{fokkerplanck} using the discretization scheme\footnote{First-order upwind scheme for the advective part combined with the Forward-Time Central-Space-method for the diffusive part}
+\item By explicitly solving eq. \eqref{fokkerplanck} using the discretization scheme
 \begin{equation} 
 \label{pde_discretization}
 \rho_i^{n+1} = \rho_i^n + \Delta t \left( \frac{\sigma^2}{2{\Delta x}^2} \left( \rho_{i+1}^{n} - 2 \rho_i^n + \rho_{i-1}^n \right)  - \mu \frac{f(x)}{\Delta x} (\rho_i^n - \rho_{i-1}^n) \right)
 \end{equation}
-for the value of the probabilty density $\rho$ at position $x=i \Delta x$ and time $t=(n+1) \Delta t$.
-\item By simulating an ensemble of $N$ particles evolving according to the corresponding stochastic differential equation  
-\begin{equation} 
-\label{SDE}
-    \dd X = \mu f(X) \dd t + \sigma \dd{W_t}.
-\end{equation}
- The position $X^{n+1}$ of each  particle  at time $t= (n+1) \Delta t$ is simulated using the Euler-Maruyama scheme
+for the value  of $\rho$ at position $x=i \Delta x$ and time $t=(n+1) \Delta t$. This is a first-order upwind scheme for the advective part combined with the Forward-Time Central-Space-method for the diffusive part.
+
+
+\item By simulating an ensemble of $N$ particles evolving according to the SDE \label{SDE}.  The position $X^{n+1}$ of each  particle  at time $t= (n+1) \Delta t$ is simulated using the Euler-Maruyama scheme
 \begin{equation}
    X^{n + 1} = X^{n} + \mu f(X^n) \Delta t +  \sigma \sqrt{\Delta t}\cdot \xi^n \label{Euler-Mar}
 \end{equation}
-with $\xi^n  \sim \mathcal{N} (0,1)$
+with $\xi^n  \sim \mathcal{N} (0,1)$.
 \end{itemize}
 
 %
@@ -107,12 +119,15 @@ with $\xi^n  \sim \mathcal{N} (0,1)$
 %\caption{The variance on the stochastic solution for the Jacobian-vector-product converges to zero with $\mathcal{O}(1/ N)$ and it does not depend on the value of $\varepsilon$.}
 %\label{Var_N}
 %\end{figure}
-\begin{figure}
-\centering
-\includegraphics[width=0.8\linewidth]{../Problems/Particles/checkSystem/plots/Var_N_eps_nw}
-\caption[Effect of variance reduction]{In the case of unweighted restriction, the variance on the stochastic solution of the Jacobian-vector-product becomes unbounded as we decrease the perturbation size $\epsilon$. By using weights in the restriction step, the variance does not longer depend on the value of $\varepsilon$ and   converges to zero with $\mathcal{O}(1/ N)$.}
-\label{Var_N}
-\end{figure}
+
+
+
+%\begin{figure}
+%\centering
+%\includegraphics[width=0.8\linewidth]{../Problems/Particles/checkSystem/plots/Var_N_eps_nw}
+%\caption[Effect of variance reduction]{In the case of unweighted restriction, the variance on the stochastic solution of the Jacobian-vector-product becomes unbounded as we decrease the perturbation size $\epsilon$. By using weights in the restriction step, the variance does not longer depend on the value of $\varepsilon$ and   converges to zero with $\mathcal{O}(1/ N)$.}
+%\label{Var_N}
+%\end{figure}
 
 
 %
