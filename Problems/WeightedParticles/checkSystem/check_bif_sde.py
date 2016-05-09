@@ -24,7 +24,7 @@ import histogram
 import particles
 import inv_transform_sampling as inv_transform
 
-import matplotlib.pylab as plt
+#import matplotlib.pylab as plt
 
 import Point.Point as Point
 import Solver.NewtonSolver as NewtonSolver
@@ -82,7 +82,7 @@ if __name__=="__main__":
   #  lifting =  inv_transform.Sampler(sampler_param)
     
     h=2e-2 # kde mesh width     
-    M=10 #number of monte carlo steps         
+    M=2 #number of monte carlo steps         
     y_mean = scipy.zeros(M)
     y_sde = scipy.zeros(M)
 
@@ -101,7 +101,7 @@ if __name__=="__main__":
 
  #   Nlist = scipy.array([1000, 2000, 4000, 8000, 16000, 32000, 64000, 128000])
 #    Nlist = scipy.array([1e3, 1e4, 1e5, 1e6, 1e7, 1e8]) 
-    Nlist = scipy.array([1e6]) #, 800, 1600, 3200])
+    Nlist = scipy.array([1e5]) #, 800, 1600, 3200])
     eps_list_exponents=[5]
     eps_list= [1e-5]
     param['eps']= eps_list[-1]
@@ -124,6 +124,7 @@ if __name__=="__main__":
     residual2 = scipy.zeros(len(Dtlist))
     residual3 = scipy.zeros(len(Dtlist))
     residual_directsim = scipy.zeros(len(Dtlist)) 
+    save_flag= False
 
 #    
             
@@ -194,9 +195,11 @@ if __name__=="__main__":
                 newt_param = NewtonSolver.NewtonSolver.getDefaultParameters()
                 newt_param['rel_tol']=1e-5
                 if (N==1e6):
-                    newt_param['abs_tol']=45e-5
+                    newt_param['abs_tol']=45e-5     #Open question: How to set the tolerance a priori (what is the dependence of the noise on the number of particles?)
                 else:
                     newt_param['abs_tol']=140e-5  
+                if (N==1e7):
+                    newt_param['abs_tol']=14e-5
                 #newt_param['abs_tol']=43e-5
                 newt_param['print']='short'
                 newt_param['max_iter']=5
@@ -331,6 +334,30 @@ if __name__=="__main__":
 
    # np.savetxt('Newton/rho_sq_tol_e-5.out' , rho_sq)
    # np.savetxt('Newton/E_rho_tol_e-5.out' , E_rho )
+
+    #Post-processing
+    y_s1 =  scipy.zeros(len(branch.points))
+    y_s2 =  scipy.zeros(len(branch.points))
+    x_sde= branch_list[-1].getPlot()[0]
+    y_mean =  scipy.zeros(len(branch.points))
+    rho_mean =  scipy.zeros((len(branch.points), len(branch.points[-1].u)))
+    
+    for b in range (M):
+        y_sde=branch_list[b].getPlot()[1]
+        y_s1 += y_sde
+        y_s2 += y_sde*y_sde 
+        for i in range (len(branch_list[b].points)):
+            rho_mean[i] =  rho_mean[i] + branch_list[b].points[i].u/M
+        
+    y_mean = y_s1/M
+    y_var = y_s2/M - y_mean*y_mean
+  #  y_sigma= sqrt(y_var)
+    
+    if save_flag:
+        np.savetxt('bifurcation_data/fixed_states_sde_Ne5_mean_M10_2.txt',rho_mean)
+        np.savetxt('bifurcation_data/norm_fixed_states_sde_Ne5_mean_M10_LR2.txt',y_mean)
+        np.savetxt('bifurcation_data/variance_fixed_states_sde_Ne5mean_M10_LR2.txt',y_var)
+        
 
 ##       
     print "End of simulation"

@@ -16,7 +16,7 @@ grid = scipy.arange(xL+dx/2.,xR,dx)
 
 #STOCHASTIC
 
-save_flag= True
+save_flag= False
 branch = branch_list[-1]
 
 bif_par = scipy.zeros( len(branch.points))
@@ -31,16 +31,16 @@ for i in range (len(branch.points)):
 plt.xlabel(r'$\sigma$', fontsize = 15)
 plt.legend()
 if save_flag:
-    plt.savefig('plots/bif/fixed_states_sde(sigma)_Ne6.pdf')
+    plt.savefig('plots/bif/fixed_states_sde(sigma)_Ne5_2.pdf')
     
 plt.show()
 
 
-for b in range ( len(branch_list)):
-    plt.plot(grid, branch_list[b].points[-1].u, label=b)
-plt.xlabel(r'$\sigma$', fontsize = 15)
-plt.show()
-    
+#for b in range ( len(branch_list)):
+#    plt.plot(grid, branch_list[b].points[-1].u, label=b)
+#plt.xlabel(r'$\sigma$', fontsize = 15)
+#plt.show()
+#    
     
 #x, y=  branch.getPlot()
 
@@ -53,7 +53,7 @@ for b in range (M):
         rho_mean[i] =  rho_mean[i] + branch_list[b].points[i].u/M
 
 if save_flag:
-    np.savetxt('bifurcation_data/fixed_states_sde_Ne6_mean_M10.txt',rho_mean)
+    np.savetxt('bifurcation_data/fixed_states_sde_Ne5_mean_M10_2.txt',rho_mean)
         
         
 for i in range (len(rho_mean)):
@@ -62,27 +62,60 @@ for i in range (len(rho_mean)):
 plt.xlabel(r'$\sigma$', fontsize = 15)
 plt.legend()
 if save_flag:
-    plt.savefig('plots/bif/fixed_states_sde(sigma)_Ne6_mean_M10.pdf')  
+    plt.savefig('plots/bif/fixed_states_sde(sigma)_Ne5_mean_M10_2.pdf')  
 plt.show()
 
 #ANALYTIC
-mu=1.0
-sigma_list= scipy.arange(1.5, 0.4, -0.1)
-sigma_list= scipy.arange(2, 0.9, -0.1)
-D_list= scipy.arange(1, 0, -0.1)
-y_anal = []
-rho_norm_D = []
-for i in range ( len(sigma_list)):
-    norm_c = sum( np.exp( (-grid**4 + grid**2)*2*mu/(sigma_list[i]**2)))*dx
-    rho_ss = np.exp( (-grid**4 + grid**2 )*2*mu/(sigma_list[i]**2)) /norm_c
-    y_anal.append(norm(rho_ss))
 
-sigma_list_fine= scipy.arange(2.1, 0.9, -0.001)
+def resize( original_vector, new_size):
+    resize_factor = int (len(original_vector)/new_size) 
+    #print "Discretisation for solving sde is ",  resize_factor , " times coarser than the discretisation for solving the pde"  
+    new_vector = scipy.zeros(new_size)
+    for i in range (0,new_size):
+        bin_av = 0
+        for j in range (0,  resize_factor ):
+            bin_av = bin_av+ original_vector[i*resize_factor+j]
+            new_vector[i] = bin_av/resize_factor
+    return new_vector
+    
+
+
+
+
+
+
+sigma_list_fine= scipy.arange(1, 2.1, 0.001)
 y_anal_fine = []
 for i in range ( len(sigma_list_fine)):
     norm_c = sum( np.exp( (-grid**4 + grid**2)*2*mu/(sigma_list_fine[i]**2)))*dx
     rho_ss = np.exp( (-grid**4 + grid**2 )*2*mu/(sigma_list_fine[i]**2)) /norm_c
     y_anal_fine.append(norm(rho_ss))
+
+
+
+mu=1.0
+sigma_list= scipy.arange(1.5, 0.4, -0.1)
+#sigma_list= scipy.arange(2, 0.9, -0.1)
+sigma_list= scipy.arange(1, 2.1, 0.1)
+D_list= scipy.arange(1, 0, -0.1)
+
+rho_norm_D = []
+y_anal_test =[] #without rescaling
+
+for i in range ( len(sigma_list)):
+    norm_c = sum( np.exp( (-grid**4 + grid**2)*2*mu/(sigma_list[i]**2)))*dx
+    rho_ss = np.exp( (-grid**4 + grid**2)*2*mu/(sigma_list[i]**2))/norm_c
+    y_anal_test.append(norm(rho_ss))     
+
+dx=1e-6
+y_anal = []
+grid_fine = scipy.arange(xL+dx/2.,xR,dx)
+for i in range ( len(sigma_list)):
+    norm_c = sum( np.exp( (-grid_fine**4 + grid_fine**2)*2*mu/(sigma_list[i]**2)))*dx
+    rho_ss_fine = np.exp( (-grid_fine**4 + grid_fine**2)*2*mu/(sigma_list[i]**2))/norm_c
+    rho_ss_coarse = resize(rho_ss_fine, len(grid))
+    y_anal.append(norm(rho_ss_coarse))               #nauwkeuriger dan rho_ss
+     
 
     #plt.plot(rho_ss)
 
@@ -103,7 +136,7 @@ for i in range ( len(sigma_list_fine)):
 #bif_par_pde = zeros( len(branch_pde.points))
 #
 #for i in range ( len(branch_pde.points)):
-#    bif_par_pde[i] = branch_pde.points[i].lambd[1]
+#    bif_par_pde[i] = branch_pde.points[i].lambd[1] 
 #    
 #for i in range (len(branch_pde.points)):
 #  #  par_label = r'$\alpha = %g $' % bif_par_pde[i]
@@ -139,29 +172,24 @@ for b in range (M):
     y_sde=branch_list[b].getPlot()[1]
     y_s1 += y_sde
     y_s2 += y_sde*y_sde 
+    plt.plot(x_sde, y_sde, 'go', markersize=4)   #plot all branches (all realizations)
+    
+plt.show()
  #   par_label = r'$D= %g $' % bif_par[b]
 #    plt.plot(branch.points[b].u, label=par_label)
     
 
-
-for b in range (M):
-  # for j in range ( len(branch_list[i].points)):
-    y_sde=branch_list[b].getPlot()[1]
-    y_mean = y_s1/M
-    y_var = y_s2/M - y_mean*y_mean
-    y_sigma= sqrt(y_var)
-   # y_error = y_sigma/sqrt(M)
-    plt.plot(x_sde, y_sde, 'go', markersize=4)
-    
-plt.show()
+y_mean = y_s1/M
+y_var = y_s2/M - y_mean*y_mean
+y_sigma= sqrt(y_var)
+y_error = y_sigma/sqrt(M)
 
 if save_flag:
-    np.savetxt('bifurcation_data/norm_fixed_states_sde_Ne6_mean_M10_RL.txt',y_mean)
-    np.savetxt('bifurcation_data/variance_fixed_states_sde_Ne6_mean_M10_RL.txt',y_var)
-#plt.plot(x_sde, y_mean, 'bo', markersize=4)
-    
-    
+    np.savetxt('bifurcation_data/norm_fixed_states_sde_Ne5_mean_M10_LR2.txt',y_mean)
+    np.savetxt('bifurcation_data/variance_fixed_states_sde_Ne5mean_M10_LR2.txt',y_var)
 
+
+   
     
 plt.plot( sigma_list_fine,y_anal_fine,  'r', markersize=4,label= 'Analytic solution')
 plt.errorbar(x_sde, y_mean, yerr=y_error,   fmt='bo', ecolor='b', markersize=3, label='Newton-Krylov solution')
@@ -172,27 +200,34 @@ plt.legend(prop={'size':8})
 #plt.plot(x_sde, y_sde, 'go', markersize=4)
 
 if save_flag:
-    plt.savefig('plots/bif/bifurcation_sde_Ne6_anal(sigma)_RL.pdf')
+    plt.savefig('plots/bif/bifurcation_sde_Ne5_anal(sigma)_LR2.pdf')
 
 plt.show()
 
 plt.errorbar(x_sde, y_sde-y_anal, yerr=y_sigma,   fmt='bo', ecolor='b', markersize=3) # For 1 realization
 plt.xlim([0.9,2.1])
 
-plt.ylabel(r'$\left\||\rho^*\right\||$', fontsize = 10)
+plt.ylabel(r'Bias($\left\||\rho^*\right\||_2$)', fontsize = 12)
 plt.xlabel(r'$\sigma$', fontsize = 11)
 
 if save_flag:
-    plt.savefig('plots/bif/bifurcation_bias(sigma)_sde_Ne6_RL.pdf')
+    plt.savefig('plots/bif/bifurcation_bias(sigma)_sde_Ne5_LR2.pdf')
 plt.show()
 
 
 plt.xlim([0.9,2.1])
-plt.ylabel(r'$\left\||\rho^*\right\||$', fontsize = 10)
+plt.ylabel(r'Bias($\left\||\rho^*\right\||_2)$', fontsize = 12)
 plt.xlabel(r'$\sigma$', fontsize = 11)
 plt.errorbar(x_sde, y_mean-y_anal, yerr=y_error,   fmt='bo', ecolor='b', markersize=3) # Mean of M realizations
 
 if save_flag:
-    plt.savefig('plots/bif/bifurcation_bias(sigma)_sde_Ne6_mean_M10_RL.pdf')
+    plt.savefig('plots/bif/bifurcation_bias(sigma)_sde_Ne5_mean_M10-1_LR2.pdf')
+
+plt.show()
+
+plt.xlim([0.9,2.1])
+plt.ylabel('Discretization error', fontsize = 12)
+plt.xlabel(r'$\sigma$', fontsize = 11)
+plt.plot(sigma_list, np.array(y_anal_test)-np.array(y_anal), 'o', markersize=3) # Mean of M realizations
 
 plt.show()
