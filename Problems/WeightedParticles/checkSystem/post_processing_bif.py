@@ -196,7 +196,7 @@ plt.errorbar(x_sde, y_mean, yerr=y_error,   fmt='bo', ecolor='b', markersize=3, 
 plt.ylabel(r'$\left\||\rho^*\right\||$', fontsize = 15)
 plt.xlabel(r'$\sigma$', fontsize = 11)
 plt.xlim([0.9,2.1])
-plt.legend(prop={'size':8})
+
 #plt.plot(x_sde, y_sde, 'go', markersize=4)
 
 if save_flag:

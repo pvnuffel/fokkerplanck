@@ -196,7 +196,7 @@ if __name__=="__main__":
   #  plt.plot(Dtlist, residual2, "r--" )
     plt.plot(Dtlist, residual_directsim, "c--" )
     plt.xlabel(r'$\Delta T$', fontsize = 14)
-    plt.ylabel(r'$||  \rho^{*}   - \frac{ \exp{\left[-\frac{V(x)}{\sigma^2}\right]}}{\mathcal{N}}  ||$'  , fontsize = 15)
+    plt.ylabel(r'$||  \rho^{*}   - \frac{ \exp{\left[-2\frac{V(x)}{\sigma^2}\right]}}{\mathcal{N}}  ||$'  , fontsize = 15)
    # plt.savefig("plots/Newton_pde_res(Dt)_dt=1e-5.pdf")
               
     

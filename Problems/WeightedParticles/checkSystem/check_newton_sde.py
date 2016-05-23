@@ -44,7 +44,7 @@ if __name__=="__main__":
     D = 2.0
     sigma=1.0
    # sigma = 2*np.sqrt(D)
-    Dt = 1e-1  #Dt influences number of GMRES-iterations strongly
+    Dt = 1e-2  #Dt influences number of GMRES-iterations strongly
     Dtlist = [ Dt]
     #Dtlist = [ 5e-3, 1e-2, 2e-2, 5e-2, 1e-1, 2e-1, 5e-1, 1]
     #Dtlist = [1e-5, 5e-5, 1e-4,  5e-4, 1e-3,  5e-3 , 1e-2, 5e-2 , 1e-1, 5e-1, 1]
@@ -82,7 +82,7 @@ if __name__=="__main__":
   #  lifting =  inv_transform.Sampler(sampler_param)
     
     h=2e-2 # kde mesh width     
-    M=2 #number of monte carlo steps         
+    M=1 #number of monte carlo steps         
     y_mean = scipy.zeros(M)
     y_sde = scipy.zeros(M)
 
@@ -100,8 +100,8 @@ if __name__=="__main__":
    # fp_sde = particles.Particles(lifting,restriction,rho,grid, lambd, param=param)       
 
  #   Nlist = scipy.array([1000, 2000, 4000, 8000, 16000, 32000, 64000, 128000])
-#    Nlist = scipy.array([1e3, 1e4, 1e5, 1e6, 1e7, 1e8]) 
-    Nlist = scipy.array([1e5]) #, 800, 1600, 3200])
+    Nlist = scipy.array([ 1e5]) 
+  #  Nlist = scipy.array([1e5]) #, 800, 1600, 3200])
     eps_list_exponents=[5]
     eps_list= [1e-5]
     param['eps']= eps_list[-1]
@@ -116,23 +116,24 @@ if __name__=="__main__":
     sq_E_Jv=scipy.zeros(nN)
     E_rho= scipy.zeros((nN,len(rho)))
     E_Jv= scipy.zeros((nN,len(rho)))
+    
    # = scipy.zeros((nN,len(rho)))
     
     
         
-    residual1 = scipy.zeros(len(Dtlist))
-    residual2 = scipy.zeros(len(Dtlist))
-    residual3 = scipy.zeros(len(Dtlist))
-    residual_directsim = scipy.zeros(len(Dtlist)) 
+#    residual1 = scipy.zeros(len(Dtlist))
+#    residual2 = scipy.zeros(len(Dtlist))
+#    residual3 = scipy.zeros(len(Dtlist))
+#    residual_directsim = scipy.zeros(len(Dtlist)) 
     save_flag= False
 
 #    
             
-#    residual1 = scipy.zeros(nN)
-#    residual2 = scipy.zeros(nN)
-#    residual3 = scipy.zeros(nN)
-#    residual_directsim = scipy.zeros(nN) 
-   # newton_res_norms = scipy.zeros(nN)
+    residual1 = scipy.zeros(nN)
+    residual2 = scipy.zeros(nN)
+    residual3 = scipy.zeros(nN)
+    residual_directsim = scipy.zeros(nN) 
+    newton_res_norms = scipy.zeros(nN)
     
 
     for Dti in range(0, len(Dtlist)):
@@ -182,7 +183,7 @@ if __name__=="__main__":
                 
                             #LINEAR SOLVER
                 gmres_param = GMRES.GMRESLinearSolver.getDefaultParameters()
-                gmres_param['tol']=1e-5   #zet terup 1e-4
+                gmres_param['tol']=1e-7   #zet terup 1e-4
                 gmres_param['print']='short'
                 gmres_param['builtin']=False
                 
@@ -194,15 +195,9 @@ if __name__=="__main__":
                 # CREATING NEWTON SOLVER
                 newt_param = NewtonSolver.NewtonSolver.getDefaultParameters()
                 newt_param['rel_tol']=1e-5
-                if (N==1e6):
-                    newt_param['abs_tol']=45e-5     #Open question: How to set the tolerance a priori (what is the dependence of the noise on the number of particles?)
-                else:
-                    newt_param['abs_tol']=140e-5  
-                if (N==1e7):
-                    newt_param['abs_tol']=14e-5
-                #newt_param['abs_tol']=43e-5
+                newt_param['abs_tol']=1e-10
                 newt_param['print']='short'
-                newt_param['max_iter']=5
+                newt_param['max_iter']=10
                 newt_param['damping']=1
                 nsolv = NewtonSolver.NewtonSolver(linsolv,newt_param)
             #    nsolv2 = NewtonSolver.NewtonSolver(linsolv2,newt_param)
@@ -219,41 +214,12 @@ if __name__=="__main__":
                 points = []
                 print "Solve for fixpoint"
                 p.correct()
-                print "Found! Add to list"
-                points.append(p)       
+              #  print "Found! Add to list"
+               # points.append(p)       
          
-#                lambd2 = scipy.array([1.2,D,alpha, beta, zeta])
-#                fp_sde2 = particles.Particles(lifting,restriction,rho,grid, lambd2, x_prev_sim, w_prev_sim, param=param )  
-#                p2 = Point.Point(fp_sde2,nsolv,None, point_param)
-#                p2.correct()
-#                print "Found! Add to list"anti-moon
-#                points.append(p2)     
-                
-                
-                continuer_param= Continuer.Continuer.getDefaultParameters()
-                continuer_param['plotx']['func'] = 1
-                continuer_param['growth_factor']=1
-                continuer_param['cont_step']=0.1
-                branch = Continuer.Continuer(points, continuer_param)
-            
-                print '#Start Continuation'
-                
-                cont_steps = 10
-                succ = branch.bcontinue_natural(cont_steps)
-                print succ, 'succesfull continuation steps', cont_steps -succ, 'failed ones'
-                branch_list.append(branch)
-                x_sde, y_sde= branch.getPlot()
-                
-                N_iter = branch.getIterations()
-                
+               
                         
 
-#                lambd = scipy.array([a,sigma,alpha,beta,zeta])
-#                fp_sde2 = particles.Particles(lifting,restriction,rho,grid, lambd, x_prev_sim, w_prev_sim, param=param )   
-#                p2 = Point.Point(fp_sde2,nsolv2,psolver_im2,point_param)
-#                p2.correct()
-#                points.append(p2)                      
-                
               #  x_prev_sim = fp_sde.x_Dt
               #  print 'len x-vector= ' , len( fp_sde.x_Dt) 
              #   w_prev_sim = fp_sde.w_prev
@@ -265,18 +231,18 @@ if __name__=="__main__":
 #                
               #  spectrum = p.mspectrum()
                 
-                rho_fix =p.u 
-                E_rho[n] = E_rho[n] +   rho_fix      
-                rho_sq[n] = rho_sq[n] +   norm(rho_fix)**2
+           #     rho_fix =p.u 
+           #     E_rho[n] = E_rho[n] +   rho_fix      
+             #   rho_sq[n] = rho_sq[n] +   norm(rho_fix)**2
                # kappa= abs(scipy.amax(spectrum[0]))/abs(scipy.amin(spectrum[0]))
                 # points.append(p)
           #      newton_states = nsolv.newton_states
-           #     newton_res_norms = nsolv.newton_res_norm
+                newton_res_norms = nsolv.newton_res_norm
              #   np.savetxt('Newton/new_method_resnorm_Dte-2_tole-4_Ne6m%d' %m, newton_res_norms)
-            #    np.savetxt('Newton/new_method_resnorm_Dte-2_tole-4_N%d' %N, newton_res_norms)
+                np.savetxt('Newton/21-05_resnorm_Dte-2_tole-7_N%d' %N, newton_res_norms)
              #   States =  newton_states.reshape(nsolv.nb_newt +1, len(grid))  
-                norm_c = sum( np.exp( 2*(-grid**4 + grid**2)*mu/D))*dx
-                rho_ss = np.exp( 2*(-grid**4 + grid**2 )*mu/D) /norm_c 
+               # norm_c = sum( np.exp( 2*(-grid**4 + grid**2)*mu/sigma**2))*dx
+               # rho_ss = np.exp( 2*(-grid**4 + grid**2 )*mu/sigma**2) /norm_c 
                # label2= r'$\frac{ \exp{\left[-2\frac{V(x)}{\sigma^2}\right]}}{\mathcal{N}}$'In [8]:
                 
             #    np.savetxt('GMRES/res_Dt1e-1_dx1e-1_N%d.out' %N, linsolv.resid)
@@ -324,9 +290,9 @@ if __name__=="__main__":
 #    np.savetxt('Newton/residual2(t)_Ne7_tol1e-2.out' , residual2)
 #    np.savetxt('Newton/residual3(t)_Ne7_tol1e-2.out' , residual3)
               
-    for n in range(len(Nlist)): 
-        rho_sq[n]=  rho_sq[n]/M
-        E_rho[n] = E_rho[n]/M
+#    for n in range(len(Nlist)): 
+#        rho_sq[n]=  rho_sq[n]/M
+#        E_rho[n] = E_rho[n]/M
           #  sq_E_rho[n]= (norm(E_rho[n]))**2
             
           #  Jv_sq[n]=  Jv_sq[n]/M
@@ -335,28 +301,7 @@ if __name__=="__main__":
    # np.savetxt('Newton/rho_sq_tol_e-5.out' , rho_sq)
    # np.savetxt('Newton/E_rho_tol_e-5.out' , E_rho )
 
-    #Post-processing
-    y_s1 =  scipy.zeros(len(branch.points))
-    y_s2 =  scipy.zeros(len(branch.points))
-    x_sde= branch_list[-1].getPlot()[0]
-    y_mean =  scipy.zeros(len(branch.points))
-    rho_mean =  scipy.zeros((len(branch.points), len(branch.points[-1].u)))
-    
-    for b in range (M):
-        y_sde=branch_list[b].getPlot()[1]
-        y_s1 += y_sde
-        y_s2 += y_sde*y_sde 
-        for i in range (len(branch_list[b].points)):
-            rho_mean[i] =  rho_mean[i] + branch_list[b].points[i].u/M
-        
-    y_mean = y_s1/M
-    y_var = y_s2/M - y_mean*y_mean
-  #  y_sigma= sqrt(y_var)
-    
-    if save_flag:
-        np.savetxt('bifurcation_data/fixed_states_sde_Ne5_mean_M10_2.txt',rho_mean)
-        np.savetxt('bifurcation_data/norm_fixed_states_sde_Ne5_mean_M10_LR2.txt',y_mean)
-        np.savetxt('bifurcation_data/variance_fixed_states_sde_Ne5mean_M10_LR2.txt',y_var)
+
     
 ##       
     print "End of simulation"

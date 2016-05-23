@@ -51,7 +51,7 @@ if __name__=="__main__":
  
     #rho_Dt_sde = E_rho[-1]
     Jv_sde = E_Jv[-1][-1]  #dim n_x
-
+    bins = len(Jv_sde)
     
     resize_factor = int (len(rho_Dt_fp)/len(Jv_sde))
   #  resize_factor = 10
@@ -77,8 +77,6 @@ if __name__=="__main__":
 #            bin_av = bin_av+ rho_Dt_fp[i*resize_factor+j]
 #        rho_coarse[i] = bin_av/resize_factor
             
-
-    bins = len(Jv_sde)
     
     Jv_coarse = scipy.zeros((len(eps_list),bins))
     for eps_i in range (0,len(eps_list)):

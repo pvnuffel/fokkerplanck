@@ -35,7 +35,7 @@ import Utils.conditions.probability as probability
 if __name__=="__main__":
 
     sigma = 1
-    Dt = 1
+    Dt = 1e-1
     seed = 16
     D=0.5*sigma**2
     # discretization parameters
@@ -57,8 +57,8 @@ if __name__=="__main__":
     dx = 1e-2
 #    factor = int (dx/dx_fp)
 #    print "Discretisation for solving sde is ", factor, " times coarser than the discretisation for solving the pde"
-    dt = 1e-2 # ti
-    N=1e5
+    dt = 1e-3 # ti
+    N=1e6
     Nlarge= N
     Nsmall =N
     
@@ -76,7 +76,7 @@ if __name__=="__main__":
   #  lifting =  inv_transform.Sampler(sampler_param)
     
     h=2e-2 # kde mesh width     
-    M=1 #number of monte carlo steps                
+    M=10 #number of monte carlo steps                
     param_histogram = histogram.Histogram.getDefaultParameters()
     param_histogram['h']=h
     restriction = histogram.Histogram(param_histogram)
@@ -89,8 +89,8 @@ if __name__=="__main__":
 #    param['eps']=1e-5
    # fp_sde = particles.Particles(lifting,restriction,rho,grid, lambd, param=param)       
 
-  #  Nlist = scipy.array([1000, 2000, 4000, 8000, 16000, 32000, 64000, 128000])
-    Nlist = scipy.array([N]) #, 800, 1600, 3200])
+    Nlist = scipy.array([1e3, 1e4, 1e5, 1e6, 1e7])
+  #  Nlist = scipy.array([N]) #, 800, 1600, 3200])
     eps_list_exponents=[5]
     eps_list= [1e-5]
    # Nlist = scipy.array([5,10, 200]) #,400])
@@ -139,14 +139,14 @@ if __name__=="__main__":
                 rg_state = lifting.get_rg_state()  #We remember the internal state of the random generator to get new random number for sampling the new particles
                 
                 print "calculate .u_Dt"
-                rho_Dt_sde = fp_sde.u_Dt 
+                rho_Dt = fp_sde.u_Dt 
                 t0=time.time()
                 print "Simulation time for solving sde: " , t0-t1, " seconds"
                 #rho_fine = fp_sde.make_rho_fine(rho_Dt) 
-             #   rho_sq[n] = rho_sq[n] + (norm(rho_Dt))**2
-            #    E_rho[n] = E_rho[n] + rho_Dt           #matrix
+                rho_sq[n] = rho_sq[n] + (norm(rho_Dt))**2
+                E_rho[n] = E_rho[n] + rho_Dt           #matrix
         
-                plt.plot(rho_Dt_sde)
+              #  plt.plot(rho_Dt)
                 print "calculate JVs"
               #  Jv =fp_sde.applyJacobian(v)                                                 
                # Jv_sq[n] = Jv_sq[n] + (norm(Jv))**2
@@ -200,9 +200,9 @@ if __name__=="__main__":
                 #print w_prev_sim
                                  
         for n in range(len(Nlist)): 
-           # rho_sq[n]=  rho_sq[n]/M
+            rho_sq[n]=  rho_sq[n]/M
             E_rho[n] = E_rho[n]/M
-          #  sq_E_rho[n]= (norm(E_rho[n]))**2
+            sq_E_rho[n]= (norm(E_rho[n]))**2
             
           #  Jv_sq[n]=  Jv_sq[n]/M
           #  E_Jv[n] = E_Jv[n]/M
@@ -210,8 +210,9 @@ if __name__=="__main__":
             
         
     
-      #  np.savetxt('25-11-rho_sq_eps-%d.out' %eps_list_exponents[eps_i], rho_sq)
-      #  np.savetxt('25-11-E_rho_eps-%d.out' %eps_list_exponents[eps_i], E_rho )
+        np.savetxt('data/09-05-rho_sq_N=e^3-7.out' , rho_sq)
+        np.savetxt('data/09-05-E_rho_N=e^3-7.out' , E_rho )
+        np.savetxt('data/09-05-sq_E_rho_N=e^3-7.out',  sq_E_rho )
     #    np.savetxt('25-11-sq_E_rho_eps-%d.out' %eps_list_exponents[eps_i],  sq_E_rho )
      #   np.savetxt('data/E_rho_N10000_M_100.out' , E_rho )
         

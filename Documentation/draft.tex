@@ -83,14 +83,14 @@ In this project, we develop a Newton-Krylov method that is able to compute effic
 
 \input{model_problem.tex}
 
-
-
 \section{Method}
 \subsection{Coarse time stepper}
 \input{coarse_time_stepper.tex}
 
 
-\subsection{Newton-Krylov solver} \label{sec:Newton-Krylov}
+\subsection{Fixed-point algorithm}
+
+\subsubsection{Newton-Krylov solver} \label{sec:Newton-Krylov}
 
 
 If we want to compute steady states for the density $\U_*$ without direct simulation, we can find them by solving the non-linear system
@@ -118,9 +118,7 @@ J(\cts) \cdot \mathbf{v} &\approx& \frac{\cts (\U + \varepsilon \mathbf{v}, \bol
 &\approx & \frac{\cts (\U, \boldsymbol{\omega_1} )  + \varepsilon J(\cts) (  \U, \boldsymbol{\omega_1})  \cdot \mathbf{v}  - \cts (\U, \boldsymbol{\omega_2}) }{\varepsilon} \nonumber
 \end{eqnarray}
 
-\input{GMRES}
-
-\subsection{Variance reduced Jacobian-vector products}
+\subsubsection{Variance reduced Jacobian-vector products}
 
 If we use the solution of the PDE, eq. \eqref{pde_discretization}, the time stepper is deterministic and the calculation of the Jacobian-vector products is straightforward. If we use the solutions of the SDE however, we have to deal with numerical noise in evaluating eq. \ref{Jv_approx}.
 Because the coarse time-stepper is stochastic, repeating $\cts$ with two sets of random numbers ($\boldsymbol{\omega_1}$ and $ \boldsymbol{\omega_2}$)  will give different results. For $ \varepsilon \ll 1$ this will result in an $\mathcal{O}(1/(\varepsilon^2 N))$ variance. Consequently the variance on the Jacobian-vector-products will grow unboundedly as $\varepsilon$ tends to zero and $J(\cts) \cdot \mathbf{v}$ completely loses the structure of the perturbation \V.
@@ -128,7 +126,17 @@ Because the coarse time-stepper is stochastic, repeating $\cts$ with two sets of
 This numerical noise can be reduced by using the same random numbers $\boldsymbol{\omega}$ for the unperturbed and perturbed simulations. If we apply the weighted restriction operator \eqref{restriction_eps},  we get the same microscopic realizations in the lifting step - the only difference is in the computation of the weights. As such,  we impose $\boldsymbol{\omega_1} = \boldsymbol{\omega_2}$ in eq. \eqref{Jv_approx} and consequently the variance of $J(\cts) \cdot \mathbf{v}$ is bounded and of  $\mathcal{O}(1/ N)$.  In the limit of infinitely many particles, the result will converge to the exact Jacobian-vector product. For finite values of $N$, there will be noise in the Jacobian-vector product as a result of the random selection of a subset of all possible realizations. The presented procedure only prevents noise blowup that would arise if a different selection of realizations were considered for the perturbed and unperturbed coarse time-step.
 
 
+
+
 \section{Analysis}
+
+Numerical experiments that show how bias and variance of the Jacobian-vector product depend on the number of particles used.
+
+Watch out: as the reference solution we use the deterministic Jacobian-vector product. That, in itself, has a discretisation error that should not be interpreted as a bias of the stochastic Jacobian-vector product.
+
+
+
+
 \subsection{Variance}
 
 Fig. \ref{Var_N} shows that the variance on the stochastic solution for the Jacobian-vector-product converges to zero with $\mathcal{O}(1/ N)$ and that it does not depend on the value of $\varepsilon$.
@@ -142,16 +150,22 @@ Fig. \ref{Var_N} shows that the variance on the stochastic solution for the Jaco
 
 %\input{GMRES.tex}
 
+\subsection{bias}
+
 
 The convergence of the density to the real solution, strongly depends on the number of particles $N$ and on the choice of $\epsilon$ in the GMRES-method. 
 
 
-
-\subsection{}
-
+\input{GMRES}
 
 
-\subsection{bias}
+
+
+
+
+
+
+
 
 
 \section{Application: Systemic Risk}
