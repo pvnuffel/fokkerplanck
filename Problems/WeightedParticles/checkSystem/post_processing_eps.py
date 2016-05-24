@@ -101,7 +101,7 @@ if __name__=="__main__":
     
     log_flag = 'log'
   #  log_flag = 'linear'
-    save_flag = True
+    save_flag = False
     
    # Nlist = scipy.array([1000,2000,4000,8000,16000])
        
@@ -156,6 +156,21 @@ if __name__=="__main__":
     order= r'$\mathcal{O}(1/N)$'
     plt.annotate(order,  xy=(2e-4, 2e-2), xytext=(1.1e-4, 5.2e-2), fontsize=11, color='grey')
     if(save_flag): plt.savefig("plots/Var_N_eps.pdf")
+    plt.savefig("plots/Variance_on_Jv.pdf")
+    plt.show()
+    
+        
+    points_o1var = [[1e-4, 2e-2], [1e-4, 1e-1], [5e-4, 1e-1]] 
+    triangle_o1var = plt.Polygon(points_o1var, fill=None  ,edgecolor='grey') 
+    plot_var = plt.plot(Nlist_inv, (sde_Jv_sq[1] -sq_E_Jv[1])/bins, linewidth=2)
+    plt.ylabel('Var ($\mathbf{\hat{Jv}} $)', fontsize = 12)
+    plt.xlabel('$1/N$', fontsize = 12) 
+    plt.xscale(log_flag)
+    plt.yscale(log_flag)
+    plt.gca().add_patch(triangle_o1var)
+    order= r'$\mathcal{O}(1/N)$'
+    plt.annotate(order,  xy=(2e-4, 2e-2), xytext=(1.1e-4, 5.2e-2), fontsize=11, color='grey')
+    plt.savefig("plots/Variance_on_Jv.pdf") #This is used to refer to in Newton convergence analysis
     plt.show()
     
      

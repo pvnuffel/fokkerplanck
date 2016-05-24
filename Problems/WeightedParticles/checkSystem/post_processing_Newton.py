@@ -41,9 +41,6 @@ if __name__=="__main__":
     resnorm_t10_N1000000 = np.loadtxt('Newton/resnorm_Dte-2_N1000000')  
     resnorm_t10_N10000000= np.loadtxt('Newton/resnorm_Dte-2_N10000000')  
     
- 
-    
-        
    # resnorm_t10_tol4_N10000 = np.loadtxt('Newton/17-05_resnorm_Dte-2_tole-4_N10000') 
     resnorm_t10_tol4_N100000 = np.loadtxt('Newton/17-05_resnorm_Dte-2_tole-4_N100000')  
     resnorm_t10_tol4_N1000000= np.loadtxt('Newton/17-05_resnorm_Dte-2_tole-4_N1000000')  
@@ -104,7 +101,7 @@ if __name__=="__main__":
   #  tol3Artist = plt.Line2D((0,1),(0,0), color='k', linestyle='--')
   #  tol2Artist = plt.Line2D((0,1),(0,0), color='k', linestyle='-')
     
-    ax.legend( numpoints = 1,  prop={'size':12} )
+    ax.legend( numpoints = 1,  prop={'size':8} )
 #    ax.legend([handle for i,handle in enumerate(handles) if i in display]+[tol3Artist,tol2Artist],
 #          [label for i,label in enumerate(labels) if i in display]+[r'$\epsilon_{GMRES} = 10^{-5}$', r'$\epsilon_{GMRES} = 10^{-2}$'], bbox_to_anchor=(1.39
 #          , 1), prop={'size':10})
@@ -128,6 +125,7 @@ if __name__=="__main__":
     
     points_o1var = [[1e-3, 1e-3], [1e-3, 5e-3], [5e-3, 5e-3]]   #label if  plotting as a function of 1/sqrt(N)
     points_o1var = [[1e-6, 1e-3], [1e-6, 2e-3], [4e-6, 2e-3]] 
+    points_o1var = [[1e-7, 1e-3], [1e-7, 3e-3], [9e-7, 3e-3]] 
     order= r'$\mathcal{O}(1/\sqrt{N})$'
 
  #   points_o1var = [[1e-5, 1e-2], [2e-5, 2e-2], [1e-5, 2e-2]] 
@@ -142,8 +140,8 @@ if __name__=="__main__":
     plt.gca().add_patch(triangle_o1var)
     plt.ylabel(r'$||  \rho^* - \Phi^N_T(\rho^*)||$'  , fontsize = 15)
     plt.xlabel(r'$1/N$', fontsize = 14)
-    plt.annotate(order,  xy=(1.1e-6, 1.5e-3), xytext=(1.1e-6, 1.5e-3), fontsize=11, color='grey')
-   # plt.savefig("Newton/plots/Tolerance_on_NK-solution_converges_N-1.pdf")
+    plt.annotate(order,  xy=(1.1e-7, 1.7e-3), xytext=(1.1e-7, 1.7e-3), fontsize=11, color='grey')
+    plt.savefig("Newton/plots/Tolerance_on_NK-solution_converges_N-1_tol_1e-4.pdf")
     plt.show()
 
 ###################################################################

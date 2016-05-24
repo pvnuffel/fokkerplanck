@@ -3,23 +3,29 @@
 
 We show some numerical experiments that show how the Newton method converges to the fixed point. 
 
-
 \subsection{Maximal accuracy}
 
-The accuracy on the Newton-Krylov solution is inevitably limited by the noise on the stochastic coarse-time-stepper, which appears in the evaluation of the residual and in the evaluation of the Jacobian-vector-product. The variance on the coarse-time-stepper is of order $\mathcal{O}(\frac{1}{N})$, as shown in fig. \ref{fig:Variance_on_cts(N-1)}. If we use weighted restriction, the variance on the Jacobian-vector-product converges in the same way.  Therefore, the accuracy on the Newton-Krylov solution will depend on the number of particles used to calculate the coarse time-stepper.  This is confirmed in fig. \ref{fig:Newton_sde_res(k)}, which shows the convergence of the Newton-residuals. After the Newton-Krylov solution is converged, it stays oscillating around the true solution with a standard deviation depending on the number of particles. Because the solution only depends on the previous density and on the random choices in the coarse time stepper, we can interpret this as a Markov chain. The residual averaged out over the converged Newton steps is a good indication of the best tolerance we can achieve. It converges as $\mathcal{O}(\frac{1}{\sqrt{N}})$. Given the number of particles $N$,  we will use this tolerance as the stopping criterion for the Newton-method.
+
+\subsubsection{Estimating stopping criterion for the non-linear solver}
+The accuracy on the Newton-Krylov solution is inevitably limited by the noise on the stochastic coarse-time-stepper, which appears in the evaluation of the residual and in the evaluation of the Jacobian-vector-product. The variance on the coarse-time-stepper is of order $\mathcal{O}(\frac{1}{N})$, as shown in fig. \ref{fig:Variance_on_cts(N-1)}. If we use weighted restriction, the variance on the Jacobian-vector-product converges in the same way.  Therefore, the accuracy on the Newton-Krylov solution will depend on the number of particles $N$ used to calculate the coarse time-stepper.  This is confirmed in fig. \ref{fig:Newton_sde_res(k)}, which shows the convergence of the Newton-residuals. When the Newton-Krylov solution is converged, it stays oscillating around the true solution with a standard deviation depending on the number of particles. Because the solution only depends on the previous density and on the random choices in the coarse time stepper, we can interpret this as a Markov chain. The residual averaged out over the converged Newton iterations is a good indication of the best tolerance we can achieve. It converges as $\mathcal{O}(\frac{1}{\sqrt{N}})$. Given the number of particles $N$,  we will use this tolerance as the stopping criterion for the Newton-method.
+
+\subsubsection{Estimating stopping criterion for the linear solver}
+Because the solution of the Newton-Krylov solution will contain noise anyway, it is pointless to iterate the linear solver until reaching machine precision.
+In fact, for low particle numbers (and a high variance on the left and right side of the linear equation we need to solve), we observe more failed Newton-iterations if the GMRES-tolerance is chosen too small.  A question of interest is then `what is a good value for the GMRES-tolerance?'. The answer depends on the desired accuracy of the calculated fixed points. For instance in fig. \ref{fig:Newton_sde_res(k)_tol1e-4}, we observe that we  can already stop the Krylov iterations if the density is calculated to an accuracy of %$\varepsilon_{\texttt{GMRES}}=
+$10^{-4}$ when $N \leq 10^7$, but that we need a smaller GMRES-tolerance if a higher accuracy is desired (by using more particles). Therefore, in the simulations we  will use $\varepsilon_{\texttt{GMRES}}= 10/N$.
 
 
-
-\begin{figure}[h]
+\begin{figure}[H!]
 \centering
-\includegraphics[width=0.5\linewidth]{../Problems/WeightedParticles/checkSystem/plots/Variance_on_cts(N-1)}
-\caption{The variance of the coarse time-stepper is of $\mathcal{O}(\frac{1}{N})$ }
+\includegraphics[width=0.49\linewidth]{../Problems/WeightedParticles/checkSystem/plots/Variance_on_cts(N-1)}
+\includegraphics[width=0.49\linewidth]{../Problems/WeightedParticles/checkSystem/plots/Variance_on_Jv}
+\caption{The variance of the coarse time-stepper and the variance on the Jacobian vector-product converge to zero with $\mathcal{O}(\frac{1}{N})$ }
 \label{fig:Variance_on_cts(N-1)}
 \end{figure}
 
 
 
-\begin{figure}[h]
+\begin{figure}[H!]
 \centering
 \includegraphics[width=0.5\linewidth]{../Problems/WeightedParticles/checkSystem/Newton/plots/Newton_sde_res(k)_Dt_e-2_tol1e-7.pdf}
 \includegraphics[width=0.49\linewidth]{../Problems/WeightedParticles/checkSystem/Newton/plots/Tolerance_on_NK-solution_converges_N-1_tol_1e-7.pdf}
@@ -31,26 +37,20 @@ The accuracy on the Newton-Krylov solution is inevitably limited by the noise on
 
 
 
-
-\begin{figure}[h]
+\begin{figure}[H!]
 \centering
-\includegraphics[width=0.5\linewidth]{../Problems/WeightedParticles/checkSystem/Newton/plots/Newton_sde_res(k)_Dt_e-2_tol1e-2}
-\includegraphics[width=0.49\linewidth]{../Problems/WeightedParticles/checkSystem/Newton/plots/Tolerance_on_NK-solution_converges_N-1}
+\includegraphics[width=0.5\linewidth]{../Problems/WeightedParticles/checkSystem/Newton/plots/Newton_sde_res(k)_Dt_e-2_tol1e-4}
+\includegraphics[width=0.49\linewidth]{../Problems/WeightedParticles/checkSystem/Newton/plots/Tolerance_on_NK-solution_converges_N-1_tol_1e-4}
 
-\caption{ The best achieved tolerance is limited because of the size of the GMRES-tolerance ($\epsilon_{\texttt{GMRES}}=10^{-4}$)
+\caption{ The best achieved tolerance for $N=10^8$ is limited because of the size of the GMRES-tolerance ($\epsilon_{\texttt{GMRES}}=10^{-4}$)
 }
 \label{fig:Newton_sde_res(k)_tol1e-4}
 \end{figure}
 
 
 
-%->Insert result N=1e7 (on the cluster now)
-
-
-
-
-
 %How to cheaply estimate the stopping criterion?
+
 %Is the resulting fixed point biased?
 %Can we reduce variance by averaging over a number of 'converged' Newton iterations?
 %Additional questions of interest:
@@ -75,7 +75,7 @@ The accuracy on the Newton-Krylov solution is inevitably limited by the noise on
 
 
 \subsection{Continuation}
- We start from a known solution to the steady-state problem, increment the continuation parameter and solve a new problem using the previous solution as an initial guess. We chose $\Delta \sigma = 0.05$ as continuation step seize. Performing a bifurcation with smaller steps is pointless, because the difference in densities will become too small in comparison with the noise on the residual.
+ We start from a known solution to the steady-state problem, increment the continuation parameter and solve a new problem using the previous solution as an initial guess. We chose $\Delta \sigma = 0.05$ as continuation step size. Performing a bifurcation with smaller steps is pointless, because the difference in densities will become too small in comparison with the noise on the residual.
 
 \begin{figure}[h]
 \centering

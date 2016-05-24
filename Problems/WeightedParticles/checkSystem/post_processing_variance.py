@@ -59,12 +59,19 @@ if __name__=="__main__":
     
     variance = (rho_sq - sq_E_rho)
     sdev = sqrt(variance)
-       
-    plot_var = plt.plot(Nlist_inv, variance, label = '$Variance$')
+    
+    points_o1var = [[1e-6, 2e-2], [1e-6, 1e-1], [5e-6, 1e-1]] 
+ #   points_o1var = [[1e-5, 1e-2], [2e-5, 2e-2], [1e-5, 2e-2]] 
+    triangle_o1var = plt.Polygon(points_o1var, fill=None  ,edgecolor='grey') 
+        
+    plot_var = plt.plot(Nlist_inv, variance, label = '$Variance$', linewidth=2)
     plt.ylabel(r'Var$(\Phi^N_T(\rho))$' , fontsize = 12)
     plt.xlabel('$1/N$', fontsize = 12)
     plt.xscale(log_flag)
     plt.yscale(log_flag)
+    plt.gca().add_patch(triangle_o1var)
+    order= r'$\mathcal{O}(1/N)$'
+    plt.annotate(order,  xy=(2e-6, 2.5e-2), xytext=(1.1e-6, 5.7e-2), fontsize=11, color='grey')
     plt.savefig('plots/Variance_on_cts(N-1).pdf')
     plt.show()
     

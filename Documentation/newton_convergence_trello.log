@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013/Debian) (format=pdflatex 2015.12.29)  23 MAY 2016 17:43
+This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013/Debian) (format=pdflatex 2015.12.29)  24 MAY 2016 14:15
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -612,80 +612,82 @@ LaTeX Info: Redefining \nameref on input line 37.
 * (1in=72.27pt=25.4mm, 1cm=28.453pt)
 
 (./newton_convergence.tex
-LaTeX Font Info:    Try loading font information for U+msa on input line 9.
+LaTeX Font Info:    Try loading font information for U+msa on input line 10.
 
 (/usr/share/texlive/texmf-dist/tex/latex/amsfonts/umsa.fd
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 )
-LaTeX Font Info:    Try loading font information for U+msb on input line 9.
+LaTeX Font Info:    Try loading font information for U+msb on input line 10.
 
 (/usr/share/texlive/texmf-dist/tex/latex/amsfonts/umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 )
-<../Problems/WeightedParticles/checkSystem/plots/Variance_on_cts(N-1).pdf, id=1
-8, 433.62pt x 289.08pt>
+<../Problems/WeightedParticles/checkSystem/plots/Variance_on_cts(N-1).pdf, id=2
+7, 433.62pt x 289.08pt>
 File: ../Problems/WeightedParticles/checkSystem/plots/Variance_on_cts(N-1).pdf 
 Graphic file (type pdf)
 
 <use ../Problems/WeightedParticles/checkSystem/plots/Variance_on_cts(N-1).pdf>
 Package pdftex.def Info: ../Problems/WeightedParticles/checkSystem/plots/Varian
-ce_on_cts(N-1).pdf used on input line 15.
-(pdftex.def)             Requested size: 204.16939pt x 136.11462pt.
+ce_on_cts(N-1).pdf used on input line 20.
+(pdftex.def)             Requested size: 200.08824pt x 133.39304pt.
+
+<../Problems/WeightedParticles/checkSystem/plots/Variance_on_Jv.pdf, id=28, 433
+.62pt x 289.08pt>
+File: ../Problems/WeightedParticles/checkSystem/plots/Variance_on_Jv.pdf Graphi
+c file (type pdf)
+
+<use ../Problems/WeightedParticles/checkSystem/plots/Variance_on_Jv.pdf>
+Package pdftex.def Info: ../Problems/WeightedParticles/checkSystem/plots/Varian
+ce_on_Jv.pdf used on input line 21.
+(pdftex.def)             Requested size: 200.08824pt x 133.39304pt.
 
 <../Problems/WeightedParticles/checkSystem/Newton/plots/Newton_sde_res(k)_Dt_e-
-2_tol1e-7.pdf, id=19, 433.62pt x 289.08pt>
+2_tol1e-7.pdf, id=29, 433.62pt x 289.08pt>
 File: ../Problems/WeightedParticles/checkSystem/Newton/plots/Newton_sde_res(k)_
 Dt_e-2_tol1e-7.pdf Graphic file (type pdf)
 
 <use ../Problems/WeightedParticles/checkSystem/Newton/plots/Newton_sde_res(k)_D
 t_e-2_tol1e-7.pdf>
 Package pdftex.def Info: ../Problems/WeightedParticles/checkSystem/Newton/plots
-/Newton_sde_res(k)_Dt_e-2_tol1e-7.pdf used on input line 24.
+/Newton_sde_res(k)_Dt_e-2_tol1e-7.pdf used on input line 30.
 (pdftex.def)             Requested size: 204.16939pt x 136.11462pt.
 
 <../Problems/WeightedParticles/checkSystem/Newton/plots/Tolerance_on_NK-solutio
-n_converges_N-1_tol_1e-7.pdf, id=20, 433.62pt x 289.08pt>
+n_converges_N-1_tol_1e-7.pdf, id=30, 433.62pt x 289.08pt>
 File: ../Problems/WeightedParticles/checkSystem/Newton/plots/Tolerance_on_NK-so
 lution_converges_N-1_tol_1e-7.pdf Graphic file (type pdf)
 
 <use ../Problems/WeightedParticles/checkSystem/Newton/plots/Tolerance_on_NK-sol
 ution_converges_N-1_tol_1e-7.pdf>
 Package pdftex.def Info: ../Problems/WeightedParticles/checkSystem/Newton/plots
-/Tolerance_on_NK-solution_converges_N-1_tol_1e-7.pdf used on input line 25.
+/Tolerance_on_NK-solution_converges_N-1_tol_1e-7.pdf used on input line 31.
 (pdftex.def)             Requested size: 200.08824pt x 133.39304pt.
 
-
-LaTeX Warning: `h' float specifier changed to `ht'.
-
-
 <../Problems/WeightedParticles/checkSystem/Newton/plots/Newton_sde_res(k)_Dt_e-
-2_tol1e-2.pdf, id=21, 433.62pt x 289.08pt>
+2_tol1e-4.pdf, id=31, 433.62pt x 289.08pt>
 File: ../Problems/WeightedParticles/checkSystem/Newton/plots/Newton_sde_res(k)_
-Dt_e-2_tol1e-2.pdf Graphic file (type pdf)
+Dt_e-2_tol1e-4.pdf Graphic file (type pdf)
 
 <use ../Problems/WeightedParticles/checkSystem/Newton/plots/Newton_sde_res(k)_D
-t_e-2_tol1e-2.pdf>
+t_e-2_tol1e-4.pdf>
 Package pdftex.def Info: ../Problems/WeightedParticles/checkSystem/Newton/plots
-/Newton_sde_res(k)_Dt_e-2_tol1e-2.pdf used on input line 37.
+/Newton_sde_res(k)_Dt_e-2_tol1e-4.pdf used on input line 42.
 (pdftex.def)             Requested size: 204.16939pt x 136.11462pt.
 
 <../Problems/WeightedParticles/checkSystem/Newton/plots/Tolerance_on_NK-solutio
-n_converges_N-1.pdf, id=22, 433.62pt x 289.08pt>
+n_converges_N-1_tol_1e-4.pdf, id=32, 433.62pt x 289.08pt>
 File: ../Problems/WeightedParticles/checkSystem/Newton/plots/Tolerance_on_NK-so
-lution_converges_N-1.pdf Graphic file (type pdf)
+lution_converges_N-1_tol_1e-4.pdf Graphic file (type pdf)
 
 <use ../Problems/WeightedParticles/checkSystem/Newton/plots/Tolerance_on_NK-sol
-ution_converges_N-1.pdf>
+ution_converges_N-1_tol_1e-4.pdf>
 Package pdftex.def Info: ../Problems/WeightedParticles/checkSystem/Newton/plots
-/Tolerance_on_NK-solution_converges_N-1.pdf used on input line 38.
+/Tolerance_on_NK-solution_converges_N-1_tol_1e-4.pdf used on input line 43.
 (pdftex.def)             Requested size: 200.08824pt x 133.39304pt.
 
-
-LaTeX Warning: `h' float specifier changed to `ht'.
-
-
 <../Problems/WeightedParticles/checkSystem/plots/bif/fixed_states_sde(sigma)_Ne
-6_mean_M10_LR.pdf, id=23, 433.62pt x 289.08pt>
+6_mean_M10_LR.pdf, id=33, 433.62pt x 289.08pt>
 File: ../Problems/WeightedParticles/checkSystem/plots/bif/fixed_states_sde(sigm
 a)_Ne6_mean_M10_LR.pdf Graphic file (type pdf)
 
@@ -696,7 +698,7 @@ xed_states_sde(sigma)_Ne6_mean_M10_LR.pdf used on input line 83.
 (pdftex.def)             Requested size: 200.08824pt x 133.39304pt.
 
 <../Problems/WeightedParticles/checkSystem/plots/bif/fixed_states(sigma)_analyt
-ic.pdf, id=24, 433.62pt x 289.08pt>
+ic.pdf, id=34, 433.62pt x 289.08pt>
 File: ../Problems/WeightedParticles/checkSystem/plots/bif/fixed_states(sigma)_a
 nalytic.pdf Graphic file (type pdf)
 
@@ -707,7 +709,7 @@ xed_states(sigma)_analytic.pdf used on input line 84.
 (pdftex.def)             Requested size: 200.08824pt x 133.39304pt.
 
 <../Problems/WeightedParticles/checkSystem/plots/bif/bifurcation_sde_Ne6_anal(s
-igma)_LR.pdf, id=25, 433.62pt x 289.08pt>
+igma)_LR.pdf, id=35, 433.62pt x 289.08pt>
 File: ../Problems/WeightedParticles/checkSystem/plots/bif/bifurcation_sde_Ne6_a
 nal(sigma)_LR.pdf Graphic file (type pdf)
 
@@ -724,27 +726,37 @@ LaTeX Warning: `h' float specifier changed to `ht'.
 Package atveryend Info: Empty hook `BeforeClearDocument' on input line 57.
  [1
 
-{/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map} <../Problems/WeightedPartic
-les/checkSystem/plots/Variance_on_cts(N-1).pdf>] [2 <../Problems/WeightedPartic
-les/checkSystem/Newton/plots/Newton_sde_res(k)_Dt_e-2_tol1e-7.pdf> <../Problems
-/WeightedParticles/checkSystem/Newton/plots/Tolerance_on_NK-solution_converges_
-N-1_tol_1e-7.pdf
+{/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}] [2 <../Problems/WeightedPa
+rticles/checkSystem/plots/Variance_on_cts(N-1).pdf> <../Problems/WeightedPartic
+les/checkSystem/plots/Variance_on_Jv.pdf
+
+pdfTeX warning: pdflatex (file ../Problems/WeightedParticles/checkSystem/plots/
+Variance_on_Jv.pdf): PDF inclusion: multiple pdfs with page group included in a
+ single page
+> <../Problems/WeightedParticles/checkSystem/Newton/plots/Newton_sde_res(k)_Dt_
+e-2_tol1e-7.pdf
+
+pdfTeX warning: pdflatex (file ../Problems/WeightedParticles/checkSystem/Newton
+/plots/Newton_sde_res(k)_Dt_e-2_tol1e-7.pdf): PDF inclusion: multiple pdfs with
+ page group included in a single page
+> <../Problems/WeightedParticles/checkSystem/Newton/plots/Tolerance_on_NK-solut
+ion_converges_N-1_tol_1e-7.pdf
 
 pdfTeX warning: pdflatex (file ../Problems/WeightedParticles/checkSystem/Newton
 /plots/Tolerance_on_NK-solution_converges_N-1_tol_1e-7.pdf): PDF inclusion: mul
 tiple pdfs with page group included in a single page
 > <../Problems/WeightedParticles/checkSystem/Newton/plots/Newton_sde_res(k)_Dt_
-e-2_tol1e-2.pdf
+e-2_tol1e-4.pdf
 
 pdfTeX warning: pdflatex (file ../Problems/WeightedParticles/checkSystem/Newton
-/plots/Newton_sde_res(k)_Dt_e-2_tol1e-2.pdf): PDF inclusion: multiple pdfs with
+/plots/Newton_sde_res(k)_Dt_e-2_tol1e-4.pdf): PDF inclusion: multiple pdfs with
  page group included in a single page
 > <../Problems/WeightedParticles/checkSystem/Newton/plots/Tolerance_on_NK-solut
-ion_converges_N-1.pdf
+ion_converges_N-1_tol_1e-4.pdf
 
 pdfTeX warning: pdflatex (file ../Problems/WeightedParticles/checkSystem/Newton
-/plots/Tolerance_on_NK-solution_converges_N-1.pdf): PDF inclusion: multiple pdf
-s with page group included in a single page
+/plots/Tolerance_on_NK-solution_converges_N-1_tol_1e-4.pdf): PDF inclusion: mul
+tiple pdfs with page group included in a single page
 >] [3 <../Problems/WeightedParticles/checkSystem/plots/bif/fixed_states_sde(sig
 ma)_Ne6_mean_M10_LR.pdf> <../Problems/WeightedParticles/checkSystem/plots/bif/f
 ixed_states(sigma)_analytic.pdf
@@ -765,35 +777,36 @@ Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 57.
 Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 57.
 Package rerunfilecheck Info: File `newton_convergence_trello.out' has not chang
 ed.
-(rerunfilecheck)             Checksum: B30F4B68A4A0FBF3626C09E52A8298CD;179.
+(rerunfilecheck)             Checksum: D641A6E16EC9E5ED69424F4022AAEB64;415.
 Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 57.
  ) 
 Here is how much of TeX's memory you used:
- 7731 strings out of 493304
- 116915 string characters out of 6139870
- 209198 words of memory out of 5000000
- 11090 multiletter control sequences out of 15000+600000
- 7399 words of font info for 30 fonts, out of 8000000 for 9000
+ 7742 strings out of 493304
+ 117362 string characters out of 6139870
+ 210275 words of memory out of 5000000
+ 11097 multiletter control sequences out of 15000+600000
+ 7707 words of font info for 31 fonts, out of 8000000 for 9000
  957 hyphenation exceptions out of 8191
- 42i,8n,40p,1420b,357s stack positions out of 5000i,500n,10000p,200000b,80000s
-</usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></us
-r/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/shar
-e/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/share/texl
-ive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi12.pfb></usr/share/texlive/te
-xmf-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb></usr/share/texlive/texmf-dis
-t/fonts/type1/public/amsfonts/cm/cmmi8.pfb></usr/share/texlive/texmf-dist/fonts
-/type1/public/amsfonts/cm/cmr10.pfb></usr/share/texlive/texmf-dist/fonts/type1/
-public/amsfonts/cm/cmr12.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/
-amsfonts/cm/cmr5.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts
-/cm/cmr7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy
-10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb>
-</usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb></usr/
-share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt8.pfb></usr/share/t
-exlive/texmf-dist/fonts/type1/urw/helvetic/uhvr8a.pfb>
-Output written on newton_convergence_trello.pdf (3 pages, 454468 bytes).
+ 42i,8n,40p,1428b,328s stack positions out of 5000i,500n,10000p,200000b,80000s
+</usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></us
+r/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/shar
+e/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/share/texl
+ive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/share/texlive/te
+xmf-dist/fonts/type1/public/amsfonts/cm/cmmi12.pfb></usr/share/texlive/texmf-di
+st/fonts/type1/public/amsfonts/cm/cmmi7.pfb></usr/share/texlive/texmf-dist/font
+s/type1/public/amsfonts/cm/cmmi8.pfb></usr/share/texlive/texmf-dist/fonts/type1
+/public/amsfonts/cm/cmr10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public
+/amsfonts/cm/cmr12.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfon
+ts/cm/cmr5.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cm
+r7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb
+></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb></usr/
+share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb></usr/share/
+texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt8.pfb></usr/share/texlive
+/texmf-dist/fonts/type1/urw/helvetic/uhvr8a.pfb>
+Output written on newton_convergence_trello.pdf (3 pages, 496858 bytes).
 PDF statistics:
- 423 PDF objects out of 1000 (max. 8388607)
- 235 compressed objects within 3 object streams
- 11 named destinations out of 1000 (max. 500000)
- 65 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 500 PDF objects out of 1000 (max. 8388607)
+ 281 compressed objects within 3 object streams
+ 13 named destinations out of 1000 (max. 500000)
+ 86 words of extra memory for PDF output out of 10000 (max. 10000000)
 
