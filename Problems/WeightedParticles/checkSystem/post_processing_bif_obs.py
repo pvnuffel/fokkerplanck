@@ -26,7 +26,7 @@ save_flag= True
 N_points = len(y_mean)
 
 #sigma_list= scipy.arange(2, 0.9, -0.1)   #voor RL
-sigma_list= scipy.arange(1, 2.1, 0.1)  #voor LR
+sigma_list= scipy.arange(1.0, 2.1, 0.1)  #voor LR
         
 for i in range (N_points):
     if (i % 2 == 0): 

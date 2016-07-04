@@ -36,10 +36,11 @@
 
 \maketitle{}
 
+(Under construction)
 \begin{abstract}
 
 
-In this project, we develop a Newton-Krylov method that is able to compute efficiently coarse fixed points when the underlying fine-scale dynamics is stochastic. We investigate the use of correlated samples to perform a more accurate approximation of the Jacobian vector products that are needed in a Krylov solution in each Newton iteration. The main novelty of the algorithm is in the elimination of the noise that is generated when estimating Jacobian-vector products using time-integration of perturbed initial conditions. We present numerical results that demonstrate the convergence properties of the numerical method, and use the method to show   the emergence of coarse equilibrium state
+In this project, we develop a Newton-Krylov method that is able to compute efficiently coarse fixed points when the underlying fine-scale dynamics is stochastic. We investigate the use of correlated samples to perform a more accurate approximation of the Jacobian vector products that are needed in a Krylov solution in each Newton iteration. The main novelty of the algorithm is in the elimination of the noise that is generated when estimating Jacobian-vector products using time-integration of perturbed initial conditions. We present numerical results that demonstrate the convergence properties of the numerical method, and use the method to show  the emergence of coarse equilibrium states.
 
 
 
@@ -162,161 +163,21 @@ The convergence of the density to the real solution, strongly depends on the num
 
 
 
-
-
-
-
+\section{Convergence of the Newton Method}
+\input{newton_convergence.tex}
 
 
 \section{Application: Systemic Risk}
 
+
+\input{systemic_risk.tex}
 %\subsection{Including an interaction term}
 
-Until now, we considered a system of non-interacting particles. We will now extend our model to a mean field model by introducing a third parameter $\alpha$, which is the degree of interaction or cooperation in the system. A simple form of cooperative behaviour is the case where each agent tends to follow the state of the majority (or, each particle feels an attractive force towards the mean state of the system). To include this cooperation effect in our stochastic simulation, we add this mean reversion term to the SDE \eqref{SDE}:
-
-\begin{equation} 
-\label{SDE_meanfield}
-    \dd x = \mu V(x) \dd t + \sigma  \dd{W_t} + \alpha(\bar{x} -x) \dd t ,
-\end{equation}
-with  $\bar{x}(t) = \frac{1}{N} \sum_{i=1}^{N} x_i(t)$ denoting the empirical mean. 
-
-
-An interesting application of this model to banks and insurance is the emergence of systemic risk.  Banks will try to minimize their own individual risk by spreading the risk between each other. However, this may increase the risk that they may all fail: reducing individual risk on a micro-scale can increase systemic risk on a macro-scale. 
-Garnier, Papanicolaou and Yang already made use of the dynamics in eq. \eqref{SDE_meanfield}  to show that interconnectedness between agents indeed affects the stability of the whole system, causing systemic risk  \cite{Garnier}. They defined $x_i$  as the state of risk of agent $i$. The bi-stable-state structure of the potential $V(x)$ ensures that each risk variable stays around $-1$ (defined as the normal state) or $+1$ (the failed state).  A natural measure of systemic risk is then the transition probability of the empirical mean $\bar{x}$ from the normal state to the failed state. 
- 
-
-To establish the idea, let us repeat the numerical simulations with eq. \ref{SDE_meanfield}. The evolution of the system is now characterized by  by the initial conditions, the three parameters ($\mu$, $\sigma$, $\alpha$) and by the system size $N$. Figure \ref{fig:sysrisk}  illustrates the behaviour of the empirical mean $\bar{x}$. The simulations were performed with all agents initially in the normal state. Nevertheless, if randomness dominates the interaction, the agents can move immediately to the other potential well. The system then behaves like $N$ independent diffusions, and hence, by the symmetry of the potential, the mean state will be attracted to a single mixed state $\bar{x}=0$. Upon increasing the interaction parameter $\alpha$, however, we find two new macroscopic states, suggesting the precence of a pitchfork bifurcation at the macroscopic level. These solutions are no stable steady states, but rather coarse metastable states. Their lifetime is linked to the finite system size. 
-
-
-
-\begin{center}
-\begin{figure}
-\includegraphics[width=0.5\textwidth]{../../riskmodel/Problems/WeightedParticles/checkSystem/plots/xmean_alpha1}
-\includegraphics[width=0.5\textwidth]{../../riskmodel/Problems/WeightedParticles/checkSystem/plots/xmean_alpha5}
-
-\caption{The empirical mean, simulated for different $\alpha$. \textit{Left}: the system has one single state $\bar{x}=0$. \textit{Right}: for $\alpha> \alpha_c$ two metastable equilibria emerge. 
- The red dashed lines are approximated  analytical solutions for the steady states. \label{fig:sysrisk}}
-\end{figure}
-\end{center}
-
-
- \begin{center}
-\begin{table}
-\caption{Parameter values}
-  \begin{tabular} { | c  c | c |}    \hline   
-     %FTCS-scheme  &   Euler-Maruyama-scheme  \\  
-   \textit{ {Discretization parameters}}&    &  SDE    \\ \hline
-    Discretization step  & $\Delta x $  & $10^{-2}$ \\ 
-        Number of discretization steps  & $n_x$ &  340 \\ 
-    Time step  &  $\Delta t$ &   $10^{-2}$ \\ 
-       Number of timesteps  & $n$  &  $10^{6}$ \\ \hline
-  \end{tabular}
-%\quad
-%     \begin{tabular}  { | c | c | c |  }  \hline
-%     \multicolumn{3}{|c|} {\textit{ System parameters}   }    \\
-%    \hline  
-%    Diffusion coefficient  & $D $ & $0.5$ \\ 
-%   Drift coefficient &  $\mu$ & $ 1$ \\ \hline
-%  \end{tabular}
-\end{table}
-\end{center}
-
-\subsection{Bifurcation study}
-
-
-
-\subsubsection{Nota's}
-Tijdens elke continueringsstap, wordt een nieuw punt gecreëerd dat initieel de dichtheid \U krijgt van het vorig punt en met een parameter (D) die horizontaal word geupdate. Dan wordt de norm van het residu berekend $\norm{ \U(t) - \U(t+\Delta t)} $, waarin de dichtheid op de volgende tijdsstap verkregen wordt door een simulatie van het systeem met de nieuwe parameter. De grootte van het residu is dus afhankelijk van de stapgrootte in de bifurcatieparamter. De newtontolerantie is de norm van het residu. Als de newton-tolerantie te groot gekozen wordt (in vergelijking met de stapgrootte van het residu), dan wordt er geen Newton-iteratie uitgevoerd. Als de Newton-tolerantie evenwel te klein gekozen wordt, dan bereikt de Newton-solver mogelijk geen convergentie ten gevolge van de ruis. De Newton-tolerantie moet dus weloverwogen gekozen worden. 
-
-
-
-\subsection{Results for the pde}
-Ook hier zien we dat de keuze van de newtontolerantie belangrijk is (te groot = kans op dezelfde toestanden , te klein= failed iterations).
-Dit kan echter opgevangen worden door de oplossing van dx nauwkeuriger te maken door de tolerantie van de GMRES te verfijnen (het probleem was dat er dx=0 oplossingen werden teruggegeven) 
-
-\begin{figure}
-%\includegraphics{../Problems/WeightedParticles/checkSystem/plots/bifurcation_pde(D)}
-\caption{  Bifurcation diagram of the steady states calculated with the Newton-Krylov-Solver for the PDE. $\Delta t = 10^{-4}, \Delta T = 10^{-2}, \Delta x = 10^{-2}, \Delta D = 0.01, \epsilon_{GMRES}=10^{-5},  \delta_{Newton} = 10^{-7}, \epsilon=10^{-5}$
-}
-\end{figure}
-
-\subsection{Results for the sde}
-We chose $\Delta \sigma = 0.05$ as continuation step seize. Performing a bifurcation with smaller steps is pointless, because the difference in densities will become too small in comparison with the noise on the residual.
-
-\begin{figure}
-%\includegraphics{../Problems/WeightedParticles/checkSystem/plots/bifurcation_pde(D)}
-\caption{  Bifurcation diagram of the steady states calculated with the Newton-Krylov-Solver for the SDE. $\Delta t = 10^{-3}, \Delta T = 10^{-1}, \Delta x = 10^{-2}, \epsilon_{GMRES}=10^{-5},  \delta_{Newton} = 10^{-7}, \epsilon=10^{-5}$
-}
-\end{figure}
-
-%\begin{center}
-%\begin{table}
-%\caption{Parameter values}
-%  \begin{tabular} { | c  | c |}    \hline   
-%     %FTCS-scheme  &   Euler-Maruyama-scheme  \\  
-%   \textit{ {Discretization parameters}}&    &  SDE    \\ \hline
-%       $\Delta t $  & $10^{-4}$ \\ 
-%       $\Delta T $ &  $10^{-2}$ \\ 
-%      $ \Delta x &  $10^{-2}$ \\ 
-%       $ \Delta D$  $  &  $ 0.01 $ \\ \hline
-%  \end{tabular}
-%\end{table}
-%\end{center}
-
-\subsubsection{Calculating fixed points}
-The steady  states are computed with the Newton-Krylov solver described in section \ref{sec:Newton-Krylov} and compared with the approximated analytical solutions, calculated by Garnier et. al for small $h$ \cite{Garnier}.
-
-
-
-\begin{center}
-\begin{figure}
-\includegraphics[width=1\textwidth]{../../riskmodel/Problems/WeightedParticles/checkSystem/plots/steady_states.pdf}
-\caption{\label{fig:bif_anal}}
-\end{figure}
-\end{center}
-
-
-
-\subsubsection{Continuation}
-We use a pseudo-arclength contunaution method with secant prediction steps.
-In fig. \ref{todo} we show a bifurcation diagram of the densities. 
 
 
 
 
 
-\begin{center}
-\begin{figure}
-\includegraphics[width=0.8\textwidth]{../../riskmodel/Problems/WeightedParticles/checkSystem/plots/bif_alpha}
-\caption{\label{fig:bif_anal}}
-\end{figure}
-\end{center}
-
-
-
-
-%\begin{equation}
-%\xi = sqrt(1-3*C)*(1+ 6*mu/(sigma**2)*C**2*(1-2*C)/(1-3*C))
-%\end{equation}  
-%
-%
-
-
-By adding the mean reversion term, the Fokker-Plack equation \eqref{fokkerplanck}  describing the evolution of the density, now becomes
-
-\begin{equation}
-\label{fp_mean_field}
-\pa{\rho(x,t)}{t} = - \mu \pa{( V(x) \rho(x,t))}{x} - \alpha \pa{}{x} \left[ \left(\int x \rho(x,t) \mathrm{d}x  -x \right) \rho(x,t) \right] + \frac{\sigma^2}{2}  \ppa{\rho(x,t)}{x} .
-\end{equation}
-
-Explicit solutions of eq. \label{fp_mean_field} are not available in general, but we can find equilibrium solutions. Assuming 
-
-
-
-
-
-\section{Convergence of the Newton Method}
-\input{newton_convergence.tex}
 
 
 \bibliographystyle{plain}

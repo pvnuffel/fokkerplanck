@@ -92,6 +92,8 @@ class NewtonSolver(Solver.Solver):
         while (iter < max_iter and (stop_norm > abs_tol)):
             iter += 1
             self.nb_newt += 1
+            self.linsolv.param['tol']= self.linsolv.param['tol']/10
+            print "GMRES tolerance = " ,  self.linsolv.param['tol']
             dx, status = self.linsolv.solve(-res)        # res = rho - rho.Dt
             if print_it == 'long':  
                 plt.plot(res)                  

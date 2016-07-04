@@ -1,0 +1,6 @@
+\beamer@endinputifotherversion {3.24pt}
+\beamer@sectionintoc {1}{Model Problem}{2}{0}{1}
+\beamer@sectionintoc {2}{Algorithm}{15}{0}{2}
+\beamer@sectionintoc {3}{Systemic risk}{26}{0}{3}
+\beamer@sectionintoc {4}{Research Plan}{52}{0}{4}
+\beamer@sectionintoc {5}{Other}{52}{0}{5}

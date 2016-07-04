@@ -62,6 +62,7 @@ class Continuer(object):
         ploty['field'] = 'u'
         ploty['func'] = 'norm'
         param['ploty']=ploty
+        param['add_failures'] = False
 
         param['growth_factor']=1.2
         
@@ -169,6 +170,7 @@ class Continuer(object):
         lambd_step = scipy.zeros_like(self.points[-1].lambd)
         cont_step = self.param['cont_step']
         bifpar_index = self.param['plotx']['func']
+        add_failed_points= self.param['add_failures']
      #   bifpar_index = self.param['bifpar_index']
         lambd_step[bifpar_index] = cont_step       #Insert the index of the prefered bifurcation parameter
         growth = self.param['growth_factor']
@@ -194,6 +196,8 @@ class Continuer(object):
                            
             if not new_success :
                 fail += 1
+                if add_failed_points = True:
+                    self.addPoint(new_point)
 
             else :  # if new_success
 #                for i in range ( len(self.points)):

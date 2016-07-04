@@ -13,15 +13,11 @@
 \BOOKMARK [2][-]{subsection.3.2}{bias}{section.3}% 13
 \BOOKMARK [3][-]{subsubsection.3.2.1}{Analysis of GMRES}{subsection.3.2}% 14
 \BOOKMARK [3][-]{subsubsection.3.2.2}{experiments}{subsection.3.2}% 15
-\BOOKMARK [1][-]{section.4}{Application: Systemic Risk}{}% 16
-\BOOKMARK [2][-]{subsection.4.1}{Bifurcation study}{section.4}% 17
-\BOOKMARK [3][-]{subsubsection.4.1.1}{Nota's}{subsection.4.1}% 18
-\BOOKMARK [2][-]{subsection.4.2}{Results for the pde}{section.4}% 19
-\BOOKMARK [2][-]{subsection.4.3}{Results for the sde}{section.4}% 20
-\BOOKMARK [3][-]{subsubsection.4.3.1}{Calculating fixed points}{subsection.4.3}% 21
-\BOOKMARK [3][-]{subsubsection.4.3.2}{Continuation}{subsection.4.3}% 22
-\BOOKMARK [1][-]{section.5}{Convergence of the Newton Method}{}% 23
-\BOOKMARK [2][-]{subsection.5.1}{Maximal accuracy}{section.5}% 24
-\BOOKMARK [3][-]{subsubsection.5.1.1}{Estimating stopping criterion for the Newton-method}{subsection.5.1}% 25
-\BOOKMARK [3][-]{subsubsection.5.1.2}{Estimating stopping criterion for Krylov-method}{subsection.5.1}% 26
-\BOOKMARK [2][-]{subsection.5.2}{Continuation}{section.5}% 27
+\BOOKMARK [1][-]{section.4}{Convergence of the Newton Method}{}% 16
+\BOOKMARK [2][-]{subsection.4.1}{Maximal accuracy}{section.4}% 17
+\BOOKMARK [3][-]{subsubsection.4.1.1}{Estimating stopping criterion for the non-linear solver}{subsection.4.1}% 18
+\BOOKMARK [3][-]{subsubsection.4.1.2}{Estimating stopping criterion for the linear solver}{subsection.4.1}% 19
+\BOOKMARK [2][-]{subsection.4.2}{Continuation}{section.4}% 20
+\BOOKMARK [1][-]{section.5}{Application: Systemic Risk}{}% 21
+\BOOKMARK [2][-]{subsubsection.5.0.1}{Calculating fixed points}{section.5}% 22
+\BOOKMARK [3][-]{subsubsection.5.0.2}{Continuation}{subsubsection.5.0.1}% 23

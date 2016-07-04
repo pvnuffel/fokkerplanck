@@ -1,0 +1,55 @@
+\documentclass[]{article}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage[utf8]{inputenc} 
+\usepackage{subcaption}
+\usepackage{caption}
+\usepackage{hyperref}
+\usepackage{amsbsy}
+\usepackage[left=4cm]{geometry}
+ %http://tex.stackexchange.com/questions/595/how-can-i-get-bold-math-symbols
+%opening
+\title{Variance reduction in coarse bifurcation analysis of stochastic models}
+\author{Pieter Van Nuffel}
+
+\newcommand{\R}{\ensuremath{\mathbb{R}}} % commando zonder argumenten
+\newcommand{\C}{\ensuremath{\mathbb{C}}}
+\newcommand{\N}{\ensuremath{\mathbb{N}}}
+\newcommand{\E}{\ensuremath{\mathbb{E}}}
+\newcommand{\norm}[1]{\left\|#1\right\|} % commando's met argumenten
+\newcommand{\pa}[2]{\frac{\partial #1}{\partial #2}}
+\newcommand{\ppa}[2]{\frac{\partial^2 #1}{\partial #2^2}}
+\newcommand{\dd}{\ensuremath{\mathrm{d}}}
+\newcommand{\U}{\ensuremath{\boldsymbol{\rho}}}
+\newcommand{\cts}{\ensuremath{\boldsymbol{\Phi}^N_T}} %Coarse time step
+\newcommand{\V}{\ensuremath{\mathbf{v}}} 
+\newcommand{\jv}{\ensuremath{\mathbf{\hat{Jv}}}}
+\newcommand{\jvpde}{\ensuremath{\mathbf{Jv}_{FP}}}
+
+\theoremstyle{definition}
+\newtheorem{Theorem}{Theorem}
+
+
+\begin{document}-
+
+
+
+ 
+\section{Model problem}
+
+\input{systemic_risk.tex}
+
+
+
+
+%
+%\bibliographystyle{plain}
+%\bibliography{biblio.bib}
+
+
+
+
+
+\end{document}

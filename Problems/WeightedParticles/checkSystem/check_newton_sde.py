@@ -100,7 +100,7 @@ if __name__=="__main__":
    # fp_sde = particles.Particles(lifting,restriction,rho,grid, lambd, param=param)       
 
  #   Nlist = scipy.array([1000, 2000, 4000, 8000, 16000, 32000, 64000, 128000])
-    Nlist = scipy.array([ 1e5]) 
+    Nlist = scipy.array([ 1e7]) 
   #  Nlist = scipy.array([1e5]) #, 800, 1600, 3200])
     eps_list_exponents=[5]
     eps_list= [1e-5]
@@ -127,11 +127,11 @@ if __name__=="__main__":
 #    residual_directsim = scipy.zeros(len(Dtlist)) 
     save_flag= False
 
-#    
-            
-    residual1 = scipy.zeros(nN)
-    residual2 = scipy.zeros(nN)
-    residual3 = scipy.zeros(nN)
+#            
+#    residual1 = scipy.zeros(len(Dtlist))
+#    residual2 = scipy.zeros(len(Dtlist))
+    residual = scipy.zeros(11)
+
     residual_directsim = scipy.zeros(nN) 
     newton_res_norms = scipy.zeros(nN)
     
@@ -183,8 +183,8 @@ if __name__=="__main__":
                 
                             #LINEAR SOLVER
                 gmres_param = GMRES.GMRESLinearSolver.getDefaultParameters()
-                gmres_param['tol']=1e-7   #zet terup 1e-4
-                gmres_param['print']='short'
+                gmres_param['tol']=1e-1   #zet terup 1e-4
+                gmres_param['print']='none'
                 gmres_param['builtin']=False
                 
                 linsolv = GMRES.GMRESLinearSolver(gmres_param)
@@ -197,7 +197,7 @@ if __name__=="__main__":
                 newt_param['rel_tol']=1e-5
                 newt_param['abs_tol']=1e-10
                 newt_param['print']='short'
-                newt_param['max_iter']=10
+                newt_param['max_iter']=8
                 newt_param['damping']=1
                 nsolv = NewtonSolver.NewtonSolver(linsolv,newt_param)
             #    nsolv2 = NewtonSolver.NewtonSolver(linsolv2,newt_param)
@@ -236,15 +236,14 @@ if __name__=="__main__":
              #   rho_sq[n] = rho_sq[n] +   norm(rho_fix)**2
                # kappa= abs(scipy.amax(spectrum[0]))/abs(scipy.amin(spectrum[0]))
                 # points.append(p)
-          #      newton_states = nsolv.newton_states
-                newton_res_norms = nsolv.newton_res_norm
+                newton_states = nsolv.newton_states
+                #newton_res_norms = nsolv.newton_res_norm
              #   np.savetxt('Newton/new_method_resnorm_Dte-2_tole-4_Ne6m%d' %m, newton_res_norms)
-                np.savetxt('Newton/21-05_resnorm_Dte-2_tole-7_N%d' %N, newton_res_norms)
-             #   States =  newton_states.reshape(nsolv.nb_newt +1, len(grid))  
-               # norm_c = sum( np.exp( 2*(-grid**4 + grid**2)*mu/sigma**2))*dx
-               # rho_ss = np.exp( 2*(-grid**4 + grid**2 )*mu/sigma**2) /norm_c 
-               # label2= r'$\frac{ \exp{\left[-2\frac{V(x)}{\sigma^2}\right]}}{\mathcal{N}}$'In [8]:
-                
+                #np.savetxt('Newton/21-05_resnorm_Dte-2_tole-7_N%d' %N, newton_res_norms)
+                States =  newton_states.reshape(nsolv.nb_newt +1, len(grid))  
+                norm_c = sum( np.exp( 2*(-grid**4 + grid**2)*mu/sigma**2))*dx
+                rho_ss = np.exp( 2*(-grid**4 + grid**2 )*mu/sigma**2) /norm_c 
+                #label2= r'$\frac{ \exp{\left[-2\frac{V(x)}{\sigma^2}\right]}}{\mathcal{N}}$'         
             #    np.savetxt('GMRES/res_Dt1e-1_dx1e-1_N%d.out' %N, linsolv.resid)
             #    print linsolv.resid
             #    np.savetxt('GMRES/spectrum_Dt1e-1_dx1e-1_N%d.out' %N, spectrum[0].view(float))
@@ -255,12 +254,15 @@ if __name__=="__main__":
              #   residual1[Dti] = norm(States[1]-rho_ss)/sqrt(len(States[1] - rho_ss))
              #   residual3[Dti] = norm(States[3]-rho_ss)/sqrt(len(States[3] - rho_ss))
         
-#                residual_directsim[n] = norm( rho_Dt -  rho_ss)/sqrt(len(rho_Dt- rho_ss))
-#                residual2[n] = norm( States[2] - rho_ss)/sqrt(len(States[2] - rho_ss))
-#                residual1[n] = norm(States[1]-rho_ss)/sqrt(len(States[1] - rho_ss))
-#                residual3[n] = norm(States[3]-rho_ss)/sqrt(len(States[3] - rho_ss))
+        #        residual_directsim[n] = norm( rho_Dt -  rho_ss)/sqrt(len(rho_Dt- rho_ss))
+                for k in range(len(States)):
+                    residual[k] = norm(States[k]-rho_ss)/sqrt(len(States[k] - rho_ss))
+                    
+           #     np.savetxt('Newton/25-05_nstates_t100/25_05_residual__tol-4_t_100_N%d' %N, residual)
+                np.savetxt('Newton/Variable_GMREStol/residual_8it_N1e7',  residual)
+                np.savetxt('Newton/Variable_GMREStol/Newton_states_8it_N1e7', States)
+           #            np.savetxt('Newton/26-05_Dependency_of_GMREStol_N1e6/Newton_states_tol-6', States)
 
-#
 #                for i in range(States.shape[0]):
 #                    print i
 #                 #   plot_rho = plt.plot(grid, States[i], "g-",  linewidth=2 )

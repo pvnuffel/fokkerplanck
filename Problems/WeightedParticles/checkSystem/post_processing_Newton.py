@@ -12,21 +12,35 @@ import matplotlib.pylab as plt
 
 from scipy.linalg import norm
 from scipy import sqrt
+import numpy as np
 
 import matplotlib.pylab as plt
 
 
 if __name__=="__main__":
+    
+    
+    
+    sigma=1.0
+    mu=1.0
+    
+    dx=1e-2
+    xL = -1.7
+    xR = 1.7
+    grid = scipy.arange(xL+dx/2.,xR,dx)
+    
+
+    
+    norm_c = sum( np.exp( (-grid**4 + grid**2)*2*mu/(sigma**2)))*dx
+    rho_ss = np.exp( (-grid**4 + grid**2 )*2*mu/(sigma**2)) /norm_c
+
 
 #    residual_directsim = np.loadtxt('Newton/residual_sim_N1e6.out')
 #    residual1 = np.loadtxt('Newton/residual1_N1e6.out') 
 #    residual2 = np.loadtxt('Newton/residual2_N1e6.out') 
 #    residual3 = np.loadtxt('Newton/residual3_N1e6.out')  
 #    
-#    residual_directsim = np.loadtxt('Newton/residual_sim(N)_Dte-1_tol1e-3.out')
-#    residual1 = np.loadtxt('Newton/residual1(N)__Dte-1_tol1e-3.out') 
-#    residual2 = np.loadtxt('Newton/residual2(N)__Dte-1_tol1e-3.out') 
-#    residual3 = np.loadtxt('Newton/residual3(N)_Dte-1_tol1e-3.out')  
+
 #    
 
 #    resnorm_t100_N1000 = np.loadtxt('Newton/resnorm_Dte-1_N1000')
@@ -240,7 +254,7 @@ if __name__=="__main__":
     plt.yscale('log')
     plt.title('Tol = 1e-5')
     plt.gca().add_patch(triangle_o1var)
-    plt.ylabel(r'$||  \rho^* - \Phi^N_T(\rho^*)||$'  , fontsize = 15)
+    plt.ylabel(r'$||  \hat{\rho^*} - \Phi^N_T(\hat{\rho^*)}||$'  , fontsize = 15)
     plt.xlabel(r'$1/N$', fontsize = 14)
     plt.annotate(order,  xy=(1.1e-6, 1.5e-3), xytext=(1.1e-6, 1.5e-3), fontsize=11, color='grey')
    # plt.savefig("Newton/plots/Tolerance_on_NK-solution_converges_N-1.pdf")
@@ -305,5 +319,206 @@ if __name__=="__main__":
     plt.savefig("Newton/plots/Tolerance_on_NK-solution_converges_N-1_tol_1e-7.pdf")
     plt.show()
     
+    
+#################################################################################
+    
+#    residual_directsim = np.loadtxt('Newton/residual_sim(N)_Dte-1_tol1e-3.out')
+#    residual1 = np.loadtxt('Newton/residual1(N)__Dte-1_tol1e-3.out') 
+#    residual2 = np.loadtxt('Newton/residual2(N)__Dte-1_tol1e-3.out')  
+    residualNe5 = np.loadtxt('Newton/25_05_residual_N100000')     #bias
+    residualNe6 = np.loadtxt('Newton/25_05_residual_N1000000')    #
+    residualNe7 = np.loadtxt('Newton/25_05_residual_N10000000')
+    residualNe8 = np.loadtxt('Newton/24_05_esidual_N100000000')
+    
+    nstatesNe5 = np.loadtxt('Newton/25_05_Newton_states_N100000')
+    nstatesNe6 = np.loadtxt('Newton/25_05_Newton_states_N1000000')  #tol1e-4
+    nstatesNe7 = np.loadtxt('Newton/25_05_Newton_states_N10000000')
+    
+    nstatesNe5 = np.loadtxt('Newton/25_05_Newton_states_tol-7_N100000')
+    nstatesNe6 = np.loadtxt('Newton/25_05_Newton_states_tol-7_N1000000')
+    nstatesNe7 = np.loadtxt('Newton/25_05_Newton_states_N10000000')
+    
+    nstatesNe5_tol4_t100 = np.loadtxt('Newton/25-05_nstates_t100/25_05_Newton_states_tol-4__t100_N100000')
+    nstatesNe6_tol4_t100 = np.loadtxt('Newton/25-05_nstates_t100/25_05_Newton_states_tol-4__t100_N1000000')
+    nstatesNe7_tol4_t100 = np.loadtxt('Newton/25-05_nstates_t100/25_05_Newton_states_tol-4__t100_N10000000')
+    
+    biasNe5_tol4_t100 = np.loadtxt('Newton/25-05_nstates_t100/25_05_residual__tol-4_t_100_N100000')
+    biasNe6_tol4_t100 = np.loadtxt('Newton/25-05_nstates_t100/25_05_residual__tol-4_t_100_N1000000')
+    biasNe7_tol4_t100 = np.loadtxt('Newton/25-05_nstates_t100/25_05_residual__tol-4_t_100_N10000000')                              
+                                                               
+    
+    
+    k_list= np.arange(11)
+    plt.yscale('log')
+    plt.plot(k_list, residualNe5, "r--",label = r'$N=10^5$' )
+    plt.plot(k_list, residualNe6, "y--" , label= r'$N=10^6$' )      
+    plt.plot(k_list, residualNe7,  "c--" , label = r'$N=10^7$' )
+ #   plt.plot(k_list, residualNe8,  "b--" , label = r'$N=10^8$' )
+    plt.legend()
+    plt.show()  
+    
+    k_list= np.arange(11)
+    plt.yscale('log')
+    plt.plot(k_list, biasNe5_tol4_t100, "r--",label = r'$N=10^5$' )
+    plt.plot(k_list,   biasNe6_tol4_t100, "y--" , label= r'$N=10^6$' )      
+    plt.plot(k_list, biasNe7_tol4_t100,  "c--" , label = r'$N=10^7$' )
+ #   plt.plot(k_list, residualNe8,  "b--" , label = r'$N=10^8$' )
+    plt.legend()
+    plt.show()  
+    
+    for k in range(len(nstatesNe5_tol4_t100)):
+        plt.plot(grid,nstatesNe5_tol4_t100[k], 'gray')
+        plt.plot(grid,rho_ss,'red' )
+    plt.show()
+        
+    for k in range(len(nstatesNe6_tol4_t100)):
+        plt.plot(grid,nstatesNe6_tol4_t100[k], 'green')
+        plt.plot(grid,rho_ss, 'red')
+    plt.show()
+        
+    
+    for k in range(len(nstatesNe7_tol4_t100)):
+        plt.plot(grid,nstatesNe7_tol4_t100[k], 'blue')
+        plt.plot(grid,rho_ss, 'red')
+    plt.show()
+        
+    
+
+#################################################################################
+
+    nstatestol_1 = np.loadtxt('Newton/26-05_Dependency_of_GMREStol_N1e6/Newton_states_tol-1')
+    nstatestol_2 = np.loadtxt('Newton/26-05_Dependency_of_GMREStol_N1e6/Newton_states_tol-2')
+    nstatestol_3 = np.loadtxt('Newton/26-05_Dependency_of_GMREStol_N1e6/Newton_states_tol-3')
+    nstatestol_4 = np.loadtxt('Newton/25_05_Newton_states_N1000000')   
+    nstatestol_5 = np.loadtxt('Newton/26-05_Dependency_of_GMREStol_N1e6/Newton_states_tol-5')
+    nstatestol_6 = np.loadtxt('Newton/26-05_Dependency_of_GMREStol_N1e6/Newton_states_tol-6')
+    nstatestol_7 = np.loadtxt('Newton/25_05_Newton_states_tol-7_N1000000')
+
+    
+    
+    for k in range(len(nstatestol_1 )):
+        plt.plot(grid,nstatestol_1[k], 'green')
+        plt.plot(grid,rho_ss, 'red')
+        plt.title(r'$\varepsilon_{GMRES} = 10^{-1}$')
+    plt.show()
+        
+    
+    for k in range(len(nstatestol_1 )):
+        plt.plot(grid,nstatestol_2[k], 'green')
+        plt.plot(grid,rho_ss, 'red')
+        plt.title(r'$\varepsilon_{GMRES} = 10^{-2}$')
+    plt.show()
+    
+        
+    for k in range(len(nstatestol_1 )):
+        plt.plot(grid,nstatestol_3[k], 'green')
+        plt.plot(grid,rho_ss, 'red')
+        plt.title(r'$\varepsilon_{GMRES} = 10^{-3}$')
+    plt.show()
+        
+    
+    for k in range(len(nstatestol_1 )):
+        plt.plot(grid,nstatestol_4[k])
+        plt.plot(grid,rho_ss, 'red')
+        plt.title(r'$\varepsilon_{GMRES} = 10^{-4}$')
+    plt.show()
+    
+        
+    for k in range(len(nstatestol_1 )):
+        plt.plot(grid,nstatestol_5[k], 'green')
+        plt.plot(grid,rho_ss, 'red')
+        plt.title(r'$\varepsilon_{GMRES} = 10^{-5}$')
+    plt.show()
+            
+    
+    for k in range(len(nstatestol_1 )):
+        plt.plot(grid,nstatestol_6[k], 'green')
+        plt.plot(grid,rho_ss, 'red')
+        plt.title(r'$\varepsilon_{GMRES} = 10^{-6}$')
+    plt.show()
+        
+        
+    for k in range(len(nstatestol_1 )):
+        plt.plot(grid,nstatestol_7[k], 'green')
+        plt.plot(grid,rho_ss, 'red')
+        plt.title(r'$\varepsilon_{GMRES} = 10^{-7}$')
+    plt.show()
+        
+    
+
+    
+    
+#################################################################################
+   # Adapting the GMRES-size in each Newton step?
+    
+    #residual_variable_tol = np.loadtxt('Newton/Variable_GMREStol/residual_half_tolerance')
+   # N_states_variable_tol= np.loadtxt('Newton/Variable_GMREStol/Newton_states_half_tolerance')
+    
+    k_list= np.arange(9)
+    tol_list  = np.zeros(9)
+    for i in range (len(k_list)):
+        tol_list[i] = 10**(-k_list[i]-1)
+        
+    
+    residual_variable_tol = np.loadtxt('Newton/Variable_GMREStol/residual_8it')
+    N_states_variable_tol= np.loadtxt('Newton/Variable_GMREStol/Newton_states_8it') 
+    
+    
+    
+    for k in range(len( N_states_variable_tol)):
+        plt.plot(grid, N_states_variable_tol[k], 'gray')
+        plt.plot(grid,rho_ss,'red' )
+        plt.show()
 
 
+    plt.yscale('log')
+    plt.plot(k_list, residual_variable_tol, "r--",label = r'$N=10^6$' )
+  #  plt.plot( tol_list , N_states_variable_tol, "r--",label = r'$N=10^5$' )
+    plt.legend()
+#    ax1.xlabel(r'$k', fontsize = 14)
+#    ax2.xlabel()
+    plt.show()  
+ #   plt.savefig("Newton/plots/Newton_step.pdf")
+    
+    
+    
+    
+#################################################################################
+   # Adapting the GMRES-size in each Newton step?
+
+    residual_variable_tol_N1e7 = np.loadtxt('Newton/Variable_GMREStol/residual_8it_N1e7')
+    N_states_variable_tol_N1e7 = np.loadtxt('Newton/Variable_GMREStol/Newton_states_8it_N1e7')
+    
+
+    
+    for k in range(len( N_states_variable_tol_N1e7)):
+        plt.plot(grid, N_states_variable_tol_N1e7[k], 'gray')
+        plt.plot(grid,rho_ss,'red' )
+        plt.show()
+
+
+    fig = plt.figure()
+    ax1 = fig.add_subplot(111)
+   # ax2 = ax1.twiny()
+
+    plt.yscale('log')
+    plt.ylabel(r'Bias($ \hat{\rho^*} $)'  , fontsize = 15)
+    ax1.set_xlabel('$k$')
+    ax1.plot(k_list, residual_variable_tol_N1e7, "r--",label = r'$N=10^7$' )
+    ax1.plot(k_list, residual_variable_tol, "b--",label = r'$N=10^6$' )
+    plt.legend()
+#    ax1.xlabel(r'$k', fontsize = 14)
+#    ax2.xlabel()
+    ax2 = ax1.twiny()
+    ax2.set_autoscale_on=False
+    ax2.set_xlim(0,8)
+    ax2.set_xlabel(r'$\varepsilon_{GMRES}$',  fontsize = 15)
+    ax2.set_xticklabels(tol_list)
+    
+    plt.savefig("Newton/plots/adapt_GMREStol_every_Nstep.pdf")
+    
+    
+    plt.show()  
+
+#    
+#    

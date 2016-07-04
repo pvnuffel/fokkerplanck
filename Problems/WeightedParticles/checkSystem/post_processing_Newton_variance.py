@@ -48,7 +48,7 @@ if __name__=="__main__":
         variance[n] = rho_sq_tol2[n] - norm(E_rho_tol2[n])**2
         variance4[n] = rho_sq_tol4[n] - norm(E_rho_tol4[n])**2
         variance3[n] =  rho_sq_tol3[n] - norm(E_rho_tol3[n])**2 
-        variance1[n] =  rho_sq_tol1[n] - norm(E_rho_tol1[n])**2 
+      #  variance1[n] =  rho_sq_tol1[n] - norm(E_rho_tol1[n])**2 
         variance5[n] =  rho_sq_tol5[n] - norm(E_rho_tol5[n])**2 
     
     log_flag = 'log'
@@ -60,10 +60,14 @@ if __name__=="__main__":
     ax = plt.subplot(111)
     box = ax.get_position()
     ax.set_position([box.x0, box.y0, box.width * 0.95, box.height])   
-    plot_var = plt.plot(Nlist_inv, variance/bins, label=r'$\epsilon_{GMRES}=10^{-2}$', linewidth=2  )
-    plot_var = plt.plot(Nlist_inv, variance3/bins,  label=r'$\epsilon_{GMRES}=10^{-3}$',linewidth=2  )
-    plot_var = plt.plot(Nlist_inv, variance4/bins,  label=r'$\epsilon_{GMRES}=10^{-4}$',linewidth=2  )
-    plot_var = plt.plot(Nlist_inv, variance5/bins,  label=r'$\epsilon_{GMRES}=10^{-5}$',linewidth=2  )
+    
+            
+    points_o1var = [[1e-5, 1e-2], [1e-5, 1e-1], [1e-4, 1e-1]] 
+    triangle_o1var = plt.Polygon(points_o1var, fill=None  ,edgecolor='grey') 
+    plot_var = plt.plot(Nlist_inv, variance/bins, label=r'$\varepsilon_{GMRES}=10^{-2}$', linewidth=2  )
+    plot_var = plt.plot(Nlist_inv, variance3/bins,  label=r'$\varepsilon_{GMRES}=10^{-3}$',linewidth=2  )
+    plot_var = plt.plot(Nlist_inv, variance4/bins,  label=r'$\varepsilon_{GMRES}=10^{-4}$',linewidth=2  )
+    plot_var = plt.plot(Nlist_inv, variance5/bins,  label=r'$\varepsilon_{GMRES}=10^{-5}$',linewidth=2  )
    # plot_var = plt.plot(Nlist_inv, variance1/bins, linewidth=2  )
     plt.ylabel(r'Var ($\rho^*_{k=3}$)', fontsize = 16)
     plt.xlabel('$1/N$', fontsize = 16) 
@@ -71,6 +75,9 @@ if __name__=="__main__":
     plt.yscale(log_flag)
     plt.legend([plot_var], loc='best')
     plt.legend(bbox_to_anchor=(0.4,1),  numpoints = 1 )
+    plt.gca().add_patch(triangle_o1var)
+    order= r'$\mathcal{O}(1/N)$'
+    plt.annotate(order,  xy=(1e-5, 1e-2), xytext=(1.1e-5, 3e-2), fontsize=11, color='grey')
     if(save_flag): plt.savefig("plots/Variance_3th_newton_it_Dt1e-1.pdf")
     plt.show()
 
